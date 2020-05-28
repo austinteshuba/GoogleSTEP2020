@@ -13,16 +13,19 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random activity I might be doing to the page
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addActivity() {
+  const activityContainer = document.getElementById('activity-container');
+
+  // Always show a new activity from the below list of activities
+  // every time the button is clicked.
+  const activities =
+      ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'].filter(ele => ele !== activityContainer.innerText);
 
   // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  const activity = activities[Math.floor(Math.random() * activities.length)];
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  // Add it to the page
+  activityContainer.innerText = activity;
 }
