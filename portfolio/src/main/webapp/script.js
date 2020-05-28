@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// A list of activities that could appear when clicking activities button.
+const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'];
+
+
 /**
  * Adds a random activity I might be doing to the page
  */
-
-const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'];
-
 function addActivity() {
   const activityContainer = document.getElementById('activity-container');
 
