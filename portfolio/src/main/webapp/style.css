@@ -3,22 +3,50 @@ This will make text still reflect the default font size
 of the user
 */
 body {
-  font-size: 1.6rem; }
+  font-size: 1.6rem; 
+  box-sizing: border-box;
+}
 
 /* 
 Since most browsers have a default of 16px, 1rem = 10px
 Unless if the user increased their default font size
 */
 html {
-  font-size: 62.5%; }
+  font-size: 62.5%; 
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: inherit;
+}
 
 .img-primary {
-  width: 100%; }
+  width: 100%; 
+}
 
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 65rem; }
+  width: 65rem; 
+}
 
 #greeting-container {
-  margin-top: 2rem; }
+  margin-top: 2rem; 
+}
+
+.header-primary {
+    height: 90vh;
+
+    position: relative;
+
+
+    background-image: linear-gradient(to right, rgba(107, 191, 255, .95), rgba(18, 105, 176, 1)) , url(images/header-background.jpg);
+    background-size: cover;
+    background-position: top;
+
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 60vh);
+}
