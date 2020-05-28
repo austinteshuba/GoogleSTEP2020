@@ -3,22 +3,27 @@ This will make text still reflect the default font size
 of the user
 */
 body {
-  font-size: 1.6rem; }
+    font-size: 1.6rem;
+}
 
 /* 
 Since most browsers have a default of 16px, 1rem = 10px
 Unless if the user increased their default font size
 */
 html {
-  font-size: 62.5%; }
+    font-size: 62.5%;
+}
 
 .img-primary {
-  width: 100%; }
+    width: 100%;
+}
 
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 65rem; }
+  width: 65rem;
+}
 
 #greeting-container {
-  margin-top: 2rem; }
+  margin-top: 2rem;
+}
