@@ -15,16 +15,18 @@
 /**
  * Adds a random activity I might be doing to the page
  */
+
+const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'];
+
 function addActivity() {
   const activityContainer = document.getElementById('activity-container');
 
   // Always show a new activity from the below list of activities
   // every time the button is clicked.
-  const activities =
-      ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'].filter(ele => ele !== activityContainer.innerText);
+  const eligibleActivities = activities.filter(ele => ele !== activityContainer.innerText);
 
   // Pick a random greeting.
-  const activity = activities[Math.floor(Math.random() * activities.length)];
+  const activity = eligibleActivities[Math.floor(Math.random() * eligibleActivities.length)];
 
   // Add it to the page
   activityContainer.innerText = activity;
