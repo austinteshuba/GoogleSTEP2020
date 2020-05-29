@@ -19,6 +19,7 @@ Unless if the user increased their default font size
 */
 html {
   font-size: 62.5%; 
+  width: 100%;
 }
 
 *,
@@ -44,6 +45,7 @@ html {
     height: 90vh;
 
     position: relative;
+    color: white;
 
 
     background-image: linear-gradient(to right, rgba(107, 191, 255, .95), rgba(18, 105, 176, 1)) , url(images/header-background.jpg);
@@ -53,17 +55,18 @@ html {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 60vh);
 }
 
-.u-padding-5 {
+.u-padding-sm {
     padding: 5rem;
 }
 
-.caption-large {
+.caption-lg {
     margin-top: 10px;
-    display: inline-block;
+    display: block;
     font-size: 3rem;
 }
 
 .img-circle {
+   display: inline-block;
    border-radius: 50%;
    object-fit: cover;
    height: 30vh;
@@ -71,7 +74,15 @@ html {
 
    border: 5px solid rgba(0,0,0,.65);
 
-   box-shadow: -1rem 2rem 3rem rgba(0,0,0,.25)
+   
+}
+
+.u-box-shadow {
+    box-shadow: -1rem 2rem 3rem rgba(0,0,0,.25);
+}
+
+.u-text-shadow {
+    text-shadow: -1rem 2rem 3rem rgba(0,0,0,.25);
 }
 
 .u-center {
@@ -90,4 +101,17 @@ html {
 
 #header-container-left {
     height: 60vh;
+}
+
+h1 {
+    font-size: 6rem;
+    font-weight: 700;
+}
+
+.header-primary h1 {
+    margin: calc(15vh - 6rem);
+}
+
+#header-container-right {
+    padding: calc(30vh/2 - 6rem - 5rem/2) 5rem 5rem 5rem;
 }
