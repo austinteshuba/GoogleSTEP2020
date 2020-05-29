@@ -12,6 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// This is a list of passions to iterate through on the homepage
+const passions = ["Front-End Development?", "Machine Learning?", "Software Design?", "Technology Consulting?" ,"Data Science?", "Algorithms?", "User Experience?"];
+
+// Get the selector for the Passions type-writer function when the window loads.
+
+
+window.onload = function () { 
+    var passionSelector = document.getElementById("passions").childNodes[0]
+    var wordIndex = 0;
+    var letterIndex = 0;
+
+    window.setTimeout(() => typewriter(passionSelector, passions, wordIndex, letterIndex), 1000);
+};
+
+
+function typewriter(textSelector, words, wordIndex, letterIndex) {
+    console.log(textSelector.nodeValue);
+    textSelector.nodeValue = textSelector.nodeValue + words[wordIndex].charAt(letterIndex);
+
+    // If the word is finished typing, go to the next word, wait a second, then clear
+    // the text and start typing the next word. Must use a space character to clear the text
+    // or the node won't render and the nodeValue will become null and unsettable. 
+    if (letterIndex+1 === words[wordIndex].length) {
+
+        (wordIndex + 1) % words.length;
+        window.setTimeout(() => {
+            textSelector.nodeValue = " ";
+            typewriter(textSelector, words, (wordIndex + 1) % words.length, 0);
+        }, 1000);
+        return;
+    }
+    
+    window.setTimeout(() => typewriter(textSelector, words, wordIndex, letterIndex+1), 100);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // A list of activities that could appear when clicking activities button.
 const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'];
 
@@ -31,4 +81,5 @@ function addActivity() {
 
   // Add it to the page
   activityContainer.innerText = activity;
+  console.log(passionSelector.nodeValue);
 }
