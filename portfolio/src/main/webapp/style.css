@@ -104,14 +104,11 @@ html {
 }
 
 h1 {
-    font-size: 6rem;
+    font-size: 9rem;
     font-weight: 700;
 }
 
-.header-primary h1 {
-    margin: calc(15vh - 6rem);
-}
 
 #header-container-right {
-    padding: calc(30vh/2 - 6rem - 5rem/2) 5rem 5rem 5rem;
+    padding: calc(60vh/2 - 30vh/2 - 10px/2 - 3rem*1.22/2 - 9rem*.22/2) calc((100%-60px*2)/6 - 15vh) 5rem 5rem;
 }
