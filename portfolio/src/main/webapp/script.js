@@ -12,17 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// A list of activities that could appear when clicking activities button.
+const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'];
+
+
 /**
- * Adds a random greeting to the page.
+ * Adds a random activity I might be doing to the page
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addActivity() {
+  const activityContainer = document.getElementById('activity-container');
+
+  // Always show a new activity from the below list of activities
+  // every time the button is clicked.
+  const eligibleActivities = activities.filter(ele => ele !== activityContainer.innerText);
 
   // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  const activity = eligibleActivities[Math.floor(Math.random() * eligibleActivities.length)];
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  // Add it to the page
+  activityContainer.innerText = activity;
 }
