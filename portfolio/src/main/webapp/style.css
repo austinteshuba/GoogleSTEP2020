@@ -7,11 +7,11 @@ This will make text still reflect the default font size
 of the user
 */
 body {
-  font-size: 1.6rem; 
+  font-size: var(--body-font-size); 
   box-sizing: border-box;
 
   font-family: 'Montserrat', sans-serif;
-  padding: 3rem;
+  padding: var(--body-padding);
 }
 
 /* 
@@ -32,59 +32,59 @@ html {
     box-sizing: inherit;
 }
 
-#greeting-container {
+/* #greeting-container {
   margin-top: 2rem; 
-}
+} */
 
 .header-primary {
-    height: 90vh;
+    height: var(--header-height);
 
     position: relative;
-    color: white;
+    color: var(--text-white);
 
     
 
 
-    background-image: linear-gradient(to right, rgba(107, 191, 255, .95), rgba(18, 105, 176, 1)) , url(images/header-background.jpg);
+    background-image: linear-gradient(to var(--gradient-direction), var(--light-blue), var(--dark-blue)) , url(images/header-background.jpg);
     background-size: cover;
     background-position: top;
 
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 60vh);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 var(--header-height-min));
 }
 
 
 .section-shadow-wrapper {
-    filter: drop-shadow(-20px 30px 40px rgba(0,0,0,.25));
+    filter: drop-shadow(var(--section-shadow-x) var(--section-shadow-y) var(--section-shadow-blur) var(--shadow-light));
 }
 
 .u-padding-sm {
-    padding: 5rem;
+    padding: var(--padding-sm);
 }
 
 .caption-lg {
-    margin-top: 1rem;
+    margin-top: var(--caption-padding-top);
     display: block;
-    font-size: 3rem;
+    font-size: var(--caption-font-size);
 }
 
 .img-circle {
    display: inline-block;
    border-radius: 50%;
    object-fit: cover;
-   height: 30vh;
-   width: 30vh;
+   height: var(--profile-picture-size);
+   width: var(--profile-picture-size);
 
-   border: 5px solid rgba(0,0,0,.65);
+   border: var(--profile-picture-border-width) solid var(--shadow-dark);
 
    
 }
 
 .u-box-shadow {
-    box-shadow: -1rem 2rem 3rem rgba(0,0,0,.35);
+    box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
 }
 
 .u-text-shadow {
-    text-shadow: -1rem 2rem 3rem rgba(0,0,0,.35);
+    text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
 }
 
 .u-center {
@@ -96,8 +96,8 @@ html {
 
 a {
     text-decoration: none;
-    color: white;
-    border-bottom: 1px solid white;
+    color: var(--text-white);
+    border-bottom: var(--anchor-underline-size) solid var(--text-white);
 }
 
 a img {
@@ -112,47 +112,47 @@ a img {
 }
 
 .header-container-left {
-    height: 60vh;
+    height: calc(var(--header-height) - var(--header-cutout-height));
 }
 
 h1 {
-    font-size: 9rem;
-    font-weight: 700;
+    font-size: var(--h1-font-size);
+    font-weight: var(--h1-font-weight);
 }
 
 h2 {
-    font-size: 5rem;
-    font-weight: 500;
+    font-size: var(--h2-font-size);
+    font-weight: var(--h2-font-weight);
 }
 
 h3 {
-    font-size: 4rem;
-    font-weight: 500;
+    font-size: var(--h3-font-size);
+    font-weight: var(--h3-font-weight);
 }
 
 h4 {
-    font-size: 3rem;
-    font-weight: 300;
+    font-size: var(--h4-font-size);
+    font-weight: var(--h4-font-weight);
 }
 
 h5 {
-    font-size: 2.5rem;
-    font-weight: 200;
+    font-size: var(--h5-font-size);
+    font-weight: var(--h5-font-weight);
 }
 
 .heading-secondary {
-    padding-bottom: 4rem;
+    padding-bottom: var(--heading-secondary-padding-btm);
 }
 
 
 .header-container-right {
-    padding: calc(60vh/2 - 30vh/2 - 1rem/2 - 3rem*1.22/2 - 9rem*.22/2) calc((100%-60px*2)/6 - 15vh) 5rem 5rem;
-    height: 75vh;
+    padding: var(--header-right-padding-top) var(--header-right-padding-right) var(--padding-sm) var(--padding-sm);
+    height: calc(var(--header-height) - var(--header-cutout-height)/2);
     position: relative;
 }
 
 .heading-primary {
-    padding-bottom: 5rem;
+    padding-bottom: var(--heading-primary-padding-btm);
 }
 
 .u-div-bottom-r {
@@ -162,16 +162,16 @@ h5 {
 }
 
 #header-bottom-r {
-    padding-right: calc((100vw + 3rem*2 - 60px*2)/6 - 15vh);
+    padding-right: calc(var(--header-right-padding-right) + var(--body-padding)/3);
 }
 
 #after-header{
-    margin-top: -30vh;
-    padding-top: 15vh;
+    margin-top: calc(var(--header-cutout-height) - var(--header-height));
+    padding-top: calc((var(--header-cutout-height) - var(--header-height))/2);
 }
 
 .section-sub {
-    background-color: whitesmoke;
+    background-color: var(--background-white);
 }
 
 #passions {

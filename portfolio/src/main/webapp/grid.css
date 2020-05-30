@@ -10,25 +10,25 @@
 }
 
 .row:not(:last-child) {
-    margin-bottom: 80px;
+    margin-bottom: var(--gutter-vertical);
 }
 
 .col-1-of-3 {
-    width: calc((100% - 60px*2)/3);
+    width: calc((100% - var(--gutter-horizontal)*2)/3);
 
     float: left;
 }
 
 .col-1-of-3:not(:last-child) {
-    margin-right: 60px;
+    margin-right: var(--gutter-horizontal);
 }
 
 .col-2-of-3 {
-    width: calc((100% - 60px*2)*2/3 + 60px);
+    width: calc((100% - var(--gutter-horizontal)*2)*2/3 + var(--gutter-horizontal));
 
     float: left;
 }
 
 .col-2-of-3:not(:last-child) {
-    margin-right: 60px;
+    margin-right: var(--gutter-horizontal);
 }
