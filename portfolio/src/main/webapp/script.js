@@ -28,7 +28,6 @@ window.onload = function () {
 
 
 function typewriter(textSelector, words, wordIndex, letterIndex) {
-    console.log(textSelector.nodeValue);
     textSelector.nodeValue = textSelector.nodeValue + words[wordIndex].charAt(letterIndex);
 
     // If the word is finished typing, go to the next word, wait a second, then clear

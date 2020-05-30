@@ -96,6 +96,12 @@ html {
 
 a {
     text-decoration: none;
+    color: white;
+    border-bottom: 1px solid white;
+}
+
+a img {
+    vertical-align: top;
 }
 
 .u-text-center {
@@ -129,6 +135,11 @@ h4 {
     font-weight: 300;
 }
 
+h5 {
+    font-size: 2.5rem;
+    font-weight: 200;
+}
+
 .heading-secondary {
     padding-bottom: 4rem;
 }
@@ -144,10 +155,13 @@ h4 {
     padding-bottom: 5rem;
 }
 
-.buttons-bottom {
+.u-div-bottom-r {
     position: absolute;
     bottom: 0%;
     right: 0%;
+}
+
+#header-bottom-r {
     padding-right: calc((100vw + 3rem*2 - 60px*2)/6 - 15vh);
 }
 
