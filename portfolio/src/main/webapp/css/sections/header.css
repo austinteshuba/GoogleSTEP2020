@@ -1,0 +1,62 @@
+/* 
+TODO: Style Guide.
+*/
+
+
+.header-primary {
+    height: var(--header-height);
+
+    position: relative;
+    color: var(--text-white);
+
+    
+
+
+    background-image: linear-gradient(to var(--gradient-direction), var(--light-blue), var(--dark-blue)) , url(/../../images/header-background.jpg);
+    background-size: cover;
+    background-position: top;
+
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 var(--header-height-min));
+}
+
+
+.section-shadow-wrapper {
+    filter: drop-shadow(var(--section-shadow-x) var(--section-shadow-y) var(--section-shadow-blur) var(--shadow-light));
+}
+
+
+
+
+
+
+
+
+.header-container-left {
+    height: calc(var(--header-height) - var(--header-cutout-height));
+}
+
+
+
+
+.header-container-right {
+    padding: var(--header-right-padding-top) var(--header-right-padding-right) var(--padding-sm) var(--padding-sm);
+    height: calc(var(--header-height) - var(--header-cutout-height)/2);
+    position: relative;
+}
+
+
+
+
+#header-bottom-r {
+    padding-right: calc(var(--header-right-padding-right) + var(--body-padding)/3);
+}
+
+
+#passions {
+    text-decoration: underline;
+}
+
+.blinking-cursor {
+    animation: blink 1s ease-in-out infinite;
+}
+

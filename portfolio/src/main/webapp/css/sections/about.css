@@ -1,0 +1,5 @@
+.section-about {
+    background-color: var(--background-white);
+    margin-top: calc(var(--header-cutout-height) - var(--header-height));
+    padding-top: calc((var(--header-cutout-height) - var(--header-height))/2);
+}

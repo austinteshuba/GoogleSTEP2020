@@ -1,0 +1,31 @@
+.u-padding-sm {
+    padding: var(--padding-sm);
+}
+
+.u-box-shadow {
+    box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
+}
+
+.u-text-shadow {
+    text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
+}
+
+.u-center {
+   position: relative;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+.u-text-center {
+    text-align: center;
+}
+.u-text-right {
+    text-align: right;
+}
+
+.u-div-bottom-r {
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+}

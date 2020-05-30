@@ -1,0 +1,11 @@
+.img-circle {
+   display: inline-block;
+   border-radius: 50%;
+   object-fit: cover;
+   height: var(--profile-picture-size);
+   width: var(--profile-picture-size);
+
+   border: var(--profile-picture-border-width) solid var(--shadow-dark);
+
+   
+}

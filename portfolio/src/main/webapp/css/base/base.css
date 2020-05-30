@@ -1,0 +1,40 @@
+
+/*
+This will make text still reflect the default font size
+of the user
+*/
+body {
+  font-size: var(--body-font-size); 
+  box-sizing: border-box;
+
+  font-family: 'Montserrat', sans-serif;
+  padding: var(--body-padding);
+}
+
+/* 
+Since most browsers have a default of 16px, 1rem = 10px
+Unless if the user increased their default font size
+*/
+html {
+  font-size: 62.5%; 
+  width: 100%;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-white);
+    border-bottom: var(--anchor-underline-size) solid var(--text-white);
+}
+
+a img {
+    vertical-align: top;
+}
