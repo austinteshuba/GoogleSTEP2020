@@ -35,3 +35,7 @@
     position: absolute;
     right: 0%;
 }
+
+.u-link-underline {
+    border-bottom: var(--underline-size) solid var(--text-white);
+}

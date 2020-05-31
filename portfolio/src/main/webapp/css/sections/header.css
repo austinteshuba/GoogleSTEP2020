@@ -31,7 +31,7 @@
 }
 
 #header-bottom-r {
-    padding-right: calc(var(--header-right-padding-right) + var(--body-padding)/3);
+    padding-right: var(--header-right-padding-right);
 }
 
 #passions {

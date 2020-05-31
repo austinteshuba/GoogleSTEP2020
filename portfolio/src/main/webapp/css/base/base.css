@@ -33,7 +33,6 @@ html {
 }
 
 a {
-    border-bottom: var(--anchor-underline-size) solid var(--text-white);
     color: var(--text-white);
     text-decoration: none;
 }

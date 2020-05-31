@@ -36,13 +36,13 @@ h5 {
 .caption-lg {
     display: block;
     font-size: var(--caption-font-size);
-    margin: var(--caption-padding-top) 0 0 0;
+    margin: var(--caption-padding-top) 0 var(--caption-padding-bottom) 0;
 }
 
 .heading-primary {
     padding: 0 0 var(--heading-primary-padding-btm) 0;
 }
 
-.heading-secondary {
+.heading-secondary:not(:last-child) {
     padding: 0 0 var(--heading-secondary-padding-btm) 0;
 }
