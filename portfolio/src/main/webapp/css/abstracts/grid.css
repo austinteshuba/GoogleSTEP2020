@@ -1,34 +1,36 @@
+/*
+    This file is for the grid system on the page.
+    Use these for laying objects next to / on top of each other
+*/
+
 .row {
     height: 100%;
-
 }
 
 .row:after {
+    clear: both;
     content: '';
     display: table;
-    clear: both;
 }
 
 .row:not(:last-child) {
-    margin-bottom: var(--gutter-vertical);
+    margin: 0 0 var(--gutter-vertical) 0;
 }
 
 .col-1-of-3 {
-    width: calc((100% - var(--gutter-horizontal)*2)/3);
-
     float: left;
+    width: calc((100% - var(--gutter-horizontal)*2)/3);
 }
 
 .col-1-of-3:not(:last-child) {
-    margin-right: var(--gutter-horizontal);
+    margin: 0 var(--gutter-horizontal) 0 0;
 }
 
 .col-2-of-3 {
-    width: calc((100% - var(--gutter-horizontal)*2)*2/3 + var(--gutter-horizontal));
-
     float: left;
+    width: calc((100% - var(--gutter-horizontal)*2)*2/3 + var(--gutter-horizontal));
 }
 
 .col-2-of-3:not(:last-child) {
-    margin-right: var(--gutter-horizontal);
+    margin: 0 var(--gutter-horizontal) 0 0;
 }

@@ -1,3 +1,7 @@
+/*
+    This file is for animations throughout the site.
+*/
+
 @keyframes blink {
     0% {
         opacity: 1;

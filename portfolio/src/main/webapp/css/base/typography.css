@@ -1,3 +1,13 @@
+/*
+    This file contains styling related to typography,
+    like headers, paragraphs, and captions.
+*/
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: var(--body-font-size); 
+}
+
 h1 {
     font-size: var(--h1-font-size);
     font-weight: var(--h1-font-weight);
@@ -24,15 +34,15 @@ h5 {
 }
 
 .caption-lg {
-    margin-top: var(--caption-padding-top);
     display: block;
     font-size: var(--caption-font-size);
+    margin: var(--caption-padding-top) 0 0 0;
 }
 
 .heading-primary {
-    padding-bottom: var(--heading-primary-padding-btm);
+    padding: 0 0 var(--heading-primary-padding-btm) 0;
 }
 
 .heading-secondary {
-    padding-bottom: var(--heading-secondary-padding-btm);
+    padding: 0 0 var(--heading-secondary-padding-btm) 0;
 }

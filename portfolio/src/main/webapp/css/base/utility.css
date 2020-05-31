@@ -1,3 +1,8 @@
+/*
+    This file contains a series of utility styling classes.
+    These can be combined with other classes to make quick, consistent adjustments to style.
+*/
+
 .u-padding-sm {
     padding: var(--padding-sm);
 }
@@ -11,21 +16,22 @@
 }
 
 .u-center {
+   left: 50%;
    position: relative;
    top: 50%;
-   left: 50%;
    transform: translate(-50%, -50%);
 }
 
 .u-text-center {
     text-align: center;
 }
+
 .u-text-right {
     text-align: right;
 }
 
 .u-div-bottom-r {
-    position: absolute;
     bottom: 0%;
+    position: absolute;
     right: 0%;
 }

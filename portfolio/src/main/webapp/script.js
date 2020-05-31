@@ -14,20 +14,32 @@
 
 // This is a list of passions to iterate through on the homepage
 const passions = ["Front-End Development?", "Machine Learning?", "Software Design?", "Technology Consulting?" ,"Data Science?", "Algorithms?", "User Experience?"];
+const typewriterLetterDelay = 100;
+const typewriterWordDelay = 1000;
 
 // Get the selector for the Passions type-writer function when the window loads.
-
-
 window.onload = function () { 
     var passionSelector = document.getElementById("passions").childNodes[0]
-    var wordIndex = 0;
-    var letterIndex = 0;
 
-    window.setTimeout(() => typewriter(passionSelector, passions, wordIndex, letterIndex), 1000);
+    window.setTimeout(() => typewriter(passionSelector, passions), 1000);
 };
 
+// Function to start a typewriter effect on an HTML element
+// where one letter of a word (in a list of words) appears at a time
+// @param textSelector - html selector of target element
+// @param words - list of words to cycle through in the effect. min length is 1
+// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0
+// @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
+function startTypewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay) {
+    typewriter(textSelector, words, 0, 0, letterDelay, wordDelay);
+}
 
-function typewriter(textSelector, words, wordIndex, letterIndex) {
+// Recursive function for typewriter effect
+// Do not call directly - use convenience function
+// @param wordIndex - current index of word in words
+// @param letterIndex - current index of next letter in word
+function typewriter(textSelector, words, wordIndex = 0, letterIndex = 0, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay) {
+
     textSelector.nodeValue = textSelector.nodeValue + words[wordIndex].charAt(letterIndex);
 
     // If the word is finished typing, go to the next word, wait a second, then clear
@@ -39,46 +51,11 @@ function typewriter(textSelector, words, wordIndex, letterIndex) {
         window.setTimeout(() => {
             textSelector.nodeValue = " ";
             typewriter(textSelector, words, (wordIndex + 1) % words.length, 0);
-        }, 1000);
-        return;
+        }, wordDelay);
+
+    } else {
+        // Otherwise, start typing the next letter
+        window.setTimeout(() => typewriter(textSelector, words, wordIndex, letterIndex+1), letterDelay);
     }
-    
-    window.setTimeout(() => typewriter(textSelector, words, wordIndex, letterIndex+1), 100);
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// A list of activities that could appear when clicking activities button.
-const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Going on a nature walk 🌲'];
-
-
-/**
- * Adds a random activity I might be doing to the page
- */
-function addActivity() {
-  const activityContainer = document.getElementById('activity-container');
-
-  // Always show a new activity from the below list of activities
-  // every time the button is clicked.
-  const eligibleActivities = activities.filter(ele => ele !== activityContainer.innerText);
-
-  // Pick a random greeting.
-  const activity = eligibleActivities[Math.floor(Math.random() * eligibleActivities.length)];
-
-  // Add it to the page
-  activityContainer.innerText = activity;
-  console.log(passionSelector.nodeValue);
 }
