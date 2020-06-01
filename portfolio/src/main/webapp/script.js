@@ -32,3 +32,15 @@ function addActivity() {
   // Add it to the page
   activityContainer.innerText = activity;
 }
+
+/*
+  This function will execute GET request on the /data URL and display results in 
+  response-container div element 
+*/
+function getData() {
+    fetch("/data")
+        .then(response => response.text())
+        .then((str) => {
+            document.getElementById('response-container').innerText = str;
+        });
+}
