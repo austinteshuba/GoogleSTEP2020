@@ -37,9 +37,9 @@
             <!-- Include box shadow on circular image, text shadow on caption -->
             <div class="u-center u-text-center">
               <img class="img-circle u-box-shadow" src="/images/headshot.jpeg" alt="Profile Picture">
-              <div class="caption-lg u-text-shadow">
+              <p class="caption-lg u-text-shadow">
                 Welcome to My Portfolio
-              </div>
+              </p>
               <!-- Create a container for three inline logos 
                    to go to LinkedIn, GitHub, and personal Devpost.
                    (images must be same small size, like 32x32, for proper formatting) -->
@@ -62,31 +62,32 @@
           <div class="col-2-of-3 u-text-right header-container-right">
             <div class="heading-primary">
               <h1>Austin Teshuba</h1>
-              <h2>Welcome to my Portfolio!</h2>
+              <h2>A business-focused technologist.</h2>
             </div>
             <!-- Passions header will be handled via JavaScript 
                  to display my passions with a typewriter effect.
                  Blinking cursor has a blinking animation attached
                  to text contents (| in this case) -->
             <div class="heading-secondary">
-              <h3>Do you need someone passionate about:</h3>
-              <h3 id="passions">
-                <span class="blinking-cursor">|</span>
-              </h3>
+              <p class="text-xl">Do you need someone passionate about:</p>
+              <p class="text-xl">
+                <!-- These spans must be next to each-other to prevent an un-needed whitespace from appearing -->
+                <span id="passions"></span><span class="blinking-cursor">|</span>
+              </p>
             </div>
             <div class="heading-secondary">
-              <h4>Great!</h4>
-              <h4>You're in the right place.</h4>
+              <p class="text-l">Great!</p>
+              <p class="text-l">You're in the right place.</p>
             </div>
             <!-- Place text contents in the bottom right of the header div. -->
             <div class="u-div-bottom-r" id="header-bottom-r">
               <div class="heading-secondary">
-                <h4>Interested? Let's chat!</h4>
-                <h5>Don't worry, I won't bite.</h5>
+                <p class="text-l">Interested? Let's chat!</p>
+                <p class="text-m">Don't worry, I won't bite.</p>
               </div>
               <div class="heading-secondary">
-                <h5>p: (519) 984-2619</h5>
-                <h5>e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a></h5>
+                <p class="text-m">p: (519) 984-2619</p>
+                <p class="text-m">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a></p>
               </div>
             </div>
           </div>

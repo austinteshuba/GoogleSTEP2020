@@ -33,6 +33,41 @@ h5 {
     font-weight: var(--h5-font-weight);
 }
 
+/*
+    Text-xl offers the same visual appearance as an h3,
+    but should be used when a header doesn't semantically make sense.
+*/
+.text-xl {
+    display: block;
+    font-size: var(--h3-font-size);
+    font-weight: var(--h3-font-weight);
+}
+
+/*
+    Text-l offers the same visual appearance as an h4,
+    but should be used when a header doesn't semantically make sense.
+*/
+.text-l {
+    display: block;
+    font-size: var(--h4-font-size);
+    font-weight: var(--h4-font-weight);
+}
+
+/*
+    Text-m offers the same visual appearance as an h5,
+    but should be used when a header doesn't semantically make sense.
+
+    There is no text-s (yet)
+*/
+.text-m {
+    display: block;
+    font-size: var(--h5-font-size);
+    font-weight: var(--h5-font-weight);
+}
+
+/*
+    This is used to style captions underneath pictures.
+*/
 .caption-lg {
     display: block;
     font-size: var(--caption-font-size);

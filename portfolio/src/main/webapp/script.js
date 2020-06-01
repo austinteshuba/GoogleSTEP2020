@@ -20,7 +20,7 @@ const typewriterLoadDelayMs = 1000;
 
 // Get the selector for the Passions type-writer function when the window loads.
 window.onload = function () { 
-    var passionSelector = document.getElementById("passions").childNodes[0]
+    var passionSelector = document.getElementById("passions");
 
     window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
 };
@@ -45,7 +45,7 @@ function startTypewriter(textSelector, words, letterDelay, wordDelay) {
 // @param letterIndex - current index of next letter in word. Start at first letter by default.
 function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay, wordIndex = 0, letterIndex = 0) {
 
-    textSelector.nodeValue = textSelector.nodeValue + words[wordIndex].charAt(letterIndex);
+    textSelector.innerText = textSelector.innerText + words[wordIndex].charAt(letterIndex);
 
     // If the word is finished typing, go to the next word, wait a second, then clear
     // the text and start typing the next word. Must use a space character to clear the text
@@ -53,7 +53,7 @@ function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wo
     if (letterIndex+1 === words[wordIndex].length) {
 
         window.setTimeout(() => {
-            textSelector.nodeValue = " ";
+            textSelector.innerText = "";
             typewriter(textSelector, words, letterDelay, wordDelay, (wordIndex + 1) % words.length, 0);
         }, wordDelay);
 
