@@ -14,31 +14,36 @@
 
 // This is a list of passions to iterate through on the homepage
 const passions = ["Front-End Development?", "Machine Learning?", "Software Design?", "Technology Consulting?" ,"Data Science?", "Algorithms?", "User Experience?"];
-const typewriterLetterDelay = 100;
-const typewriterWordDelay = 1000;
+const typewriterLetterDelayMs = 100;
+const typewriterWordDelayMs = 1000;
+const typewriterLoadDelayMs = 1000;
 
 // Get the selector for the Passions type-writer function when the window loads.
 window.onload = function () { 
     var passionSelector = document.getElementById("passions").childNodes[0]
 
-    window.setTimeout(() => typewriter(passionSelector, passions), 1000);
+    window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
 };
 
 // Function to start a typewriter effect on an HTML element
 // where one letter of a word (in a list of words) appears at a time
 // @param textSelector - html selector of target element
 // @param words - list of words to cycle through in the effect. min length is 1
-// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0
+// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
 // @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
-function startTypewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay) {
-    typewriter(textSelector, words, 0, 0, letterDelay, wordDelay);
+function startTypewriter(textSelector, words, letterDelay, wordDelay) {
+    typewriter(textSelector, words, letterDelay, wordDelay);
 }
 
 // Recursive function for typewriter effect
 // Do not call directly - use convenience function
-// @param wordIndex - current index of word in words
-// @param letterIndex - current index of next letter in word
-function typewriter(textSelector, words, wordIndex = 0, letterIndex = 0, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay) {
+// @param textSelector - html selector of target element
+// @param words - list of words to cycle through in the effect. min length is 1
+// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
+// @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
+// @param wordIndex - current index of word in words. Start at first word by default
+// @param letterIndex - current index of next letter in word. Start at first letter by default.
+function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay, wordIndex = 0, letterIndex = 0) {
 
     textSelector.nodeValue = textSelector.nodeValue + words[wordIndex].charAt(letterIndex);
 
@@ -47,15 +52,14 @@ function typewriter(textSelector, words, wordIndex = 0, letterIndex = 0, letterD
     // or the node won't render and the nodeValue will become null and unsettable. 
     if (letterIndex+1 === words[wordIndex].length) {
 
-        (wordIndex + 1) % words.length;
         window.setTimeout(() => {
             textSelector.nodeValue = " ";
-            typewriter(textSelector, words, (wordIndex + 1) % words.length, 0);
+            typewriter(textSelector, words, letterDelay, wordDelay, (wordIndex + 1) % words.length, 0);
         }, wordDelay);
 
     } else {
         // Otherwise, start typing the next letter
-        window.setTimeout(() => typewriter(textSelector, words, wordIndex, letterIndex+1), letterDelay);
+        window.setTimeout(() => typewriter(textSelector, words, letterDelay, wordDelay, wordIndex, letterIndex+1), letterDelay);
     }
 
 }

@@ -5,7 +5,10 @@
     <title>
       Austin Teshuba
     </title>
+    <!-- Add Font Stylesheet from Google Fonts that imports the Montserrant font globally 
+         Link to font: https://fonts.google.com/specimen/Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;500;700&display=swap" rel="stylesheet">
+    <!-- Add stylesheets from css file -->
     <link rel="stylesheet" href="css/abstracts/variables.css">
     <link rel="stylesheet" href="css/abstracts/grid.css">
     <link rel="stylesheet" href="css/abstracts/animations.css">
@@ -15,20 +18,31 @@
     <link rel="stylesheet" href="css/components/img-circle.css">
     <link rel="stylesheet" href="css/sections/about.css">
     <link rel="stylesheet" href="css/sections/header.css">
+    <!-- Add logo for website tab. Must be a 32x32 and 16x16 png file available-->
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <!-- Import main Javascript file -->
     <script src="script.js"></script>
 
   <body>
+    <!-- This section comprises the header/contact card. -->
+    <!-- Must wrap in section-shadow-wrapper to create shadow along polygonal edge -->
     <div class="section-shadow-wrapper">
       <header class="header-primary">
+        <!-- Create a row with three columns. Apply a text shadow to all text elements. -->
         <div class="row u-text-shadow">
+          <!-- Column one on the left. Include a small padding. -->
           <div class="col-1-of-3 u-padding-sm header-container-left">
+            <!-- Div that contains the profile image. Center contents vertically and horizontally. -->  
+            <!-- Include box shadow on circular image, text shadow on caption -->
             <div class="u-center u-text-center">
               <img class="img-circle u-box-shadow" src="/images/headshot.jpeg" alt="Profile Picture">
               <div class="caption-lg u-text-shadow">
                 Welcome to My Portfolio
               </div>
+              <!-- Create a container for three inline logos 
+                   to go to LinkedIn, GitHub, and personal Devpost.
+                   (images must be same small size, like 32x32, for proper formatting) -->
               <div class="icons">
                 <a href="https://www.linkedin.com/in/ateshub" target="_blank" >
                   <img src="/images/linkedin.png" alt="LinkedIn Logo">
@@ -42,11 +56,18 @@
               </div>
             </div>
           </div>
+          <!-- Create double-sized column on the right to contain text headers. 
+               Right align all text. Use heading primary for larger text elements
+               and heading secondary for moderate sized text elements.-->
           <div class="col-2-of-3 u-text-right header-container-right">
             <div class="heading-primary">
               <h1>Austin Teshuba</h1>
               <h2>Welcome to my Portfolio!</h2>
             </div>
+            <!-- Passions header will be handled via JavaScript 
+                 to display my passions with a typewriter effect.
+                 Blinking cursor has a blinking animation attached
+                 to text contents (| in this case) -->
             <div class="heading-secondary">
               <h3>Do you need someone passionate about:</h3>
               <h3 id="passions">
@@ -57,6 +78,7 @@
               <h4>Great!</h4>
               <h4>You're in the right place.</h4>
             </div>
+            <!-- Place text contents in the bottom right of the header div. -->
             <div class="u-div-bottom-r" id="header-bottom-r">
               <div class="heading-secondary">
                 <h4>Interested? Let's chat!</h4>
@@ -71,6 +93,8 @@
         </div>
       </header>
     </div>
+    <!-- Placeholder for an About me section. Use same small padding 
+         and text-shadows on text elements as above. -->
     <div class="section-about u-padding-sm u-text-shadow">
       <h1>In a rush?</h1>
       <h2>Learn about me in 30 seconds or less.</h2>
