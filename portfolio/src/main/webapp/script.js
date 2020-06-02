@@ -63,3 +63,15 @@ function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wo
     }
 
 }
+
+/*
+  This function will execute GET request on the /data URL and display results in 
+  response-container div element 
+*/
+function getData() {
+    fetch("/data")
+        .then(response => response.text())
+        .then((str) => {
+            document.getElementById('response-container').innerText = str;
+        });
+}
