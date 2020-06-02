@@ -1,0 +1,9 @@
+/*
+    This page is for layout settings for the "about-us"
+    section (i.e. the get to know me in 30 seconds section)
+*/
+
+.section-about {
+    background-color: var(--background-white);
+    margin-top: calc(-1 * var(--header-cutout-height));
+}

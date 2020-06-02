@@ -2,46 +2,102 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Austin Teshuba</title>
-    <link rel="stylesheet" href="style.css">
+    <title>
+      Austin Teshuba
+    </title>
+    <!-- Add Font Stylesheet from Google Fonts that imports the Montserrant font globally 
+         Link to font: https://fonts.google.com/specimen/Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;500;700&display=swap" rel="stylesheet">
+    <!-- Add stylesheets from css file -->
+    <link rel="stylesheet" href="css/abstracts/variables.css">
+    <link rel="stylesheet" href="css/abstracts/grid.css">
+    <link rel="stylesheet" href="css/abstracts/animations.css">
+    <link rel="stylesheet" href="css/base/base.css">
+    <link rel="stylesheet" href="css/base/typography.css">
+    <link rel="stylesheet" href="css/base/utility.css">
+    <link rel="stylesheet" href="css/components/img-circle.css">
+    <link rel="stylesheet" href="css/sections/about.css">
+    <link rel="stylesheet" href="css/sections/header.css">
+    <!-- Add logo for website tab. Must be a 32x32 and 16x16 png file available-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <!-- Import main Javascript file -->
     <script src="script.js"></script>
-  </head>
   <body onload="getData()">
-    <div id="content">
-      <h1>Austin Teshuba</h1>
-
-      <img class="img-primary" src="/images/headshot.jpeg" alt="Profile Picture">
-
-      <p>
-          Hi! Welcome to my portfolio.
-
-      <a href="https://github.com/austinteshuba" target="_blank">Github</a>
-
-      <p> 
-          I'm a rising 3rd-year software engineering student at Western University.
-
-      <p>
-          I’m also a technologist knowledgeable in web development with Angular, 
-          iOS development with Swift, data analysis and ML with Python, algorithms, 
-          object oriented design, and much more.
-
-      <p>
-          Most importantly, I’m a curious person and a lightening fast learner. 
-          Whether I’m mastering web development to complete a pressing project at Deloitte, 
-          or figuring out Twilio and Microsoft Azure in 24 hours at MHacks, 
-          I always approach new problems with a positive attitude and relentless determination.
-
-      <p> 
-          If you're solving big problems with even bigger impacts, please reach out!
-          I'd love to chat more about how I can help.
-
-      <p>
-          What am I doing right now?
-      </p>
-
-      <button onclick="addActivity()">Let's find out</button>
-      <div id="activity-container"></div>
+    <!-- This section comprises the header/contact card. -->
+    <!-- Must wrap in section-shadow-wrapper to create shadow along polygonal edge -->
+    <div class="section-shadow-wrapper">
+      <header class="header-primary">
+        <!-- Create a row with three columns. Apply a text shadow to all text elements. -->
+        <div class="row u-text-shadow">
+          <!-- Column one on the left. Include a small padding. -->
+          <div class="col-1-of-3 u-padding-sm header-container-left">
+            <!-- Div that contains the profile image. Center contents vertically and horizontally. -->  
+            <!-- Include box shadow on circular image, text shadow on caption -->
+            <div class="u-center u-text-center">
+              <img class="img-circle u-box-shadow" src="/images/headshot.jpeg" alt="Profile Picture">
+              <p class="caption-lg u-text-shadow">
+                Welcome to My Portfolio
+              </p>
+              <!-- Create a container for three inline logos 
+                   to go to LinkedIn, GitHub, and personal Devpost.
+                   (images must be same small size, like 32x32, for proper formatting) -->
+              <div class="icons">
+                <a href="https://www.linkedin.com/in/ateshub" target="_blank" >
+                  <img src="/images/linkedin.png" alt="LinkedIn Logo">
+                </a>
+                <a href="https://www.github.com/austinteshuba" target="_blank" >
+                  <img src="/images/github.png" alt="Github Logo">
+                </a>
+                <a href="https://www.devpost.com/teshuba" target="_blank" >
+                  <img src="/images/link.png" alt="Devpost Link">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Create double-sized column on the right to contain text headers. 
+               Right align all text. Use heading primary for larger text elements
+               and heading secondary for moderate sized text elements.-->
+          <div class="col-2-of-3 u-text-right header-container-right">
+            <div class="heading-primary">
+              <h1>Austin Teshuba</h1>
+              <h2>A business-focused technologist.</h2>
+            </div>
+            <!-- Passions header will be handled via JavaScript 
+                 to display my passions with a typewriter effect.
+                 Blinking cursor has a blinking animation attached
+                 to text contents (| in this case) -->
+            <div class="heading-secondary">
+              <p class="text-xl">Do you need someone passionate about:</p>
+              <p class="text-xl">
+                <!-- These spans must be next to each-other to prevent an un-needed whitespace from appearing -->
+                <span id="passions"></span><span class="blinking-cursor">|</span>
+              </p>
+            </div>
+            <div class="heading-secondary">
+              <p class="text-l">Great!</p>
+              <p class="text-l">You're in the right place.</p>
+            </div>
+            <!-- Place text contents in the bottom right of the header div. -->
+            <div class="u-div-bottom-r" id="header-bottom-r">
+              <div class="heading-secondary">
+                <p class="text-l">Interested? Let's chat!</p>
+                <p class="text-m">Don't worry, I won't bite.</p>
+              </div>
+              <div class="heading-secondary">
+                <p class="text-m">p: (519) 984-2619</p>
+                <p class="text-m">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+    <!-- Placeholder for an About me section. Use same small padding 
+         and text-shadows on text elements as above. -->
+    <div class="section-about u-padding-sm u-text-shadow">
+      <h1>In a rush?</h1>
+      <h2>Learn about me in 30 seconds or less.</h2>
+      <p> Lorem Ipsum Emmet.
       <div id="response-container"></div>
     </div>
-  </body>
-</html>

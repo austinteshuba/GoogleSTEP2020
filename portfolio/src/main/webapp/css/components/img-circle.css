@@ -1,0 +1,12 @@
+/*
+    This component formats an image to display in a bordered circle
+*/
+
+.img-circle {
+   border: var(--profile-picture-border-width) solid var(--shadow-dark);
+   border-radius: 50%;
+   display: inline-block;
+   height: var(--profile-picture-size);
+   object-fit: cover;
+   width: var(--profile-picture-size);
+}

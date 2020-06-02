@@ -1,0 +1,42 @@
+/*
+    This file is for key declarations to reset style settings
+    in the browser and create stylings for base tags.
+*/
+
+/*
+This will make text still reflect the default font size
+of the user
+*/
+body {
+    box-sizing: border-box;
+    padding: var(--body-padding);
+}
+
+/* 
+Since most browsers have a default of 16px, 1rem = 10px
+Unless if the user increased their default font size
+*/
+html {
+    font-size: 62.5%; 
+    width: 100%;
+}
+
+/*
+    Resets any pre-existing browser style settings.
+*/
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+a {
+    color: var(--text-white);
+    text-decoration: none;
+}
+
+a img {
+    vertical-align: top;
+}
