@@ -102,6 +102,7 @@
     </div>
     <div>
       <form action="/data" method="POST">
+        <p>Introduce yourself!</p>
         <label for="fname">First Name:</label><br>
         <input type="text" id="fname" name="fname"><br>
         <label for="lname">Last Name:</label><br>
@@ -109,22 +110,24 @@
         <label for="email">Email:</label><br>
         <input type="text" id="email" name="email"><br>
         <br>
+
         <p>What's the purpose of your visit?</p>
-        
-        <input type="radio" id="recruiting" name="purpose">
+        <input type="radio" id="recruiting" name="purpose" value="recruiting">
         <label for="recruiting">Recruiting</label><br>
 
-        <input type="radio" id="project" name="purpose">
+        <input type="radio" id="project" name="purpose" value="project">
         <label for="project">Project Inquiries</label><br>
 
-        <input type="radio" id="tutoring" name="purpose">
+        <input type="radio" id="tutoring" name="purpose" value="tutoring">
         <label for="tutoring">Tutoring</label><br>
 
-        <input type="radio" id="chat" name="purpose">
-        <label for="chat">Just a chat</label><br>
+        <input type="radio" id="chat" name="purpose" value="chat">
+        <label for="chat">Other / Just a chat</label><br>
         <br>
-        
+
         <label for="comment">Comment:</label>
         <input type="text" id="comment" name="comment"><br>
+
+        <input type="submit" value="Submit">
       </form>
     </div>
