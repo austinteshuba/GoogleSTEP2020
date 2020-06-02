@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /*
-  Servlet that stubs response from /data URL. Expected response is of type String.
+* Servlet that stubs response from /data URL. Expected response is of type String.
 */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -32,8 +32,8 @@ public class DataServlet extends HttpServlet {
   private ArrayList<String> comments;
   
   /*
-    Initialize the ArrayList with three hardcoded comments
-    to stub the response.
+  * Initialize the ArrayList with three hardcoded comments
+  * to stub the response.
   */
   @Override
   public void init() {
@@ -57,8 +57,8 @@ public class DataServlet extends HttpServlet {
 
 
   /*
-    Response to a GET request with a JSON string representing the 
-    hardcoded comments.
+  * Response to a GET request with a JSON string representing the 
+  * hardcoded comments.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
