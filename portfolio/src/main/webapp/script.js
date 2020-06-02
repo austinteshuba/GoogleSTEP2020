@@ -34,13 +34,11 @@ function addActivity() {
 }
 
 /*
-  This function will execute GET request on the /data URL and display results in 
-  response-container div element 
+  This function will execute GET request on the /data URL and log results.
+  Expected response is a hardcoded array of comments.
 */
 function getData() {
-    fetch("/data")
-        .then(response => response.text())
-        .then((str) => {
-            document.getElementById('response-container').innerText = str;
-        });
+  fetch('/data')
+    .then((response) => response.json())
+    .then((commentsArr) => console.log(commentsArr));
 }
