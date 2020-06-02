@@ -31,22 +31,35 @@ public class DataServlet extends HttpServlet {
 
   private ArrayList<String> comments;
   
+  /*
+    Initialize the ArrayList with three hardcoded comments
+    to stub the response.
+  */
   @Override
   public void init() {
 
     comments = new ArrayList<String>();
-    
+
     comments.add("Comment One.");
     comments.add("Comment Two.");
     comments.add("Comment Three.");
 
   }
 
+  /*
+    Utility function that uses Gson to convert an ArrayList<String>
+    to a JSON string.
+  */
   private String arrayListToJson(ArrayList<String> arrList) {
     Gson gson = new Gson();
     return gson.toJson(arrList);
   }
 
+
+  /*
+    Response to a GET request with a JSON string representing the 
+    hardcoded comments.
+  */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String json = arrayListToJson(comments);
