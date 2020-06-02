@@ -17,7 +17,7 @@ const activities = ['Coding 💻', 'Travelling 🗼', 'Brewing coffee ☕', 'Goi
 
 
 /**
-  Adds a random activity I might be doing to the page
+ * Adds a random activity I might be doing to the page
  */
 function addActivity() {
   const activityContainer = document.getElementById('activity-container');
@@ -33,20 +33,20 @@ function addActivity() {
   activityContainer.innerText = activity;
 }
 
-/*
-  This function will execute GET request on the /data URL.
-  Expected response is an array of hardcoded comments.
-
-  This function will display each comment on a new line in the
-  response-container div.
-*/
+/**
+ * This function will execute GET request on the /data URL.
+ * Expected response is an array of hardcoded comments.
+ *
+ * This function will display each comment on a new line in the
+ * response-container div.
+ */
 function getData() {
   fetch('/data')
-    .then((response) => response.json())
-    .then((commentsArr) => {
-      var commentStr = commentsArr.reduce((a,b) => a + "\n" + b);
-      var element = document.getElementById("response-container");
+      .then((response) => response.json())
+      .then((commentsArr) => {
+        const commentStr = commentsArr.reduce((a,b) => a + "\n" + b);
+        const element = document.getElementById("response-container");
 
-      element.innerText = commentStr;
-    });
+        element.innerText = commentStr;
+      });
 }
