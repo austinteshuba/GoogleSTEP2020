@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
-* Servlet that stubs response from /data URL. Expected response is of type String.
-*/
+/**
+ * Servlet that stubs response from /data URL. Expected response is of type String.
+ */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
