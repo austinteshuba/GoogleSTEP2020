@@ -32,28 +32,24 @@ public class DataServlet extends HttpServlet {
   /**
   * Holds the stubbed comments to be returned by the GET method.
   */
-  private final String[] COMMENTS = new String[]{
-      "Comment One.",
-      "Comment Two.",
-      "Comment Three."
-  };
+  private final List<String> comments = Arrays.asList("Comment One.", "Comment Two.", "Comment Three.");
 
-  /*
-  * Utility function that uses Gson to convert an ArrayList
-  * to a JSON string.
+  /**
+  * Utility function that uses Gson to convert a List
+  * (e.g. ArrayList) to a JSON string.
   */
-  private String arrayListToJson(List arrList) {
+  private String listToJson(List list) {
     Gson gson = new Gson();
-    return gson.toJson(arrList);
+    return gson.toJson(list);
   }
 
-  /*
+  /**
   * Response to a GET request with a JSON string representing the 
   * hardcoded comments.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = arrayListToJson(Arrays.asList(COMMENTS));
+    String json = listToJson(comments);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }

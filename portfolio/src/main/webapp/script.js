@@ -44,6 +44,7 @@ function getData() {
   fetch('/data')
       .then((response) => response.json())
       .then((commentsArr) => {
+        console.log(commentsArr);
         const commentStr = commentsArr.reduce((a,b) => a + "\n" + b);
         const element = document.getElementById("response-container");
 
