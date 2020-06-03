@@ -13,18 +13,20 @@
 // limitations under the License.
 
 // This is a list of passions to iterate through on the homepage
-const passions = ["Front-End Development?", "Machine Learning?", "Software Design?", "Technology Consulting?" ,"Data Science?", "Algorithms?", "User Experience?"];
+const passions = ["Front-End Development?", "Machine Learning?",
+    "Software Design?", "Technology Consulting?", "Data Science?", "Algorithms?",
+    "User Experience?"];
 const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-// Run the Get request on load
+// Run the GET request on load
 // and start the typewriter effect in the passions element
 window.onload = function () {
-    getData();
+  getData();
 
-    let passionSelector = document.getElementById("passions");
-    window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
+  let passionSelector = document.getElementById("passions");
+  window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
 };
 
 // Function to start a typewriter effect on an HTML element
@@ -34,7 +36,7 @@ window.onload = function () {
 // @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
 // @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
 function startTypewriter(textSelector, words, letterDelay, wordDelay) {
-    typewriter(textSelector, words, letterDelay, wordDelay);
+  typewriter(textSelector, words, letterDelay, wordDelay);
 }
 
 // Recursive function for typewriter effect
@@ -47,38 +49,34 @@ function startTypewriter(textSelector, words, letterDelay, wordDelay) {
 // @param letterIndex - current index of next letter in word. Start at first letter by default.
 function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay, wordIndex = 0, letterIndex = 0) {
 
-    textSelector.innerText = textSelector.innerText + words[wordIndex].charAt(letterIndex);
+  textSelector.innerText = textSelector.innerText + words[wordIndex].charAt(letterIndex);
 
-    // If the word is finished typing, go to the next word, wait a second, then clear
-    // the text and start typing the next word. Must use a space character to clear the text
-    // or the node won't render and the nodeValue will become null and unsettable. 
-    if (letterIndex+1 === words[wordIndex].length) {
+  // If the word is finished typing, go to the next word, wait a second, then clear
+  // the text and start typing the next word. Must use a space character to clear the text
+  // or the node won't render and the nodeValue will become null and unsettable.
+  if (letterIndex + 1 === words[wordIndex].length) {
+    window.setTimeout(() => {
+      textSelector.innerText = "";
+      typewriter(textSelector, words, letterDelay, wordDelay, (wordIndex + 1) % words.length, 0);
+    }, wordDelay);
 
-        window.setTimeout(() => {
-            textSelector.innerText = "";
-            typewriter(textSelector, words, letterDelay, wordDelay, (wordIndex + 1) % words.length, 0);
-        }, wordDelay);
-
-    } else {
-        // Otherwise, start typing the next letter
-        window.setTimeout(() => typewriter(textSelector, words, letterDelay, wordDelay, wordIndex, letterIndex+1), letterDelay);
-    }
-
+  } else {
+    // Otherwise, start typing the next letter
+    window.setTimeout(() => typewriter(textSelector, words, letterDelay, wordDelay, wordIndex, letterIndex + 1), letterDelay);
+  }
 }
 
-/**
- * This function will execute GET request on the /data URL.
- * Expected response is an array of hardcoded comments.
- *
- * This function will display each comment on a new line in the
- * response-container div.
- */
+// This function will execute GET request on the /data URL.
+// Expected response is an array of comments previously inputted.
+// This function will display each comment on a new line in the
+// response-container div.
 function getData() {
   fetch('/data')
       .then((response) => response.json())
       .then((comments) => {
         // Create a string to contain all of the comments
         let commentString = ""
+
         // Build up the string with information from each comment.
         for (const comment of comments) {
           commentString += "Comment:\n";
