@@ -18,10 +18,12 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-// Get the selector for the Passions type-writer function when the window loads.
-window.onload = function () { 
-    var passionSelector = document.getElementById("passions");
+// Run the Get request on load
+// and start the typewriter effect in the passions element
+window.onload = function () {
+    getData();
 
+    var passionSelector = document.getElementById("passions");
     window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
 };
 
@@ -72,12 +74,10 @@ function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wo
  * response-container div.
  */
 function getData() {
+  console.log("Here");
   fetch('/data')
       .then((response) => response.json())
       .then((commentsArr) => {
-        const commentStr = commentsArr.reduce((a,b) => a + "\n" + b);
-        const element = document.getElementById("response-container");
-
-        element.innerText = commentStr;
+        console.log(commentsArr);
       });
 }

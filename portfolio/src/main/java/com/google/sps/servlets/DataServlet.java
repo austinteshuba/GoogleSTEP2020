@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,30 +29,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<String> comments;
-  
-  /*
-  * Initialize the ArrayList with three hardcoded comments
-  * to stub the response.
-  */
-  @Override
-  public void init() {
-
-    comments = new ArrayList<String>();
-
-    comments.add("Comment One.");
-    comments.add("Comment Two.");
-    comments.add("Comment Three.");
-
-  }
+  private ArrayList<Comment> comments = new ArrayList<Comment>();
 
   /*
   * Utility function that uses Gson to convert an ArrayList<String>
   * to a JSON string.
   */
-  private String arrayListToJson(ArrayList<String> arrList) {
+  private String arrayListToJson(List objects) {
     Gson gson = new Gson();
-    return gson.toJson(arrList);
+    return gson.toJson(objects);
   }
 
 
@@ -64,5 +50,21 @@ public class DataServlet extends HttpServlet {
     String json = arrayListToJson(comments);
     response.setContentType("application/json;");
     response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Create new comment object
+    Comment comment = new Comment();
+
+    comment.setComment("Hello");
+    comment.setFirstName("Austin");
+    comment.setLastName("Teshuba");
+    comment.setVisitType("chat");
+    comment.setEmail("ateshuba@google.com");
+
+    comments.add(comment);
+
+    response.sendRedirect("/index.html");
   }
 }
