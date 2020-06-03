@@ -29,42 +29,75 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<Comment> comments = new ArrayList<Comment>();
+  private ArrayList<Comment> comments = new ArrayList<>();
 
-  /*
+  /**
   * Utility function that uses Gson to convert an ArrayList<String>
   * to a JSON string.
   */
-  private String arrayListToJson(List objects) {
+  private String listToJson(List objects) {
     Gson gson = new Gson();
     return gson.toJson(objects);
   }
 
+  /**
+   * Takes in a request and parameter for the request
+   * and returns the result as a string.
+   * @param request the request sent to the GET or POST methods
+   * @param key the parameter in the request you want to access
+   * @return the value of the parameter in the request, or an empty string if this is null.
+   */
+  private String parameterToString(HttpServletRequest request, String key) {
+    String requestVal = request.getParameter(key);
+    return requestVal != null ? requestVal : "";
+  }
 
-  /*
+
+  /**
   * Response to a GET request with a JSON string representing the 
   * hardcoded comments.
+   * @param request the request sent to the GET method from client
+   * @param response HTTP response that will be sent back to the client
+   * @throws IOException if an IO error occurs while the GET request is being processed by the servlet.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = arrayListToJson(comments);
+    String json = listToJson(comments);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
 
+  /**
+   * Response to a POST request that contains a new entered comment.
+   * In the request, expected values include:
+   * fname - User's first name
+   * lname - User's last name
+   * email - User's email
+   * purpose - User's reason for visiting
+   * comment - User's written comment
+   *
+   * None of the fields are required. For now, an empty form entry is
+   * handled as an empty comment object.
+   * @param request the request sent to the POST method from client
+   * @param response HTTP response that will be sent back to the client
+   * @throws IOException if an IO error occurs while the GET request is being processed by the servlet.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Create new comment object
     Comment comment = new Comment();
 
-    comment.setComment("Hello");
-    comment.setFirstName("Austin");
-    comment.setLastName("Teshuba");
-    comment.setVisitType("chat");
-    comment.setEmail("ateshuba@google.com");
+    // Populate comment object with values from the request
+    comment.setComment(parameterToString(request, "comment"));
+    comment.setFirstName(parameterToString(request, "fname"));
+    comment.setLastName(parameterToString(request, "lname"));
+    comment.setEmail(parameterToString(request, "email"));
+    comment.setVisitType(parameterToString(request, "purpose"));
 
+    // Add the comment to the ArrayList
     comments.add(comment);
 
+    // Redirect user back to the homepage.
     response.sendRedirect("/index.html");
   }
 }
