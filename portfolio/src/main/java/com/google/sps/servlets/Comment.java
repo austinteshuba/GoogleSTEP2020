@@ -4,68 +4,20 @@ package com.google.sps.servlets;
  * Encapsulated the possible values for reasons a user visited a site.
  * Update this enum when adding or removing allowable Visit Type values to the
  * Comments form.
+ *
+ * NONE represents a null response (i.e. user did not answer the question)
+ * All other responses correspond with one radio button on the form
  */
 enum VisitType {
-    NONE {
-        /**
-         * NONE corresponds to an empty/null response to the
-         * "Reason for Visiting" question
-         * @return empty string to reflect null input
-         */
-        @Override
-        public String toString() {
-            return "";
-        }
-    },
-    RECRUITING {
-        /**
-         * RECRUITING corresponds to a visitor indicating
-         * they are visiting the site for recruiting purposes
-         * @return "recruiting" to reflect the string received in form POST request
-         */
-        @Override
-        public String toString() {
-            return "recruiting";
-        }
-    },
-    PROJECT {
-        /**
-         * PROJECT corresponse to a visitor indicating they
-         * are interested in chatting about a new project opportunity.
-         * @return "project" to reflect the string received in form POST request
-         */
-        @Override
-        public String toString() {
-            return "project";
-        }
-    },
-    TUTORING {
-        /**
-         * TUTORING corresponds to a visitor indicating they
-         * are a potential tutoring client.
-         * @return "tutoring" to reflect the string received in form POST request
-         */
-        @Override
-        public String toString() {
-            return "tutoring";
-        }
-    },
-    CHAT {
-        /**
-         * CHAT correponds to a visitor indicating they are interested
-         * in just chatting for none of the above reasons.
-         * @return "chat" to reflect the string received in form POST request
-         */
-        @Override
-        public String toString() {
-            return "chat";
-        }
-    }
+    NONE, RECRUITING, PROJECT, TUTORING, CHAT
 }
 
 /**
  * Encapsulates a user-entered comment and their personal information,
  * including their first and last name, reason for visiting, and email address.
+ *
+ * Setter functions included, but getter functions are not needed
+ * since GSON accesses private members directly.
  */
 public class Comment {
     private String email;
@@ -118,24 +70,5 @@ public class Comment {
         }
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public String getComment() {
-        return this.comment;
-    }
-
-    public String getVisitReason() {
-        return this.visitReason.toString();
-    }
 
 }

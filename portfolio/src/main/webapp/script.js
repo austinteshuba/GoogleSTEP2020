@@ -23,7 +23,7 @@ const typewriterLoadDelayMs = 1000;
 window.onload = function () {
     getData();
 
-    var passionSelector = document.getElementById("passions");
+    let passionSelector = document.getElementById("passions");
     window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
 };
 
@@ -74,10 +74,22 @@ function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wo
  * response-container div.
  */
 function getData() {
-  console.log("Here");
   fetch('/data')
       .then((response) => response.json())
-      .then((commentsArr) => {
-        console.log(commentsArr);
+      .then((comments) => {
+        // Create a string to contain all of the comments
+        let commentString = ""
+        // Build up the string with information from each comment.
+        for (const comment of comments) {
+          commentString += "Comment:\n";
+          commentString += "First Name: " + comment["firstName"] + "\n";
+          commentString += "Last Name: " + comment["lastName"] + "\n";
+          commentString += "Email: " + comment["email"] + "\n";
+          commentString += "Reason for Visit: " + comment["visitReason"] + "\n";
+          commentString += "Comment Body: " + comment["comment"] + "\n\n";
+        }
+
+        // Display the comment
+        document.getElementById("response-container").innerText = commentString;
       });
 }

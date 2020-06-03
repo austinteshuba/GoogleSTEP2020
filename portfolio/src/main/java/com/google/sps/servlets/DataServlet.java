@@ -70,10 +70,10 @@ public class DataServlet extends HttpServlet {
   /**
    * Response to a POST request that contains a new entered comment.
    * In the request, expected values include:
-   * fname - User's first name
-   * lname - User's last name
+   * firstName - User's first name
+   * lastName - User's last name
    * email - User's email
-   * purpose - User's reason for visiting
+   * visitReason - User's reason for visiting
    * comment - User's written comment
    *
    * None of the fields are required. For now, an empty form entry is
@@ -89,10 +89,10 @@ public class DataServlet extends HttpServlet {
 
     // Populate comment object with values from the request
     comment.setComment(parameterToString(request, "comment"));
-    comment.setFirstName(parameterToString(request, "fname"));
-    comment.setLastName(parameterToString(request, "lname"));
+    comment.setFirstName(parameterToString(request, "firstName"));
+    comment.setLastName(parameterToString(request, "lastName"));
     comment.setEmail(parameterToString(request, "email"));
-    comment.setVisitType(parameterToString(request, "purpose"));
+    comment.setVisitType(parameterToString(request, "visitReason"));
 
     // Add the comment to the ArrayList
     comments.add(comment);
