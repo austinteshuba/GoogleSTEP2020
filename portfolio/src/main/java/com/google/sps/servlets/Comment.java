@@ -34,6 +34,10 @@ public final class Comment {
   private final VisitType visitReason;
   private final String comment;
 
+  // Store date of creation in Unix time in milliseconds.
+  // Unix time is time in milliseconds since January 1, 1970 12:00:00AM
+  private final long timestamp;
+
   /**
    * Initializes a comment. All values are directly passed to their respective fields,
    * except for visitReason which requires additional logic stored in a setter method.
@@ -50,6 +54,9 @@ public final class Comment {
     this.lastName = lastName;
     this.comment = comment;
     this.visitReason = parseVisitType(visitReason);
+
+    // Set time of creation to current time
+    this.timestamp = System.currentTimeMillis();
   }
 
   /**
@@ -62,8 +69,10 @@ public final class Comment {
     this.firstName = (String) commentEntity.getProperty("firstName");
     this.lastName = (String) commentEntity.getProperty("lastName");
     this.comment = (String) commentEntity.getProperty("comment");
-    System.out.println((String) commentEntity.getProperty("visitReason"));
     this.visitReason = parseVisitType((String) commentEntity.getProperty("visitReason"));
+
+    // Use timestamp stored in entity, not current time
+    this.timestamp = (long) commentEntity.getProperty("timestamp");
   }
 
   /**
@@ -109,8 +118,10 @@ public final class Comment {
     commentEntity.setProperty("lastName", this.lastName);
     commentEntity.setProperty("email", this.email);
     commentEntity.setProperty("comment", this.comment);
+    commentEntity.setProperty("timestamp", this.timestamp);
     commentEntity.setProperty("visitReason", this.visitReason.name()); // set to enum property name
 
+    // Return the created entity
     return commentEntity;
   }
 
@@ -136,6 +147,7 @@ public final class Comment {
       comments.add(comment);
     }
 
+    // Return created list
     return comments;
   }
 }
