@@ -16,10 +16,12 @@ enum VisitType {
  * Encapsulates a user-entered comment and their personal information,
  * including their first and last name, reason for visiting, and email address.
  *
+ * Can only be initialized once.
+ *
  * Setter functions included, but getter functions are not needed
  * since GSON accesses private members directly.
  */
-public class Comment {
+public final class Comment {
   private String email;
   private String firstName;
   private String lastName;
@@ -27,32 +29,21 @@ public class Comment {
   private String comment;
 
   /**
-   * Create new Comment object.
-   * Initialize all string values as empty strings
-   * and set visitReason to NONE.
+   * Initializes a comment. All values are directly passed to their respective fields,
+   * except for visitReason which requires additional logic stored in a setter method.
+   * @param email email address of site visitor
+   * @param firstName first name of site visitor
+   * @param lastName last name of site visitor
+   * @param visitReason reason for the visit's visit. Must correspond to a value in the VisitType enum
+   * @param comment User's comment after visiting site.
    */
-  public Comment() {
-    email = "";
-    firstName = "";
-    lastName = "";
-    comment = "";
-    visitReason = VisitType.NONE;
-  }
-
-  public void setEmail(String email) {
-      this.email = email;
-  }
-
-  public void setFirstName(String firstName) {
+  public Comment(String email, String firstName, String lastName, String visitReason,
+      String comment) {
+    this.email = email;
     this.firstName = firstName;
-  }
-
-  public void setLastName(String lastName) {
     this.lastName = lastName;
-  }
-
-  public void setComment(String comment) {
     this.comment = comment;
+    setVisitType(visitReason);
   }
 
     /**
@@ -62,7 +53,7 @@ public class Comment {
      * "", "recruiting", "project", "tutoring", or "chat".
      * @param visitReason string representation from POST request of the reason user visited.
      */
-  public void setVisitType(String visitReason) {
+  public void setVisitType(String visitReason) throws IllegalArgumentException {
     switch (visitReason.toLowerCase()) {
       case "recruiting":
         this.visitReason = VisitType.RECRUITING;
@@ -79,6 +70,11 @@ public class Comment {
       case "":
         this.visitReason = VisitType.NONE;
         break;
+      default:
+        throw new IllegalArgumentException("Unexpected Value");
+        // This should not happen, as the form has a discrete set of values
+        // for visit type. If it does happen, check the HTML form
+        // or change the Enum to include new possible values.
     }
   }
 }

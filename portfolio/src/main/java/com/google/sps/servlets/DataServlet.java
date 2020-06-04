@@ -32,7 +32,7 @@ public class DataServlet extends HttpServlet {
   /**
    * Stores comments sent via POST request from client.
    */
-  private final ArrayList<Comment> comments = new ArrayList<>();
+  private final List<Comment> comments = new ArrayList<>();
 
   /**
    * Utility function that uses Gson to convert an ArrayList<String>
@@ -62,7 +62,7 @@ public class DataServlet extends HttpServlet {
    *
    * @param request  the request sent to the GET method from client
    * @param response HTTP response that will be sent back to the client
-   * @throws IOException if an IO error occurs while the GET request is being processed by the servlet.
+   * @throws IOException if an IO error occurs while the request is being processed by the servlet.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -84,24 +84,32 @@ public class DataServlet extends HttpServlet {
    *
    * @param request  the request sent to the POST method from client
    * @param response HTTP response that will be sent back to the client
-   * @throws IOException if an IO error occurs while the GET request is being processed by the servlet.
+   * @throws IOException if an IO error occurs while the request is being processed by the servlet.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Create new comment object
-    Comment comment = new Comment();
+    // Get values from request
+    // comm is to hold the comment text left by the user
+    String comm = parameterToString(request, "comment");
+    String firstName = parameterToString(request, "firstName");
+    String lastName = parameterToString(request, "lastName");
+    String email = parameterToString(request, "email");
+    String visitReason = parameterToString(request, "visitReason");
 
-    // Populate comment object with values from the request
-    comment.setComment(parameterToString(request, "comment"));
-    comment.setFirstName(parameterToString(request, "firstName"));
-    comment.setLastName(parameterToString(request, "lastName"));
-    comment.setEmail(parameterToString(request, "email"));
-    comment.setVisitType(parameterToString(request, "visitReason"));
+    // Either populate a Comment instance or return an error.
+    try {
+      // Create comment instance
+      // Can throw error for VisitType
+      Comment comment = new Comment(email, firstName, lastName, visitReason, comm);
 
-    // Add the comment to the ArrayList
-    comments.add(comment);
+      // Add the comment to the ArrayList
+      comments.add(comment);
 
-    // Redirect user back to the homepage.
-    response.sendRedirect("/index.html");
+      // Redirect user back to the homepage.
+      response.sendRedirect("/index.html");
+
+    } catch (IllegalArgumentException e) {
+      response.sendError(400, "Invalid argument for VisitType.");
+    }
   }
 }

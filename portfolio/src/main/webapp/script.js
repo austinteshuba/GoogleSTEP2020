@@ -14,8 +14,8 @@
 
 // This is a list of passions to iterate through on the homepage
 const passions = ["Front-End Development?", "Machine Learning?",
-    "Software Design?", "Technology Consulting?", "Data Science?", "Algorithms?",
-    "User Experience?"];
+    "Software Design?", "Technology Consulting?", "Data Science?",
+    "Algorithms?", "User Experience?"];
 const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
@@ -26,50 +26,77 @@ window.onload = function () {
   getData();
 
   let passionSelector = document.getElementById("passions");
-  window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
+  window.setTimeout(() => {
+    startTypewriter(
+        passionSelector,
+        passions,
+        typewriterLetterDelayMs,
+        typewriterWordDelayMs);
+  }, typewriterLoadDelayMs);
 };
 
-// Function to start a typewriter effect on an HTML element
-// where one letter of a word (in a list of words) appears at a time
-// @param textSelector - html selector of target element
-// @param words - list of words to cycle through in the effect. min length is 1
-// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
-// @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
-function startTypewriter(textSelector, words, letterDelay, wordDelay) {
-  typewriter(textSelector, words, letterDelay, wordDelay);
+/**
+ * Function to start a typewriter effect on an HTML element
+ * where one letter of a word (in a list of words) appears at a time
+ * @param textSelector - html selector of target element
+ * @param words - list of words to cycle through in the effect. min length is 1
+ * @param letterDelayMs - duration in milliseconds of delay between
+ *     letter keypresses. Must be > 0.
+ * @param wordDelayMs - duration in milliseconds of delay between presenting
+ *     a finished word and starting the next one. Must be >0
+ */
+
+function startTypewriter(textSelector, words, letterDelayMs, wordDelayMs) {
+  typewriter(textSelector, words, letterDelayMs, wordDelayMs);
 }
 
-// Recursive function for typewriter effect
-// Do not call directly - use convenience function
-// @param textSelector - html selector of target element
-// @param words - list of words to cycle through in the effect. min length is 1
-// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
-// @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
-// @param wordIndex - current index of word in words. Start at first word by default
-// @param letterIndex - current index of next letter in word. Start at first letter by default.
-function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay, wordIndex = 0, letterIndex = 0) {
+/**
+ * Recursive function for typewriter effect
+ * Do not call directly - use convenience function
+ * @param textSelector - html selector of target element
+ * @param words - list of words to cycle through in the effect. min length is 1
+ * @param letterDelayMs - duration in milliseconds of delay between
+ *     letter keypresses. Must be > 0.
+ * @param wordDelayMs - duration in milliseconds of delay between
+ *     presenting a finished word and starting the next one. Must be >0
+ * @param wordIndex - current index of word in words.
+ *     Start at first word by default
+ * @param letterIndex - current index of next letter in word.
+ *     Start at first letter by default.
+ */
 
-  textSelector.innerText = textSelector.innerText + words[wordIndex].charAt(letterIndex);
+function typewriter(textSelector, words, letterDelayMs,
+    wordDelayMs, wordIndex = 0, letterIndex = 0) {
 
-  // If the word is finished typing, go to the next word, wait a second, then clear
-  // the text and start typing the next word. Must use a space character to clear the text
-  // or the node won't render and the nodeValue will become null and unsettable.
+  textSelector.innerText =
+      textSelector.innerText + words[wordIndex].charAt(letterIndex);
+
+  // If the word is finished typing, go to the next word, wait a second, then
+  // clear the text and start typing the next word.
   if (letterIndex + 1 === words[wordIndex].length) {
     window.setTimeout(() => {
       textSelector.innerText = "";
-      typewriter(textSelector, words, letterDelay, wordDelay, (wordIndex + 1) % words.length, 0);
-    }, wordDelay);
+      typewriter(
+          textSelector, words, letterDelayMs, wordDelayMs,
+          (wordIndex + 1) % words.length, 0);
+    }, wordDelayMs);
 
   } else {
     // Otherwise, start typing the next letter
-    window.setTimeout(() => typewriter(textSelector, words, letterDelay, wordDelay, wordIndex, letterIndex + 1), letterDelay);
+    window.setTimeout(() => {
+      typewriter(
+          textSelector, words, letterDelayMs, wordDelayMs, wordIndex,
+          letterIndex + 1);
+    }, letterDelayMs);
   }
 }
 
-// This function will execute GET request on the /data URL.
-// Expected response is an array of comments previously inputted.
-// This function will display each comment on a new line in the
-// response-container div.
+/**
+ * This function will execute GET request on the /data URL.
+ * Expected response is an array of comments previously inputted.
+ * This function will display each comment on a new line in the
+ * response-container div.
+ */
 function getData() {
   fetch('/data')
       .then((response) => response.json())
@@ -88,6 +115,7 @@ function getData() {
         }
 
         // Display the comment
-        document.getElementById("response-container").innerText = commentString;
+        document.getElementById("response-container").innerText =
+            commentString;
       });
 }
