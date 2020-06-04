@@ -32,7 +32,7 @@ public class DataServlet extends HttpServlet {
   /**
   * Holds the stubbed comments to be returned by the GET method.
   */
-  private final List<String> comments = Arrays.asList("Comment One.", "Comment Two.", "Comment Three.");
+  private List<String> comments = Arrays.asList("Comment One.", "Comment Two.", "Comment Three.");
 
   /**
   * Utility function that uses Gson to convert a List
