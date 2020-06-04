@@ -1,5 +1,7 @@
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.Entity;
+
 /**
  * Encapsulated the possible values for reasons a user visited a site.
  * Update this enum when adding or removing allowable Visit Type values to the
@@ -76,5 +78,23 @@ public final class Comment {
         // for visit type. If it does happen, check the HTML form
         // or change the Enum to include new possible values.
     }
+  }
+
+  /**
+   * Create a Datastore entity. Use field names as the keys, field values as the values.
+   * @return Datastore entity with contents of this class
+   */
+  public Entity createEntity() {
+    // Create entity
+    Entity commentEntity = new Entity("Comment");
+
+    // Create properties in the Entity for each field.
+    commentEntity.setProperty("firstName", this.firstName);
+    commentEntity.setProperty("lastName", this.lastName);
+    commentEntity.setProperty("email", this.email);
+    commentEntity.setProperty("comment", this.comment);
+    commentEntity.setProperty("visitReason", this.visitReason.name()); // set to enum property name
+
+    return commentEntity;
   }
 }

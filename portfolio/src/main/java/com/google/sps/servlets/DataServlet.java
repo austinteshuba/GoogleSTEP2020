@@ -15,6 +15,9 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ public class DataServlet extends HttpServlet {
   /**
    * Stores comments sent via POST request from client.
    */
-  private final List<Comment> comments = new ArrayList<>();
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   /**
    * Utility function that uses Gson to convert an ArrayList<String>
@@ -57,6 +60,8 @@ public class DataServlet extends HttpServlet {
   }
 
   /**
+   * TODO: Update the GET function to work with Datastore
+   *
    * Response to a GET request with a JSON string representing the
    * hardcoded comments.
    *
@@ -66,13 +71,15 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = listToJson(comments);
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+    // String json = listToJson(comments);
+    // response.setContentType("application/json;");
+    // response.getWriter().println(json);
   }
 
   /**
    * Response to a POST request that contains a new entered comment.
+   * Store the new comment in the Datastore for future review.
+   *
    * In the request, expected values include:
    * firstName - User's first name
    * lastName - User's last name
@@ -88,6 +95,7 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     // Get values from request
     // comm is to hold the comment text left by the user
     String comm = parameterToString(request, "comment");
@@ -96,20 +104,23 @@ public class DataServlet extends HttpServlet {
     String email = parameterToString(request, "email");
     String visitReason = parameterToString(request, "visitReason");
 
-    // Either populate a Comment instance or return an error.
+    // Declare a comment object
+    Comment comment = null;
+
+    // Either populate a Comment instance or return 400 error to client if input is invalid.
     try {
-      // Create comment instance
-      // Can throw error for VisitType
-      Comment comment = new Comment(email, firstName, lastName, visitReason, comm);
-
-      // Add the comment to the ArrayList
-      comments.add(comment);
-
-      // Redirect user back to the homepage.
-      response.sendRedirect("/index.html");
-
+      comment = new Comment(email, firstName, lastName, visitReason, comm);
     } catch (IllegalArgumentException e) {
       response.sendError(400, "Invalid argument for VisitType.");
+      return;
     }
+
+    // Add comment to the datastore
+    this.datastore.put(comment.createEntity());
+
+    // Redirect user back to the homepage
+    response.sendRedirect("/index.html");
+
+
   }
 }
