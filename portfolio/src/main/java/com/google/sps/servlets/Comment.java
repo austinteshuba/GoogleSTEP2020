@@ -1,6 +1,10 @@
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import java.util.ArrayList;
 
 /**
  * Encapsulated the possible values for reasons a user visited a site.
@@ -48,13 +52,27 @@ public final class Comment {
     setVisitType(visitReason);
   }
 
-    /**
-     * Set the VisitType enum to the appropriate value based on the string recieved in the POST
-     * request. If the input is unexpected, throw an error Expected inputs are one of the following:
-     * "", "recruiting", "project", "tutoring", or "chat".
-     * @param visitReason string representation from POST request of the reason user visited.
-     * @throws IllegalArgumentException the visitReason is not one of the above expected inputs.
-     */
+  /**
+   * Initializes a comment object from a Datastore entity of type "Comment"
+   * Cast to String will not fail under current implementation
+   * @param commentEntity a Datastore Entity of type "Comment"
+   */
+  public Comment(Entity commentEntity) {
+    this.email = (String) commentEntity.getProperty("email");
+    this.firstName = (String) commentEntity.getProperty("firstName");
+    this.lastName = (String) commentEntity.getProperty("lastName");
+    this.comment = (String) commentEntity.getProperty("comment");
+    System.out.println((String) commentEntity.getProperty("visitReason"));
+    setVisitType((String) commentEntity.getProperty("visitReason"));
+  }
+
+  /**
+   * Set the VisitType enum to the appropriate value based on the string recieved in the POST
+   * request. If the input is unexpected, throw an error Expected inputs are one of the following:
+   * "", "none", "recruiting", "project", "tutoring", or "chat".
+   * @param visitReason string representation from POST request of the reason user visited.
+   * @throws IllegalArgumentException the visitReason is not one of the above expected inputs.
+   */
   public void setVisitType(String visitReason) throws IllegalArgumentException {
     switch (visitReason.toLowerCase()) {
       case "recruiting":
@@ -69,6 +87,8 @@ public final class Comment {
       case "chat":
         this.visitReason = VisitType.CHAT;
         break;
+      case "none":
+        // fall-through to "" case
       case "":
         this.visitReason = VisitType.NONE;
         break;
@@ -96,5 +116,30 @@ public final class Comment {
     commentEntity.setProperty("visitReason", this.visitReason.name()); // set to enum property name
 
     return commentEntity;
+  }
+
+  /**
+   * Static method to convert a datastore to an ArrayList of Comment objects.
+   * @param datastore instance of DatastoreService that contains "Comment" entities
+   * @return an ArrayList of comment objects with data from each entity in datastore.
+   */
+  public static ArrayList<Comment> datastoreToArrayList(DatastoreService datastore) {
+    // Create a query
+    Query query = new Query("Comment");
+
+    // Get the results from the query
+    PreparedQuery results = datastore.prepare(query);
+
+    // Create ArrayList to return Comment objects
+    ArrayList<Comment> comments = new ArrayList<>();
+
+    // Iterate through the entities
+    // Create a Comment instance for each entity and add it to the ArrayList
+    for (Entity entity: results.asIterable()) {
+      Comment comment = new Comment(entity);
+      comments.add(comment);
+    }
+
+    return comments;
   }
 }

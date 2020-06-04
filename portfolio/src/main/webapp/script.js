@@ -23,7 +23,7 @@ const typewriterLoadDelayMs = 1000;
 // Run the GET request on load
 // and start the typewriter effect in the passions element
 window.onload = function () {
-  // getData();
+  getData();
 
   let passionSelector = document.getElementById("passions");
   window.setTimeout(() => {

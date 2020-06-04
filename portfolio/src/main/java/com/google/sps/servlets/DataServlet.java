@@ -17,7 +17,6 @@ package com.google.sps.servlets;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +59,6 @@ public class DataServlet extends HttpServlet {
   }
 
   /**
-   * TODO: Update the GET function to work with Datastore
-   *
    * Response to a GET request with a JSON string representing the
    * hardcoded comments.
    *
@@ -71,9 +68,15 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // String json = listToJson(comments);
-    // response.setContentType("application/json;");
-    // response.getWriter().println(json);
+    // Get the Comments ArrayList
+    ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore);
+
+    // Convert the ArrayList to a JSON string
+    String json = listToJson(comments);
+
+    // Add the comments to the response.
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 
   /**
@@ -95,7 +98,6 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     // Get values from request
     // comm is to hold the comment text left by the user
     String comm = parameterToString(request, "comment");
@@ -120,7 +122,5 @@ public class DataServlet extends HttpServlet {
 
     // Redirect user back to the homepage
     response.sendRedirect("/index.html");
-
-
   }
 }
