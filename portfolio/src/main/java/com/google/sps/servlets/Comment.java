@@ -62,7 +62,6 @@ public final class Comment {
     this.firstName = (String) commentEntity.getProperty("firstName");
     this.lastName = (String) commentEntity.getProperty("lastName");
     this.comment = (String) commentEntity.getProperty("comment");
-    System.out.println((String) commentEntity.getProperty("visitReason"));
     this.visitReason = parseVisitType((String) commentEntity.getProperty("visitReason"));
   }
 
