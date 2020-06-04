@@ -14,7 +14,10 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +29,28 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  /**
+  * Holds the stubbed comments to be returned by the GET method.
+  */
+  private final List<String> comments = Arrays.asList("Comment One.", "Comment Two.", "Comment Three.");
+
+  /**
+  * Utility function that uses Gson to convert a List
+  * (e.g. ArrayList) to a JSON string.
+  */
+  private String listToJson(List list) {
+    Gson gson = new Gson();
+    return gson.toJson(list);
+  }
+
+  /**
+  * Response to a GET request with a JSON string representing the 
+  * hardcoded comments.
+  */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("Hello Austin!");
+    String json = listToJson(comments);
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 }

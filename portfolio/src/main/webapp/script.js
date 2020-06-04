@@ -64,14 +64,21 @@ function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wo
 
 }
 
-/*
-  This function will execute GET request on the /data URL and display results in 
-  response-container div element 
-*/
+/**
+ * This function will execute GET request on the /data URL.
+ * Expected response is an array of hardcoded comments.
+ *
+ * This function will display each comment on a new line in the
+ * response-container div.
+ */
 function getData() {
-    fetch("/data")
-        .then(response => response.text())
-        .then((str) => {
-            document.getElementById('response-container').innerText = str;
-        });
+  fetch('/data')
+      .then((response) => response.json())
+      .then((commentsArr) => {
+        console.log(commentsArr);
+        const commentStr = commentsArr.reduce((a,b) => a + "\n" + b);
+        const element = document.getElementById("response-container");
+
+        element.innerText = commentStr;
+      });
 }
