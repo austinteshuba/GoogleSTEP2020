@@ -28,11 +28,11 @@ enum VisitType {
  * since GSON accesses private members directly.
  */
 public final class Comment {
-  private String email;
-  private String firstName;
-  private String lastName;
-  private VisitType visitReason;
-  private String comment;
+  private final String email;
+  private final String firstName;
+  private final String lastName;
+  private final VisitType visitReason;
+  private final String comment;
 
   /**
    * Initializes a comment. All values are directly passed to their respective fields,
@@ -49,7 +49,7 @@ public final class Comment {
     this.firstName = firstName;
     this.lastName = lastName;
     this.comment = comment;
-    setVisitType(visitReason);
+    this.visitReason = parseVisitType(visitReason);
   }
 
   /**
@@ -63,35 +63,31 @@ public final class Comment {
     this.lastName = (String) commentEntity.getProperty("lastName");
     this.comment = (String) commentEntity.getProperty("comment");
     System.out.println((String) commentEntity.getProperty("visitReason"));
-    setVisitType((String) commentEntity.getProperty("visitReason"));
+    this.visitReason = parseVisitType((String) commentEntity.getProperty("visitReason"));
   }
 
   /**
-   * Set the VisitType enum to the appropriate value based on the string recieved in the POST
-   * request. If the input is unexpected, throw an error Expected inputs are one of the following:
+   * Parse string received in the POST request and return a VisitType value.
+   * If the input is unexpected, throw an error Expected inputs are one of the following:
    * "", "none", "recruiting", "project", "tutoring", or "chat".
    * @param visitReason string representation from POST request of the reason user visited.
+   * @return value of VisitType enum that best matches the passed string.
    * @throws IllegalArgumentException the visitReason is not one of the above expected inputs.
    */
-  public void setVisitType(String visitReason) throws IllegalArgumentException {
+  public VisitType parseVisitType(String visitReason) throws IllegalArgumentException {
     switch (visitReason.toLowerCase()) {
       case "recruiting":
-        this.visitReason = VisitType.RECRUITING;
-        break;
+        return VisitType.RECRUITING;
       case "project":
-        this.visitReason = VisitType.PROJECT;
-        break;
+        return VisitType.PROJECT;
       case "tutoring":
-        this.visitReason = VisitType.TUTORING;
-        break;
+        return VisitType.TUTORING;
       case "chat":
-        this.visitReason = VisitType.CHAT;
-        break;
+        return VisitType.CHAT;
       case "none":
         // fall-through to "" case
       case "":
-        this.visitReason = VisitType.NONE;
-        break;
+        return VisitType.NONE;
       default:
         throw new IllegalArgumentException("Unexpected Value");
         // This should not happen, as the form has a discrete set of values
