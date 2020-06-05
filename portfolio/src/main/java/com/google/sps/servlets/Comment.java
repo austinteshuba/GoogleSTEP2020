@@ -46,13 +46,13 @@ public final class Comment {
     setVisitType(visitReason);
   }
 
-    /**
-     * Set the VisitType enum to the appropriate value based on the string recieved in the POST
-     * request. If the input is unexpected, throw an error Expected inputs are one of the following:
-     * "", "recruiting", "project", "tutoring", or "chat".
-     * @param visitReason string representation from POST request of the reason user visited.
-     * @throws IllegalArgumentException the visitReason is not one of the above expected inputs.
-     */
+  /**
+   * Set the VisitType enum to the appropriate value based on the string recieved in the POST
+   * request. If the input is unexpected, throw an error Expected inputs are one of the following:
+   * "", "recruiting", "project", "tutoring", or "chat".
+   * @param visitReason string representation from POST request of the reason user visited.
+   * @throws IllegalArgumentException the visitReason is not one of the above expected inputs.
+   */
   public void setVisitType(String visitReason) throws IllegalArgumentException {
     switch (visitReason.toLowerCase()) {
       case "recruiting":
