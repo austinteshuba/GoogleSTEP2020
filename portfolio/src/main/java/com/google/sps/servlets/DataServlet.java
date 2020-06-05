@@ -68,6 +68,10 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the display parameter and print it (for now)
+    int display = Integer.parseInt(request.getParameter("display"));
+    System.out.println(display);
+
     // Get the Comments ArrayList
     ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore);
 

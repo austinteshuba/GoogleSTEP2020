@@ -98,7 +98,7 @@ function typewriter(textSelector, words, letterDelayMs,
  * response-container div.
  */
 function getData() {
-  fetch('/data')
+  fetch('/data?display=2')
       .then((response) => response.json())
       .then((comments) => {
         // Create a string to contain all of the comments
