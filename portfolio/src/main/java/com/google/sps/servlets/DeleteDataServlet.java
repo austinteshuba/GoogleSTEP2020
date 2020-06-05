@@ -16,7 +16,6 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.*;
 
-import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,11 +34,9 @@ public class DeleteDataServlet extends HttpServlet {
    * This POST request will delete all comments in the datastore
    * @param request the request sent from client. Body should be empty
    * @param response response to send back to the client. Should be empty.
-   * @throws IOException throws if error occurs while processing request. Will not happen
-   *     in current implementation since request is empty.
    */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) {
     // Create a query to get all Comment entities
     Query query = new Query("Comment");
 
