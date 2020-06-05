@@ -128,21 +128,30 @@ public final class Comment {
   /**
    * Static method to convert a datastore to an ArrayList of Comment objects.
    * @param datastore instance of DatastoreService that contains "Comment" entities
+   * @param max maximum number of comments to return. Set to 0 for no maximum
    * @return an ArrayList of comment objects with data from each entity in datastore.
    */
-  public static ArrayList<Comment> datastoreToArrayList(DatastoreService datastore) {
+  public static ArrayList<Comment> datastoreToArrayList(DatastoreService datastore, int max) {
     // Create a query
-    Query query = new Query("Comment");
+    Query query = new Query("Comment")
+        .addSort("timestamp", Query.SortDirection.DESCENDING);
 
     // Get the results from the query
-    PreparedQuery results = datastore.prepare(query);
+    PreparedQuery resultsQuery = datastore.prepare(query);
 
     // Create ArrayList to return Comment objects
     ArrayList<Comment> comments = new ArrayList<>();
 
+    // Get results as an iterable
+    Iterable<Entity> results = resultsQuery.asIterable();
+
     // Iterate through the entities
     // Create a Comment instance for each entity and add it to the ArrayList
-    for (Entity entity: results.asIterable()) {
+    // until the maximum amount of elements are created (if a maximum exists)
+    for (Entity entity: results) {
+      if(max != 0 && comments.size() >= max) {
+        break;
+      }
       Comment comment = new Comment(entity);
       comments.add(comment);
     }
