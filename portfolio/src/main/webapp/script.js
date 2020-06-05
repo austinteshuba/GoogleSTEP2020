@@ -135,3 +135,16 @@ function getData() {
             commentString;
       });
 }
+
+/**
+ * This function will delete all comments currently in the datastore.
+ */
+function deleteData() {
+  // Create the request
+  let request = new Request("/delete-data", {method: "POST"});
+
+  // Perform the request to delete all comments
+  // and then perform a GET request to update the comments view.
+  fetch(request)
+      .then(() => getData());
+}
