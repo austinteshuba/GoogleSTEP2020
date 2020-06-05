@@ -23,8 +23,6 @@ const typewriterLoadDelayMs = 1000;
 // Run the GET request on load
 // and start the typewriter effect in the passions element
 window.onload = function () {
-  getData();
-
   let passionSelector = document.getElementById("passions");
   window.setTimeout(() => {
     startTypewriter(
@@ -98,7 +96,17 @@ function typewriter(textSelector, words, letterDelayMs,
  * response-container div.
  */
 function getData() {
-  fetch('/data?display=2')
+  // Get the element
+  const quantityElement = document.getElementById("display");
+
+  // Get the stored value
+  // Could be empty - this means display all comments.
+  const display = quantityElement.value;
+
+  // Create query string
+  const queryString = "/data?display=" + display;
+
+  fetch(queryString)
       .then((response) => response.json())
       .then((comments) => {
         // Create a string to contain all of the comments

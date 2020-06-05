@@ -98,8 +98,21 @@
       <h1>In a rush?</h1>
       <h2>Learn about me in 30 seconds or less.</h2>
       <p> Lorem Ipsum Emmet.<br>
+    </div>
+    <!-- Container to display comments from server. MUST BE REMOVED for prod version. -->
+    <div>
+      <!-- Form controls how many comments are displayed -->
+      <form onsubmit="getData()">
+        <p>View Comments</p>
+        <label for="display">Quantity (1-100, blank for all):</label>
+        <input type="number" id="display" name="display" min="1" max="100"><br>
+        <input type="submit" value="View Comments">
+      </form>
+      <!-- Contains the actual comment body objects -->
       <div id="response-container"></div>
     </div>
+    <br><br>
+    <!-- Form to submit a comment/contact information. No required fields for now. -->
     <div>
       <form action="/data" method="POST">
         <p>Introduce yourself!</p>
