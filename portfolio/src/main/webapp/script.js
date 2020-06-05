@@ -113,15 +113,7 @@ function getData() {
 
         // Build up the string with information from each comment.
         for (const comment of comments) {
-          // Start each comment with "Comment: " header
           commentString += "Comment:\n";
-
-          // Use timestamp to display date
-          // String Format: Day_Of_Week Month DD YYYY
-          const timestamp = new Date(comment["timestamp"]);
-          commentString += "Timestamp: " + timestamp.toDateString() + "\n";
-
-          // Populate string with remaining values from object
           commentString += "First Name: " + comment["firstName"] + "\n";
           commentString += "Last Name: " + comment["lastName"] + "\n";
           commentString += "Email: " + comment["email"] + "\n";
