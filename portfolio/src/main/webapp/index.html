@@ -102,7 +102,8 @@
     <!-- Container to display comments from server. MUST BE REMOVED for prod version. -->
     <div>
       <!-- Form controls how many comments are displayed -->
-      <form onsubmit="getData()">
+      <!-- Return false is needed so form doesn't submit its own HTTP request. -->
+      <form onsubmit="getData(); return false;">
         <p>View Comments</p>
         <label for="display">Quantity (1-100, blank for all):</label>
         <input type="number" id="display" name="display" min="1" max="100"><br>
