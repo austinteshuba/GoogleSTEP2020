@@ -99,23 +99,29 @@
       <h2>Learn about me in 30 seconds or less.</h2>
       <p> Lorem Ipsum Emmet.<br>
     </div>
-    <!-- Container to display comments from server. MUST BE REMOVED for prod version. -->
+
+    <!-- Container to display comments from server. Should be removed for prod version. -->
     <div>
       <!-- Form controls how many comments are displayed -->
       <!-- Return false is needed so form doesn't submit its own HTTP request. -->
       <form onsubmit="getData(); return false;">
-        <p>View Comments</p>
+        <p>View Most Recent Comments:</p>
         <label for="display">Quantity (1-100, blank for all):</label>
         <input type="number" id="display" name="display" min="1" max="100"><br>
         <input type="submit" value="View Comments">
       </form>
+
       <!-- Contains the actual comment body objects -->
       <div id="response-container"></div>
+
+      <!-- Form allows user to delete all comments in the database -->
+      <!-- Return false is needed so form doesn't submit its own HTTP request. -->
       <form onsubmit="deleteData(); return false;">
         <input type="submit" value="Delete All Comments">
       </form>
     </div>
     <br><br>
+
     <!-- Form to submit a comment/contact information. No required fields for now. -->
     <div>
       <form action="/data" method="POST">
