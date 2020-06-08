@@ -153,7 +153,4 @@ function fetchBlobstoreUrl() {
       .then((urlObject) => {
         bizCardForm.action = urlObject['blobUrl'];
       });
-
-  // Just console log the result. Remove this later
-  console.log(bizCardForm.action);
 }
