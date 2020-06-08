@@ -76,7 +76,7 @@
     Other Variables
 */
 :root {
-  --font-multiplier: 22%;
+  --font-multiplier: .22;
   --gradient-direction: right;
   --profile-picture-border-width: 5px;
   --underline-size: 1px;
