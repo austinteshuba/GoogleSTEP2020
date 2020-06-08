@@ -16,7 +16,11 @@ package com.google.sps.servlets;
 
 import com.google.gson.Gson;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+import java.util.Arrays;
+>>>>>>> master
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
