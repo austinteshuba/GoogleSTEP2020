@@ -122,6 +122,7 @@
     </div>
     <br><br>
 
+    <!-- Div contains comment form(s). TODO - style the forms -->
     <!-- Form to submit a comment/contact information. No required fields for now. -->
     <div>
       <form action="/data" method="POST">
@@ -153,5 +154,13 @@
         <input type="text" id="comment" name="comment"><br>
 
         <input type="submit" value="Submit">
+      </form>
+      <br><br>
+
+      <form id="bizCardForm" method="POST">
+        <p>Or, drop your business card here!</p>
+        <input type="file" name="bizCard" id="bizCard" value="Select File"><br><br>
+
+        <input type="submit" value="Upload!">
       </form>
     </div>
