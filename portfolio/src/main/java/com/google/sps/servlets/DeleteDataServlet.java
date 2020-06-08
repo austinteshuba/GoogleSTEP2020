@@ -38,7 +38,7 @@ public class DeleteDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     // Create a query to get all Comment entities
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").setKeysOnly();
 
     // Use the query to get results from the datastore
     PreparedQuery results = datastore.prepare(query);
