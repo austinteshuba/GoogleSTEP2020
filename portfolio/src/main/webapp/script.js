@@ -22,6 +22,8 @@ const typewriterLoadDelayMs = 1000;
 
 // Start the typewriter effect when page loads
 window.onload = function() {
+  fetchBlobstoreUrl();
+
   const passionSelector = document.getElementById('passions');
   window.setTimeout(() => {
     startTypewriter(
@@ -136,4 +138,22 @@ function deleteData() {
   // and then perform a GET request to update the comments view.
   fetch(request)
       .then(() => getData());
+}
+
+/**
+ * This function will fetch the blobstore URL for the business card form.
+ */
+function fetchBlobstoreUrl() {
+  // Get the form element
+  const bizCardForm = document.getElementById('bizCardForm');
+
+  // Get the url
+  fetch('/blobstore-upload-url')
+      .then((response) => response.json())
+      .then((urlObject) => {
+        bizCardForm.action = urlObject['blobUrl'];
+      });
+
+  // Just console log the result. Remove this later
+  console.log(bizCardForm.action);
 }
