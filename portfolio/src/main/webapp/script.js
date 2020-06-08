@@ -102,7 +102,7 @@ function getData() {
       .then((response) => response.json())
       .then((comments) => {
         // Create a string to contain all of the comments
-        let commentString = ""
+        let commentString = "";
 
         // Build up the string with information from each comment.
         for (const comment of comments) {
