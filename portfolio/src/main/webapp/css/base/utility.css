@@ -1,62 +1,62 @@
 /*
-    This file contains a series of utility styling classes.
-    These can be combined with other classes to make quick, consistent adjustments to style.
+  This file contains a series of utility styling classes.
+  These can be combined with other classes to make quick, consistent adjustments to style.
 */
 
 /*
-    Add a small padding to an element 
+  Add a small padding to an element
 */
 .u-padding-sm {
-    padding: var(--padding-sm);
+  padding: var(--padding-sm);
 }
 
 /*
-    Add shadow to block elements. Shadow will not work on text. 
+  Add shadow to block elements. Shadow will not work on text.
 */
 .u-box-shadow {
-    box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
 }
 
 /*
-    Add shadow to text elements. Shadow will not work on block elements (i.e. divs)
+  Add shadow to text elements. Shadow will not work on block elements (i.e. divs)
 */
 .u-text-shadow {
-    text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
+  text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-light);
 }
 
 /*
-    Center an element in its enclosing div both vertically and horizontally
+  Center an element in its enclosing div both vertically and horizontally
 */
 .u-center {
-   left: 50%;
-   position: relative;
-   top: 50%;
-   transform: translate(-50%, -50%);
+  left: 50%;
+  position: relative;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /*
     Center text horizontally in its parent element.
 */
 .u-text-center {
-    text-align: center;
+  text-align: center;
 }
 
 /*
     Right align text in its parent element.
 */
 .u-text-right {
-    text-align: right;
+  text-align: right;
 }
 
 /*
-    Place a div in the bottom right of its parent. 
-    Parent must have the property declaration "display: relative"
-    or this utility class will not work as expected.
+  Place a div in the bottom right of its parent.
+  Parent must have the property declaration "display: relative"
+  or this utility class will not work as expected.
 */
 .u-div-bottom-r {
-    bottom: 0%;
-    position: absolute;
-    right: 0%;
+  bottom: 0;
+  position: absolute;
+  right: 0;
 }
 
 /*
@@ -64,5 +64,5 @@
     (border bottom will not cut off text. text-decoration will cut through some letters).
 */
 .u-link-underline {
-    border-bottom: var(--underline-size) solid var(--text-white);
+  border-bottom: var(--underline-size) solid var(--text-white);
 }

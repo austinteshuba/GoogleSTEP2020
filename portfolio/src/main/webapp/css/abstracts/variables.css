@@ -13,71 +13,71 @@
     3) The profile picture is centered in its column
 */
 :root {
-    --body-padding: 3rem;
-    --caption-padding-top: 1rem;
-    --caption-padding-bottom: .5rem;
-    --header-cutout-height: 30vh;
-    --header-height: 90vh;
-    --header-height-min: calc(var(--header-height) - var(--header-cutout-height));
-    --header-container-left-height: var(--header-height-min);
-    --header-right-padding-right: calc((100vw - var(--gutter-horizontal)*2)/6 - var(--profile-picture-size)/2);
-    --header-right-padding-top: calc(var(--header-height-min)/2 - var(--profile-picture-size)/2 - var(--caption-padding-top)/2 - var(--caption-font-size)*(1 + var(--font-multiplier))/2 - var(--h1-font-size)*var(--font-multiplier)/2);
-    --heading-primary-padding-btm: 5rem;
-    --heading-secondary-padding-btm: 4rem;
-    --padding-sm: min(4.5vh, 5rem);
-    --profile-picture-size: 30vh;
-    --section-shadow-blur: 40px;
-    --section-shadow-x: -20px;
-    --section-shadow-y: 30px;
-    --shadow-blur: 30px;
-    --shadow-x: -10px;
-    --shadow-y: 20px;
+  --body-padding: 3rem;
+  --caption-padding-top: 1rem;
+  --caption-padding-bottom: .5rem;
+  --header-cutout-height: 30vh;
+  --header-height: 90vh;
+  --header-height-min: calc(var(--header-height) - var(--header-cutout-height));
+  --header-container-left-height: var(--header-height-min);
+  --header-right-padding-right: calc((100vw - var(--gutter-horizontal) * 2) / 6 - var(--profile-picture-size) / 2);
+  --header-right-padding-top: calc(var(--header-height-min) / 2 - var(--profile-picture-size) / 2 - var(--caption-padding-top) / 2 - var(--caption-font-size) * (1 + var(--font-multiplier)) / 2 - var(--h1-font-size) * var(--font-multiplier) / 2);
+  --heading-primary-padding-btm: 5rem;
+  --heading-secondary-padding-btm: 4rem;
+  --padding-sm: min(4.5vh, 5rem);
+  --profile-picture-size: 30vh;
+  --section-shadow-blur: 40px;
+  --section-shadow-x: -20px;
+  --section-shadow-y: 30px;
+  --shadow-blur: 30px;
+  --shadow-x: -10px;
+  --shadow-y: 20px;
 }
 
 /*
     Color Variables
 */
 :root {
-    --background-white: whitesmoke;
-    --dark-blue: rgba(18, 105, 176, 1);
-    --light-blue: rgba(107, 191, 255, .95);
-    --shadow-dark: rgba(0,0,0,.65);
-    --shadow-light: rgba(0,0,0,.35);
-    --text-white: white;
+  --background-white: whitesmoke;
+  --dark-blue: rgba(18, 105, 176, 1);
+  --light-blue: rgba(107, 191, 255, .95);
+  --shadow-dark: rgba(0, 0, 0, .65);
+  --shadow-light: rgba(0, 0, 0, .35);
+  --text-white: white;
 }
 
 /*
     Font Variables
 */
 :root {
-    --body-font-size: 1.6rem;
-    --caption-font-size: min(2.7vh, 3rem);
-    --h1-font-size: min(8.5vh, 9rem);
-    --h2-font-size: min(4.5vh, 5rem);
-    --h3-font-size: min(3.6vh, 4rem);
-    --h4-font-size: min(2.7vh, 3rem);
-    --h5-font-size: min(2.3vh, 2.5rem);
-    --h1-font-weight: 700;
-    --h2-font-weight: 500;
-    --h3-font-weight: 500;
-    --h4-font-weight: 300;
-    --h5-font-weight: 200;
+  --body-font-size: 1.6rem;
+  --caption-font-size: min(2.7vh, 3rem);
+  --h1-font-size: min(8.5vh, 9rem);
+  --h2-font-size: min(4.5vh, 5rem);
+  --h3-font-size: min(3.6vh, 4rem);
+  --h4-font-size: min(2.7vh, 3rem);
+  --h5-font-size: min(2.3vh, 2.5rem);
+  --h1-font-weight: 700;
+  --h2-font-weight: 500;
+  --h3-font-weight: 500;
+  --h4-font-weight: 300;
+  --h5-font-weight: 200;
 }
 
 /*
     Grid Variables
 */
 :root {
-    --gutter-horizontal: 60px;
-    --gutter-vertical: 60px;
+  --gutter-horizontal: 60px;
+  --gutter-vertical: 60px;
 }
 
 /*
     Other Variables
 */
 :root {
-    --font-multiplier: .22;
-    --gradient-direction: right;
-    --profile-picture-border-width: 5px;
-    --underline-size: 1px;
+  --font-multiplier: 22%;
+  --gradient-direction: right;
+  --profile-picture-border-width: 5px;
+  --underline-size: 1px;
 }
