@@ -4,12 +4,17 @@ import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -27,25 +32,67 @@ public class BusinessCardServlet extends HttpServlet {
   // Store the Datastore Service instance. Will hold all BizCard entities.
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+  // Store the ImagesService instance which will be used to get download URLs for the images
+  // in blobstore.
+  private final ImagesService imagesService = ImagesServiceFactory.getImagesService();
+
+  /**
+   * Add a business card to the Datastore.
+   * DO NOT ACCESS DIRECTLY - should only be accessed by Blobstore.
+   * Point Client to the blobstore upload URL, which can be retrieved from the BlobstoreUrlServlet
+   * @param request HTTP request sent from client for POST request
+   * @param response HTTP response to be sent to client
+   * @throws IOException if an IO error occurs while the request is being processed by the servlet.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     System.out.println("Made it to Post");
-    Entity bizCardEntity = new Entity("BizCard");
 
-    String bizCardURL = getImageUrl(request, "bizCard");
+    BlobKey bizCardBlobKey = getImageBlobKey(request, "bizCard");
+
+    // UNCOMMENT FOR TESTING: Use for test server to check if Post and Blobstore is working
+    // blobstoreService.serve(bizCardBlobKey, response);
+
+    // UNCOMMENT FOR TESTING: Use this for testing GET method.
+    // Will set bizCardURL to a public Lorem Ipsum image hosted by Picsum
+    String bizCardURL = "https://i.picsum.photos/id/1037/200/200.jpg";
+
+    // COMMENT ON DEV SERVER - getImageUrl is only functional on live servers.
+    // Get URL to download image
+    // String bizCardURL = getImageUrl(bizCardBlobKey);
+
+    // Create Business Card Entity
+    Entity businessCardEntity = new Entity("BizCard");
+
+    // Add URL to entity
+    businessCardEntity.setProperty("bizCard", bizCardURL);
+
+    // Add business card to datastore
+    datastore.put(businessCardEntity);
 
     response.sendRedirect("/index.html");
   }
 
   /**
-   * This function will get the image URL from a request that used blobstore.
-   * This function will NOT return more than one URL, even if there was more than
-   * one file uploaded in a single form element.
-   * @param request the HTTP Servlet Request that was sent from Blobstore
-   * @param formElementName The name of the input element in the HTML form that uploaded the image.
-   * @return a string containing a URL to retrieve the photo.
+   * Return a list of URLs that point to all business cards in datastore.
+   * @param request the HTTP request sent from client for GET
+   * @param response HTTP response that will be sent back to the client
    */
-  private String getImageUrl(HttpServletRequest request, String formElementName) {
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+  }
+
+  /**
+   * This function will get the blobkey of an uploaded image from blobstore.
+   * Note this will only get the blobkey of the first image in the upload
+   * (If more than one file is uploaded per form element, this function will return
+   * unexpected results).
+   * @param request The HTTP request sent by blobstore
+   * @param formElementName the name of the input element in the HTML form that uploaded the image.
+   * @return blobkey of image, or null if the upload was not an image or another error occurred
+   */
+  private BlobKey getImageBlobKey(HttpServletRequest request, String formElementName) {
     // Get the relevant blob key
     // This map will use the form element name as the key, and then a list of
     // file blobkeys as the value.
@@ -71,9 +118,35 @@ public class BusinessCardServlet extends HttpServlet {
     }
 
     // Make sure that the image is an image.
-    System.out.println(blobInfo.getContentType());
-    return "";
+    if (!blobInfo.getContentType().contains("image")) {
+      return null;
+    }
+
+    return blobKey;
   }
 
+  /**
+   * This function will get the image URL from a request that used blobstore.
+   * This function will NOT return more than one URL, even if there was more than
+   * one file uploaded in a single form element.
+   * THIS WILL ONLY WORK ON A PRODUCTION/TEST SERVER (not Dev server)
+   * @param blobKey The BlobKey of the image for which a URL is being generated.
+   * @return a string containing a URL to retrieve the photo.
+   */
+  private String getImageUrl(BlobKey blobKey) {
+    // Use the Image Service to get a download URL
+    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 
+    try {
+      URL url = new URL(imagesService.getServingUrl(options));
+      return url.getPath();
+    } catch (MalformedURLException e) {
+      // May not be a valid URL.
+      String url = imagesService.getServingUrl(options);
+
+      System.out.println("WARNING: ImageService download URL may be invalid.");
+      System.out.println("URL: " + url);
+      return url;
+    }
+  }
 }
