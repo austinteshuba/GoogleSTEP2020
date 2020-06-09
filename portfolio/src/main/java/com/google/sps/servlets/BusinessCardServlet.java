@@ -24,7 +24,7 @@ import java.util.Map;
  * TODO - Create this.
  */
 @WebServlet("/biz-card")
-public class BusinessCardServlet extends HttpServlet {
+public class BusinessCardServlet extends HttpServletWithUtilities {
 
   // Store the BlobstoreService instance for the application. Same instance as other files.
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

@@ -28,7 +28,7 @@ import java.io.IOException;
  * Servlet responsible for generating an upload URL for HTML forms.
  */
 @WebServlet("/blobstore-upload-url")
-public class BlobstoreUrlServlet extends HttpServlet {
+public class BlobstoreUrlServlet extends HttpServletWithUtilities {
 
   // Store the Blobstore service reference for the server
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

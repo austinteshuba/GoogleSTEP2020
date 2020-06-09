@@ -29,33 +29,12 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet that stubs response from /data URL. Expected response is of type String.
  */
 @WebServlet("/data")
-public class DataServlet extends HttpServlet {
+public class DataServlet extends HttpServletWithUtilities {
 
   /**
    * Stores comments sent via POST request from client.
    */
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-  /**
-   * Use Gson to convert a List with any contents to a JSON string.
-   */
-  private String listToJson(List objects) {
-    Gson gson = new Gson();
-    return gson.toJson(objects);
-  }
-
-  /**
-   * Takes in a request and parameter for the request
-   * and returns the result as a string.
-   *
-   * @param request the request sent to the GET or POST methods
-   * @param key     the parameter in the request you want to access
-   * @return the value of the parameter in the request, or an empty string if this is null.
-   */
-  private String parameterToString(HttpServletRequest request, String key) {
-    String requestVal = request.getParameter(key);
-    return requestVal != null ? requestVal : "";
-  }
 
   /**
    * Response to a GET request with a JSON string representing the
