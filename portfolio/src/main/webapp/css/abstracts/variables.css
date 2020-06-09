@@ -1,16 +1,15 @@
 /*
-    This file is for variable declarations.
-    Throughout the styling, there should be little/no hardcoded values
-    except in this file for maintenance purposes.
+  This file is for variable declarations.
+  Throughout the styling, there should be little/no hardcoded values
+  except in this file for maintenance purposes.
 /*
 
 /*
-    Spacing Variables
-
-    Header Calculations are in place so:
-    1) The top of the right header is at the same y as the top of the profile picture
-    2) The right padding is the same as the left padding.
-    3) The profile picture is centered in its column
+  Spacing Variables
+  Header Calculations are in place so:
+  1) The top of the right header is at the same y as the top of the profile picture
+  2) The right padding is the same as the left padding.
+  3) The profile picture is centered in its column
 */
 :root {
   --body-padding: 3rem;
@@ -35,7 +34,7 @@
 }
 
 /*
-    Color Variables
+  Color Variables
 */
 :root {
   --background-white: whitesmoke;
@@ -65,7 +64,7 @@
 }
 
 /*
-    Grid Variables
+  Grid Variables
 */
 :root {
   --gutter-horizontal: 60px;
@@ -73,7 +72,7 @@
 }
 
 /*
-    Other Variables
+  Other Variables
 */
 :root {
   --font-multiplier: .22;
