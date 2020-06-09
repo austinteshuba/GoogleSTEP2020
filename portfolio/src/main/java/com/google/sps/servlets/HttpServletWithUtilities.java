@@ -6,6 +6,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * Extension of the HttpServlet class to allow all servlets to access
+ * utility functions.
+ */
 public class HttpServletWithUtilities extends HttpServlet {
   /**
    * Utility function that uses Gson to convert a List with any contents

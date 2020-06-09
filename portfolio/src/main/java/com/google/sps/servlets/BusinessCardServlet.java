@@ -1,7 +1,15 @@
 package com.google.sps.servlets;
 
-import com.google.appengine.api.blobstore.*;
-import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
@@ -19,7 +27,6 @@ import java.util.stream.Collectors;
 /**
  * This class will handle the storage/retrieval of information from the
  * Business Card Drop on the portfolio homepage.
- * TODO - Create this.
  */
 @WebServlet("/biz-card")
 public class BusinessCardServlet extends HttpServletWithUtilities {
@@ -44,8 +51,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    System.out.println("Made it to Post");
-
+    // Get the blobKey of the image so it can be located in the blobstore.
     BlobKey bizCardBlobKey = getImageBlobKey(request, "bizCard");
 
     // UNCOMMENT FOR TESTING: Use for test server to check if Post and Blobstore is working
@@ -53,11 +59,11 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
 
     // UNCOMMENT FOR TESTING: Use this for testing GET method.
     // Will set bizCardURL to a public Lorem Ipsum image hosted by Picsum
-    String bizCardURL = "https://i.picsum.photos/id/1037/200/200.jpg";
+    // String bizCardURL = "https://i.picsum.photos/id/1037/200/200.jpg";
 
-    // COMMENT WHILE ON DEV SERVER - getImageUrl is only functional on live servers.
+    // COMMENT WHILE TESTING - getImageUrl is only functional on live servers.
     // Get URL to download image
-    // String bizCardURL = getImageUrl(bizCardBlobKey);
+    String bizCardURL = getImageUrl(bizCardBlobKey);
 
     // Create Business Card Entity
     Entity businessCardEntity = new Entity("BizCard");
