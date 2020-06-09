@@ -14,8 +14,8 @@
 
 // This is a list of passions to iterate through on the homepage
 const passions = ["Front-End Development?", "Machine Learning?",
-  "Software Design?", "Technology Consulting?", "Data Science?",
-  "Algorithms?", "User Experience?"];
+    "Software Design?", "Technology Consulting?", "Data Science?",
+    "Algorithms?", "User Experience?"];
 const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
@@ -105,7 +105,7 @@ function getData() {
       .then((response) => response.json())
       .then((comments) => {
         // Create a string to contain all of the comments
-        let commentString = '';
+        let commentString = "";
 
         // Build up the string with information from each comment.
         for (const comment of comments) {
@@ -118,7 +118,7 @@ function getData() {
         }
 
         // Display the comment
-        document.getElementById('response-container').innerText =
+        document.getElementById("response-container").innerText =
             commentString;
       });
 }
