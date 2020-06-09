@@ -13,16 +13,16 @@
 // limitations under the License.
 
 // This is a list of passions to iterate through on the homepage
-const passions = ['Front-End Development?', 'Machine Learning?',
-  'Software Design?', 'Technology Consulting?', 'Data Science?',
-  'Algorithms?', 'User Experience?'];
+const passions = ["Front-End Development?", "Machine Learning?",
+  "Software Design?", "Technology Consulting?", "Data Science?",
+  "Algorithms?", "User Experience?"];
 const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
 // Start the typewriter effect when page loads
 window.onload = function() {
-  const passionSelector = document.getElementById('passions');
+  const passionSelector = document.getElementById("passions");
   window.setTimeout(() => {
     startTypewriter(
         passionSelector,
@@ -35,13 +35,12 @@ window.onload = function() {
 /**
  * Function to start a typewriter effect on an HTML element
  * where one letter of a word (in a list of words) appears at a time
- * @param {HTMLElement} textSelector - html selector of target element
- * @param {Array} words - list of words to cycle through in the effect.
- *     min length is 1
- * @param {number} letterDelayMs - duration in milliseconds of delay between
+ * @param textSelector - html selector of target element
+ * @param words - list of words to cycle through in the effect. min length is 1
+ * @param letterDelayMs - duration in milliseconds of delay between
  *     letter keypresses. Must be > 0.
- * @param {number} wordDelayMs - duration in milliseconds of delay between
- *     presenting a finished word and starting the next one. Must be >0
+ * @param wordDelayMs - duration in milliseconds of delay between presenting
+ *     a finished word and starting the next one. Must be >0
  */
 function startTypewriter(textSelector, words, letterDelayMs, wordDelayMs) {
   typewriter(textSelector, words, letterDelayMs, wordDelayMs);
@@ -50,16 +49,15 @@ function startTypewriter(textSelector, words, letterDelayMs, wordDelayMs) {
 /**
  * Recursive function for typewriter effect
  * Do not call directly - use convenience function
- * @param {HTMLElement} textSelector - html selector of target element
- * @param {Array} words - list of words to cycle through in the effect.
- *     min length is 1
- * @param {number} letterDelayMs - duration in milliseconds of delay between
+ * @param textSelector - html selector of target element
+ * @param words - list of words to cycle through in the effect. min length is 1
+ * @param letterDelayMs - duration in milliseconds of delay between
  *     letter keypresses. Must be > 0.
- * @param {number} wordDelayMs - duration in milliseconds of delay between
+ * @param wordDelayMs - duration in milliseconds of delay between
  *     presenting a finished word and starting the next one. Must be >0
- * @param {number} wordIndex - current index of word in words.
+ * @param wordIndex - current index of word in words.
  *     Start at first word by default
- * @param {number} letterIndex - current index of next letter in word.
+ * @param letterIndex - current index of next letter in word.
  *     Start at first letter by default.
  */
 function typewriter(textSelector, words, letterDelayMs,
@@ -71,7 +69,7 @@ function typewriter(textSelector, words, letterDelayMs,
   // clear the text and start typing the next word.
   if (letterIndex + 1 === words[wordIndex].length) {
     window.setTimeout(() => {
-      textSelector.innerText = '';
+      textSelector.innerText = "";
       typewriter(
           textSelector, words, letterDelayMs, wordDelayMs,
           (wordIndex + 1) % words.length, 0);
@@ -111,12 +109,12 @@ function getData() {
 
         // Build up the string with information from each comment.
         for (const comment of comments) {
-          commentString += 'Comment:\n';
-          commentString += 'First Name: ' + comment['firstName'] + '\n';
-          commentString += 'Last Name: ' + comment['lastName'] + '\n';
-          commentString += 'Email: ' + comment['email'] + '\n';
-          commentString += 'Reason for Visit: ' + comment['visitReason'] + '\n';
-          commentString += 'Comment Body: ' + comment['comment'] + '\n\n';
+          commentString += "Comment:\n";
+          commentString += "First Name: " + comment["firstName"] + "\n";
+          commentString += "Last Name: " + comment["lastName"] + "\n";
+          commentString += "Email: " + comment["email"] + "\n";
+          commentString += "Reason for Visit: " + comment["visitReason"] + "\n";
+          commentString += "Comment Body: " + comment["comment"] + "\n\n";
         }
 
         // Display the comment
