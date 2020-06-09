@@ -166,7 +166,7 @@ function getImageUrls() {
       .then(urls => {
         const container = document.getElementById('images-container');
         const imageUrls =
-            urls.reduce((urls, currentUrl) => urls + currentUrl + '\n');
+            urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
         container.innerText = imageUrls;
       });
 }
