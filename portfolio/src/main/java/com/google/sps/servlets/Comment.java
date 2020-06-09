@@ -1,9 +1,11 @@
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.*;
-
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Entity;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Encapsulated the possible values for reasons a user visited a site.
