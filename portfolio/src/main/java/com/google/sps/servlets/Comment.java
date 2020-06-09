@@ -1,5 +1,12 @@
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Entity;
+import java.util.ArrayList;
+
 /**
  * Encapsulated the possible values for reasons a user visited a site.
  * Update this enum when adding or removing allowable Visit Type values to the
@@ -22,11 +29,15 @@ enum VisitType {
  * since GSON accesses private members directly.
  */
 public final class Comment {
-  private String email;
-  private String firstName;
-  private String lastName;
-  private VisitType visitReason;
-  private String comment;
+  private final String email;
+  private final String firstName;
+  private final String lastName;
+  private final VisitType visitReason;
+  private final String comment;
+
+  // Store date of creation in Unix time in milliseconds.
+  // Unix time is time in milliseconds since January 1, 1970 12:00:00AM
+  private final long timestamp;
 
   /**
    * Initializes a comment. All values are directly passed to their respective fields,
@@ -43,33 +54,50 @@ public final class Comment {
     this.firstName = firstName;
     this.lastName = lastName;
     this.comment = comment;
-    setVisitType(visitReason);
+    this.visitReason = parseVisitType(visitReason);
+
+    // Set time of creation to current time
+    this.timestamp = System.currentTimeMillis();
   }
 
   /**
-   * Set the VisitType enum to the appropriate value based on the string recieved in the POST
-   * request. If the input is unexpected, throw an error Expected inputs are one of the following:
-   * "", "recruiting", "project", "tutoring", or "chat".
+   * Initializes a comment object from a Datastore entity of type "Comment"
+   * Cast to String will not fail under current implementation
+   * @param commentEntity a Datastore Entity of type "Comment"
+   */
+  public Comment(Entity commentEntity) {
+    this.email = (String) commentEntity.getProperty("email");
+    this.firstName = (String) commentEntity.getProperty("firstName");
+    this.lastName = (String) commentEntity.getProperty("lastName");
+    this.comment = (String) commentEntity.getProperty("comment");
+    this.visitReason = parseVisitType((String) commentEntity.getProperty("visitReason"));
+
+    // Use timestamp stored in entity, not current time
+    this.timestamp = (long) commentEntity.getProperty("timestamp");
+  }
+
+  /**
+   * Parse string received in the POST request and return a VisitType value.
+   * If the input is unexpected, throw an error Expected inputs are one of the following:
+   * "", "none", "recruiting", "project", "tutoring", or "chat".
    * @param visitReason string representation from POST request of the reason user visited.
+   * @return value of VisitType enum that best matches the passed string.
    * @throws IllegalArgumentException the visitReason is not one of the above expected inputs.
    */
-  public void setVisitType(String visitReason) throws IllegalArgumentException {
+  public VisitType parseVisitType(String visitReason) throws IllegalArgumentException {
     switch (visitReason.toLowerCase()) {
       case "recruiting":
-        this.visitReason = VisitType.RECRUITING;
-        break;
+        return VisitType.RECRUITING;
       case "project":
-        this.visitReason = VisitType.PROJECT;
-        break;
+        return VisitType.PROJECT;
       case "tutoring":
-        this.visitReason = VisitType.TUTORING;
-        break;
+        return VisitType.TUTORING;
       case "chat":
-        this.visitReason = VisitType.CHAT;
-        break;
+        return VisitType.CHAT;
+      case "none":
+        // fall-through to "" case
       case "":
-        this.visitReason = VisitType.NONE;
-        break;
+        return VisitType.NONE;
       default:
         throw new IllegalArgumentException("Unexpected Value");
         // This should not happen, as the form has a discrete set of values
@@ -77,4 +105,58 @@ public final class Comment {
         // or change the Enum to include new possible values.
     }
   }
+
+  /**
+   * Create a Datastore entity. Use field names as the keys, field values as the values.
+   * @return Datastore entity with contents of this class
+   */
+  public Entity createEntity() {
+    // Create entity
+    Entity commentEntity = new Entity("Comment");
+
+    // Create properties in the Entity for each field.
+    commentEntity.setProperty("firstName", this.firstName);
+    commentEntity.setProperty("lastName", this.lastName);
+    commentEntity.setProperty("email", this.email);
+    commentEntity.setProperty("comment", this.comment);
+    commentEntity.setProperty("timestamp", this.timestamp);
+    commentEntity.setProperty("visitReason", this.visitReason.name()); // set to enum property name
+
+    // Return the created entity
+    return commentEntity;
+  }
+
+  /**
+   * Static method to convert a datastore to an ArrayList of Comment objects.
+   * @param datastore instance of DatastoreService that contains "Comment" entities
+   * @param max maximum number of comments to return. Set to 0 for no maximum
+   * @return an ArrayList of comment objects with data from each entity in datastore.
+   */
+  public static ArrayList<Comment> datastoreToArrayList(DatastoreService datastore, int max) {
+    // Create a query
+    Query query = new Query("Comment")
+        .addSort("timestamp", Query.SortDirection.DESCENDING);
+
+    // Get the results from the query
+    PreparedQuery resultsQuery = datastore.prepare(query);
+
+    // Create ArrayList to return Comment objects
+    ArrayList<Comment> comments = new ArrayList<>();
+
+    // Get results as an iterable
+    Iterable<Entity> results = max < 1 ? resultsQuery.asIterable() :
+        resultsQuery.asIterable(FetchOptions.Builder.withLimit(max));
+
+    // Iterate through the entities
+    // Create a Comment instance for each entity and add it to the ArrayList
+    // until the maximum amount of elements are created (if a maximum exists)
+    for (Entity entity: results) {
+      Comment comment = new Comment(entity);
+      comments.add(comment);
+    }
+
+    // Return created list
+    return comments;
+  }
 }
+

@@ -15,6 +15,8 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class DataServlet extends HttpServlet {
   /**
    * Stores comments sent via POST request from client.
    */
-  private final List<Comment> comments = new ArrayList<>();
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   /**
    * Utility function that uses Gson to convert an ArrayList<String>
@@ -60,19 +62,35 @@ public class DataServlet extends HttpServlet {
    * Response to a GET request with a JSON string representing the
    * hardcoded comments.
    *
-   * @param request  the request sent to the GET method from client
+   * @param request  the request sent to the GET method from client. display parameter indicates
+   *     maximum amount of comments to return (empty value if all comments can be returned)
    * @param response HTTP response that will be sent back to the client
    * @throws IOException if an IO error occurs while the request is being processed by the servlet.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the display parameter and print it (for now)
+    String displayParam = request.getParameter("display");
+
+    // Get the display value
+    // If parameter is empty, set display to 0. Otherwise, parse the value
+    int display = displayParam.equals("") ? 0 : Integer.parseInt(displayParam);
+
+    // Get the Comments ArrayList
+    ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore, display);
+
+    // Convert the ArrayList to a JSON string
     String json = listToJson(comments);
+
+    // Add the comments to the response.
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
 
   /**
    * Response to a POST request that contains a new entered comment.
+   * Store the new comment in the Datastore for future review.
+   *
    * In the request, expected values include:
    * firstName - User's first name
    * lastName - User's last name
@@ -96,20 +114,22 @@ public class DataServlet extends HttpServlet {
     String email = parameterToString(request, "email");
     String visitReason = parameterToString(request, "visitReason");
 
-    // Either populate a Comment instance or return an error.
+    // Declare a comment object
+    Comment comment = null;
+
+    // Either populate a Comment instance or return 400 error to client if input is invalid.
     try {
-      // Create comment instance
-      // Can throw error for VisitType
-      Comment comment = new Comment(email, firstName, lastName, visitReason, comm);
-
-      // Add the comment to the ArrayList
-      comments.add(comment);
-
-      // Redirect user back to the homepage.
-      response.sendRedirect("/index.html");
-
+      comment = new Comment(email, firstName, lastName, visitReason, comm);
     } catch (IllegalArgumentException e) {
       response.sendError(400, "Invalid argument for VisitType.");
+      return;
     }
+
+    // Add comment to the datastore
+    this.datastore.put(comment.createEntity());
+
+    // Redirect user back to the homepage
+    response.sendRedirect("/index.html");
   }
 }
+
