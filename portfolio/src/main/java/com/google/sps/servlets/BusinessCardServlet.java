@@ -1,12 +1,11 @@
 package com.google.sps.servlets;
 
 import com.google.appengine.api.blobstore.*;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class will handle the storage/retrieval of information from the
@@ -56,7 +57,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // Will set bizCardURL to a public Lorem Ipsum image hosted by Picsum
     String bizCardURL = "https://i.picsum.photos/id/1037/200/200.jpg";
 
-    // COMMENT ON DEV SERVER - getImageUrl is only functional on live servers.
+    // COMMENT WHILE ON DEV SERVER - getImageUrl is only functional on live servers.
     // Get URL to download image
     // String bizCardURL = getImageUrl(bizCardBlobKey);
 
@@ -76,9 +77,26 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * Return a list of URLs that point to all business cards in datastore.
    * @param request the HTTP request sent from client for GET
    * @param response HTTP response that will be sent back to the client
+   * @throws IOException if an IO error occurs while the request is being processed by the servlet.
    */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Create Query to get the image URLS
+    Query query = new Query("BizCard");
+
+    // Get the Entities and populate the array list with the URLs
+    List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+
+    // Use a stream to convert all entities to urls
+    List<String> urls = results.stream().map(entity -> (String) entity.getProperty("bizCard"))
+        .collect(Collectors.toList());
+
+    // Convert list to JSON
+    String urlJson = listToJson(urls);
+
+    // Attach the JSON to the response
+    response.setContentType("application/json;");
+    response.getWriter().println(urlJson);
 
   }
 
