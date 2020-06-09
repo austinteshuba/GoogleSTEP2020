@@ -137,3 +137,4 @@ function deleteData() {
   fetch(request)
       .then(() => getData());
 }
+

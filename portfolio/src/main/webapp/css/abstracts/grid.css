@@ -40,3 +40,4 @@
 .col-2-of-3:not(:last-child) {
   margin: 0 var(--gutter-horizontal) 0 0;
 }
+
