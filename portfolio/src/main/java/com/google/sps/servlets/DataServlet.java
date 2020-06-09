@@ -62,14 +62,22 @@ public class DataServlet extends HttpServlet {
    * Response to a GET request with a JSON string representing the
    * hardcoded comments.
    *
-   * @param request  the request sent to the GET method from client
+   * @param request  the request sent to the GET method from client. display parameter indicates
+   *     maximum amount of comments to return (empty value if all comments can be returned)
    * @param response HTTP response that will be sent back to the client
    * @throws IOException if an IO error occurs while the request is being processed by the servlet.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the display parameter and print it (for now)
+    String displayParam = request.getParameter("display");
+
+    // Get the display value
+    // If parameter is empty, set display to 0. Otherwise, parse the value
+    int display = displayParam.equals("") ? 0 : Integer.parseInt(displayParam);
+
     // Get the Comments ArrayList
-    ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore);
+    ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore, display);
 
     // Convert the ArrayList to a JSON string
     String json = listToJson(comments);
@@ -124,3 +132,4 @@ public class DataServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 }
+

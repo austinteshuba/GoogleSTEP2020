@@ -1,9 +1,10 @@
 package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Entity;
 import java.util.ArrayList;
 
 /**
@@ -34,6 +35,10 @@ public final class Comment {
   private final VisitType visitReason;
   private final String comment;
 
+  // Store date of creation in Unix time in milliseconds.
+  // Unix time is time in milliseconds since January 1, 1970 12:00:00AM
+  private final long timestamp;
+
   /**
    * Initializes a comment. All values are directly passed to their respective fields,
    * except for visitReason which requires additional logic stored in a setter method.
@@ -50,6 +55,9 @@ public final class Comment {
     this.lastName = lastName;
     this.comment = comment;
     this.visitReason = parseVisitType(visitReason);
+
+    // Set time of creation to current time
+    this.timestamp = System.currentTimeMillis();
   }
 
   /**
@@ -63,6 +71,9 @@ public final class Comment {
     this.lastName = (String) commentEntity.getProperty("lastName");
     this.comment = (String) commentEntity.getProperty("comment");
     this.visitReason = parseVisitType((String) commentEntity.getProperty("visitReason"));
+
+    // Use timestamp stored in entity, not current time
+    this.timestamp = (long) commentEntity.getProperty("timestamp");
   }
 
   /**
@@ -108,33 +119,44 @@ public final class Comment {
     commentEntity.setProperty("lastName", this.lastName);
     commentEntity.setProperty("email", this.email);
     commentEntity.setProperty("comment", this.comment);
+    commentEntity.setProperty("timestamp", this.timestamp);
     commentEntity.setProperty("visitReason", this.visitReason.name()); // set to enum property name
 
+    // Return the created entity
     return commentEntity;
   }
 
   /**
    * Static method to convert a datastore to an ArrayList of Comment objects.
    * @param datastore instance of DatastoreService that contains "Comment" entities
+   * @param max maximum number of comments to return. Set to 0 for no maximum
    * @return an ArrayList of comment objects with data from each entity in datastore.
    */
-  public static ArrayList<Comment> datastoreToArrayList(DatastoreService datastore) {
+  public static ArrayList<Comment> datastoreToArrayList(DatastoreService datastore, int max) {
     // Create a query
-    Query query = new Query("Comment");
+    Query query = new Query("Comment")
+        .addSort("timestamp", Query.SortDirection.DESCENDING);
 
     // Get the results from the query
-    PreparedQuery results = datastore.prepare(query);
+    PreparedQuery resultsQuery = datastore.prepare(query);
 
     // Create ArrayList to return Comment objects
     ArrayList<Comment> comments = new ArrayList<>();
 
+    // Get results as an iterable
+    Iterable<Entity> results = max < 1 ? resultsQuery.asIterable() :
+        resultsQuery.asIterable(FetchOptions.Builder.withLimit(max));
+
     // Iterate through the entities
     // Create a Comment instance for each entity and add it to the ArrayList
-    for (Entity entity: results.asIterable()) {
+    // until the maximum amount of elements are created (if a maximum exists)
+    for (Entity entity: results) {
       Comment comment = new Comment(entity);
       comments.add(comment);
     }
 
+    // Return created list
     return comments;
   }
 }
+
