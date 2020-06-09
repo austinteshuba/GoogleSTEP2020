@@ -23,7 +23,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <!-- Import main Javascript file -->
     <script src="script.js"></script>
-  <body onload="getData()">
+  <body>
     <!-- This section comprises the header/contact card. -->
     <!-- Must wrap in section-shadow-wrapper to create shadow along polygonal edge -->
     <div class="section-shadow-wrapper">
@@ -68,25 +68,24 @@
                  Blinking cursor has a blinking animation attached
                  to text contents (| in this case) -->
             <div class="heading-secondary">
-              <p class="text-xlg">Do you need someone passionate about:</p>
+              <p class="text-xlg">Do you need someone passionate about:
               <p class="text-xlg">
                 <!-- These spans must be next to each-other to prevent an un-needed whitespace from appearing -->
                 <span id="passions"></span><span class="blinking-cursor">|</span>
-              </p>
             </div>
             <div class="heading-secondary">
-              <p class="text-lg">Great!</p>
-              <p class="text-lg">You're in the right place.</p>
+              <p class="text-lg">Great!
+              <p class="text-lg">You're in the right place.
             </div>
             <!-- Place text contents in the bottom right of the header div. -->
             <div class="u-div-bottom-r" id="header-bottom-r">
               <div class="heading-secondary">
-                <p class="text-lg">Interested? Let's chat!</p>
-                <p class="text-md">Don't worry, I won't bite.</p>
+                <p class="text-lg">Interested? Let's chat!
+                <p class="text-md">Don't worry, I won't bite.
               </div>
               <div class="heading-secondary">
                 <p class="text-md">p: (519) 984-2619</p>
-                <p class="text-md">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a></p>
+                <p class="text-md">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a>
               </div>
             </div>
           </div>
@@ -98,6 +97,61 @@
     <div class="section-about u-padding-sm u-text-shadow">
       <h1>In a rush?</h1>
       <h2>Learn about me in 30 seconds or less.</h2>
-      <p> Lorem Ipsum Emmet.
+      <p> Lorem Ipsum Emmet.<br>
+    </div>
+
+    <!-- Container to display comments from server. Should be removed for prod version. -->
+    <div>
+      <!-- Form controls how many comments are displayed -->
+      <!-- Return false is needed so form doesn't submit its own HTTP request. -->
+      <form onsubmit="getData(); return false;">
+        <p>View Most Recent Comments:</p>
+        <label for="display">Quantity (1-100, blank for all):</label>
+        <input type="number" id="display" name="display" min="1" max="100"><br>
+        <input type="submit" value="View Comments">
+      </form>
+
+      <!-- Contains the actual comment body objects -->
       <div id="response-container"></div>
+
+      <!-- Form allows user to delete all comments in the database -->
+      <!-- Return false is needed so form doesn't submit its own HTTP request. -->
+      <form onsubmit="deleteData(); return false;">
+        <input type="submit" value="Delete All Comments">
+      </form>
+    </div>
+    <br><br>
+
+    <!-- Form to submit a comment/contact information. No required fields for now. -->
+    <div>
+      <form action="/data" method="POST">
+        <p>Introduce yourself!</p>
+        <label for="firstName">First Name:</label><br>
+        <input type="text" id="firstName" name="firstName"><br>
+        <label for="lastName">Last Name:</label><br>
+        <input type="text" id="lastName" name="lastName"><br>
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email"><br>
+        <br>
+
+        <p>What's the purpose of your visit?</p>
+
+        <input type="radio" id="recruiting" name="visitReason" value="recruiting">
+        <label for="recruiting">Recruiting</label><br>
+
+        <input type="radio" id="project" name="visitReason" value="project">
+        <label for="project">Project Inquiries</label><br>
+
+        <input type="radio" id="tutoring" name="visitReason" value="tutoring">
+        <label for="tutoring">Tutoring</label><br>
+
+        <input type="radio" id="chat" name="visitReason" value="chat">
+        <label for="chat">Other / Just a chat</label><br>
+        <br>
+
+        <label for="comment">Comment:</label>
+        <input type="text" id="comment" name="comment"><br>
+
+        <input type="submit" value="Submit">
+      </form>
     </div>
