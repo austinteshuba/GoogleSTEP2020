@@ -162,8 +162,12 @@ function fetchBlobstoreUrl() {
  */
 function getImageUrls() {
   fetch('/biz-card')
-      .then((response) => response.json())
-      .then((urls) => {
-        console.log(urls);
+      .then(response => response.json())
+      .then(urls => {
+        const container = document.getElementById('images-container');
+        const imageUrls =
+            urls.reduce((urls, currentUrl) => urls + currentUrl + '\n');
+        container.innerText = imageUrls;
       });
 }
+
