@@ -20,12 +20,9 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-// Run the GET request on load
-// and start the typewriter effect in the passions element
-window.onload = function () {
-  getData();
-
-  let passionSelector = document.getElementById("passions");
+// Start the typewriter effect when page loads
+window.onload = function() {
+  const passionSelector = document.getElementById("passions");
   window.setTimeout(() => {
     startTypewriter(
         passionSelector,
@@ -45,7 +42,6 @@ window.onload = function () {
  * @param wordDelayMs - duration in milliseconds of delay between presenting
  *     a finished word and starting the next one. Must be >0
  */
-
 function startTypewriter(textSelector, words, letterDelayMs, wordDelayMs) {
   typewriter(textSelector, words, letterDelayMs, wordDelayMs);
 }
@@ -64,10 +60,8 @@ function startTypewriter(textSelector, words, letterDelayMs, wordDelayMs) {
  * @param letterIndex - current index of next letter in word.
  *     Start at first letter by default.
  */
-
 function typewriter(textSelector, words, letterDelayMs,
     wordDelayMs, wordIndex = 0, letterIndex = 0) {
-
   textSelector.innerText =
       textSelector.innerText + words[wordIndex].charAt(letterIndex);
 
@@ -80,7 +74,6 @@ function typewriter(textSelector, words, letterDelayMs,
           textSelector, words, letterDelayMs, wordDelayMs,
           (wordIndex + 1) % words.length, 0);
     }, wordDelayMs);
-
   } else {
     // Otherwise, start typing the next letter
     window.setTimeout(() => {
@@ -98,7 +91,17 @@ function typewriter(textSelector, words, letterDelayMs,
  * response-container div.
  */
 function getData() {
-  fetch('/data')
+  // Get the element
+  const quantityElement = document.getElementById('display');
+
+  // Get the stored value
+  // Could be empty - this means display all comments.
+  const display = quantityElement.value;
+
+  // Create query string
+  const queryString = '/data?display=' + display;
+
+  fetch(queryString)
       .then((response) => response.json())
       .then((comments) => {
         // Create a string to contain all of the comments
@@ -118,4 +121,17 @@ function getData() {
         document.getElementById("response-container").innerText =
             commentString;
       });
+}
+
+/**
+ * This function will delete all comments currently in the datastore.
+ */
+function deleteData() {
+  // Create the request
+  const request = new Request('/delete-data', {method: 'POST'});
+
+  // Perform the request to delete all comments
+  // and then perform a GET request to update the comments view.
+  fetch(request)
+      .then(() => getData());
 }
