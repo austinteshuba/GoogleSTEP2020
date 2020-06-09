@@ -13,72 +13,125 @@
 // limitations under the License.
 
 // This is a list of passions to iterate through on the homepage
-const passions = ["Front-End Development?", "Machine Learning?", "Software Design?", "Technology Consulting?" ,"Data Science?", "Algorithms?", "User Experience?"];
+const passions = ["Front-End Development?", "Machine Learning?",
+    "Software Design?", "Technology Consulting?", "Data Science?",
+    "Algorithms?", "User Experience?"];
 const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-// Get the selector for the Passions type-writer function when the window loads.
-window.onload = function () { 
-    var passionSelector = document.getElementById("passions");
-
-    window.setTimeout(() => startTypewriter(passionSelector, passions, typewriterLetterDelayMs, typewriterWordDelayMs), typewriterLoadDelayMs);
+// Start the typewriter effect when page loads
+window.onload = function() {
+  const passionSelector = document.getElementById("passions");
+  window.setTimeout(() => {
+    startTypewriter(
+        passionSelector,
+        passions,
+        typewriterLetterDelayMs,
+        typewriterWordDelayMs);
+  }, typewriterLoadDelayMs);
 };
 
-// Function to start a typewriter effect on an HTML element
-// where one letter of a word (in a list of words) appears at a time
-// @param textSelector - html selector of target element
-// @param words - list of words to cycle through in the effect. min length is 1
-// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
-// @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
-function startTypewriter(textSelector, words, letterDelay, wordDelay) {
-    typewriter(textSelector, words, letterDelay, wordDelay);
+/**
+ * Function to start a typewriter effect on an HTML element
+ * where one letter of a word (in a list of words) appears at a time
+ * @param textSelector - html selector of target element
+ * @param words - list of words to cycle through in the effect. min length is 1
+ * @param letterDelayMs - duration in milliseconds of delay between
+ *     letter keypresses. Must be > 0.
+ * @param wordDelayMs - duration in milliseconds of delay between presenting
+ *     a finished word and starting the next one. Must be >0
+ */
+function startTypewriter(textSelector, words, letterDelayMs, wordDelayMs) {
+  typewriter(textSelector, words, letterDelayMs, wordDelayMs);
 }
 
-// Recursive function for typewriter effect
-// Do not call directly - use convenience function
-// @param textSelector - html selector of target element
-// @param words - list of words to cycle through in the effect. min length is 1
-// @param letterDelay - duration in milliseconds of delay between letter keypresses. Must be > 0. 
-// @param wordDelay - duration in milliseconds of delay between presenting a finished word and starting the next one. Must be >0
-// @param wordIndex - current index of word in words. Start at first word by default
-// @param letterIndex - current index of next letter in word. Start at first letter by default.
-function typewriter(textSelector, words, letterDelay = typewriterLetterDelay, wordDelay = typewriterWordDelay, wordIndex = 0, letterIndex = 0) {
+/**
+ * Recursive function for typewriter effect
+ * Do not call directly - use convenience function
+ * @param textSelector - html selector of target element
+ * @param words - list of words to cycle through in the effect. min length is 1
+ * @param letterDelayMs - duration in milliseconds of delay between
+ *     letter keypresses. Must be > 0.
+ * @param wordDelayMs - duration in milliseconds of delay between
+ *     presenting a finished word and starting the next one. Must be >0
+ * @param wordIndex - current index of word in words.
+ *     Start at first word by default
+ * @param letterIndex - current index of next letter in word.
+ *     Start at first letter by default.
+ */
+function typewriter(textSelector, words, letterDelayMs,
+    wordDelayMs, wordIndex = 0, letterIndex = 0) {
+  textSelector.innerText =
+      textSelector.innerText + words[wordIndex].charAt(letterIndex);
 
-    textSelector.innerText = textSelector.innerText + words[wordIndex].charAt(letterIndex);
-
-    // If the word is finished typing, go to the next word, wait a second, then clear
-    // the text and start typing the next word. Must use a space character to clear the text
-    // or the node won't render and the nodeValue will become null and unsettable. 
-    if (letterIndex+1 === words[wordIndex].length) {
-
-        window.setTimeout(() => {
-            textSelector.innerText = "";
-            typewriter(textSelector, words, letterDelay, wordDelay, (wordIndex + 1) % words.length, 0);
-        }, wordDelay);
-
-    } else {
-        // Otherwise, start typing the next letter
-        window.setTimeout(() => typewriter(textSelector, words, letterDelay, wordDelay, wordIndex, letterIndex+1), letterDelay);
-    }
-
+  // If the word is finished typing, go to the next word, wait a second, then
+  // clear the text and start typing the next word.
+  if (letterIndex + 1 === words[wordIndex].length) {
+    window.setTimeout(() => {
+      textSelector.innerText = "";
+      typewriter(
+          textSelector, words, letterDelayMs, wordDelayMs,
+          (wordIndex + 1) % words.length, 0);
+    }, wordDelayMs);
+  } else {
+    // Otherwise, start typing the next letter
+    window.setTimeout(() => {
+      typewriter(
+          textSelector, words, letterDelayMs, wordDelayMs, wordIndex,
+          letterIndex + 1);
+    }, letterDelayMs);
+  }
 }
 
 /**
  * This function will execute GET request on the /data URL.
- * Expected response is an array of hardcoded comments.
- *
+ * Expected response is an array of comments previously inputted.
  * This function will display each comment on a new line in the
  * response-container div.
  */
 function getData() {
-  fetch('/data')
-      .then((response) => response.json())
-      .then((commentsArr) => {
-        console.log(commentsArr);
-        const commentStr = commentsArr.reduce((a,b) => a + "\n" + b);
-        const element = document.getElementById("response-container");
+  // Get the element
+  const quantityElement = document.getElementById('display');
 
-        element.innerText = commentStr;
+  // Get the stored value
+  // Could be empty - this means display all comments.
+  const display = quantityElement.value;
+
+  // Create query string
+  const queryString = '/data?display=' + display;
+
+  fetch(queryString)
+      .then((response) => response.json())
+      .then((comments) => {
+        // Create a string to contain all of the comments
+        let commentString = "";
+
+        // Build up the string with information from each comment.
+        for (const comment of comments) {
+          commentString += "Comment:\n";
+          commentString += "First Name: " + comment["firstName"] + "\n";
+          commentString += "Last Name: " + comment["lastName"] + "\n";
+          commentString += "Email: " + comment["email"] + "\n";
+          commentString += "Reason for Visit: " + comment["visitReason"] + "\n";
+          commentString += "Comment Body: " + comment["comment"] + "\n\n";
+        }
+
+        // Display the comment
+        document.getElementById("response-container").innerText =
+            commentString;
       });
+}
+
+/**
+ * This function will delete all comments currently in the datastore.
+ */
+function deleteData() {
+  // Create the request
+  const request = new Request('/delete-data', {method: 'POST'});
+
+  // Perform the request to delete all comments
+  // and then perform a GET request to update the comments view.
+  fetch(request)
+      .then(() => getData());
 }
