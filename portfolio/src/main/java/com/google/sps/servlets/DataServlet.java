@@ -69,7 +69,7 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the display parameter and print it (for now)
+    // Get the display parameter
     String displayParam = request.getParameter("display");
 
     // Get the display value
