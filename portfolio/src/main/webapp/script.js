@@ -165,7 +165,7 @@ function getImageUrls() {
       .then((response) => response.json())
       .then((urls) => {
         const container = document.getElementById('images-container');
-        if (urls.size > 0) {
+        if (urls.length > 0) {
           const imageUrls =
               urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
           container.innerText = imageUrls;
