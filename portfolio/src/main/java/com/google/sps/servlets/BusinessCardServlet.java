@@ -45,6 +45,10 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * Add a business card to the Datastore.
    * DO NOT ACCESS DIRECTLY - should only be accessed by Blobstore.
    * Point Client to the blobstore upload URL, which can be retrieved from the BlobstoreUrlServlet
+   *
+   * Image must have been uploaded inside a form element with the name "bizCard".
+   * If this changes, change the formElementName parameter in the getImageBlobKey function.
+   *
    * @param request HTTP request sent from client for POST request
    * @param response HTTP response to be sent to client
    * @throws IOException if an IO error occurs while the request is being processed by the servlet.
@@ -105,7 +109,6 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // Attach the JSON to the response
     response.setContentType("application/json;");
     response.getWriter().println(urlJson);
-
   }
 
   /**
@@ -118,13 +121,11 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * @return blobkey of image, or null if the upload was not an image or another error occurred
    */
   private BlobKey getImageBlobKey(HttpServletRequest request, String formElementName) {
-    // Get the relevant blob key
-    // This map will use the form element name as the key, and then a list of
-    // file blobkeys as the value.
+    // Get the relevant blobkeys from the blobstore
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formElementName);
 
-    // Make sure the list isn't empty (and there are no photo uploads)
+    // Make sure at least one photo was uploaded
     if (blobKeys == null || blobKeys.size() == 0) {
       return null;
     }
@@ -134,7 +135,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     BlobKey blobKey = blobKeys.get(0);
 
     // Check the image file
-    // Make sure the image isn't empty and is of type image
+    // Make sure the file isn't empty and is of type image
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
 
     if (blobInfo.getSize() == 0) {

@@ -37,6 +37,7 @@ public class BlobstoreUrlServlet extends HttpServletWithUtilities {
    * Will point to the BusinessCardServlet.
    * @param request the request sent from client. Body should be empty
    * @param response response to send back to the client. Should be empty.
+   * @throws IOException if there is an error retrieving the writer from the response.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
