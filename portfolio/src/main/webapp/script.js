@@ -165,9 +165,11 @@ function getImageUrls() {
       .then((response) => response.json())
       .then((urls) => {
         const container = document.getElementById('images-container');
-        const imageUrls =
-            urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
-        container.innerText = imageUrls;
+        if (urls.size > 0) {
+          const imageUrls =
+              urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
+          container.innerText = imageUrls;
+        }
       });
 }
 
