@@ -54,6 +54,12 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // Get the blobKey of the image so it can be located in the blobstore.
     BlobKey bizCardBlobKey = getImageBlobKey(request, "bizCard");
 
+    // If a blob key was not generated, an error occurred with the file.
+    if(bizCardBlobKey == null) {
+      response.sendError(400, "No image uploaded or file was invalid.");
+      return;
+    }
+
     // UNCOMMENT FOR TESTING: Use for test server to check if Post and Blobstore is working
     // blobstoreService.serve(bizCardBlobKey, response);
 
@@ -65,15 +71,12 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // Get URL to download image
     String bizCardURL = getImageUrl(bizCardBlobKey);
 
-    // Create Business Card Entity
+    // Add Business Card URL to the datastore
     Entity businessCardEntity = new Entity("BizCard");
-
-    // Add URL to entity
     businessCardEntity.setProperty("bizCard", bizCardURL);
-
-    // Add business card to datastore
     datastore.put(businessCardEntity);
 
+    // Refresh the client page
     response.sendRedirect("/index.html");
   }
 
@@ -130,15 +133,14 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     BlobKey blobKey = blobKeys.get(0);
 
     // Check the image file
+    // Make sure the image isn't empty and is of type image
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
 
-    // Make sure the image isn't empty
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
       return null;
     }
 
-    // Make sure that the image is an image.
     if (!blobInfo.getContentType().contains("image")) {
       return null;
     }
@@ -163,10 +165,12 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
       return url.getPath();
     } catch (MalformedURLException e) {
       // May not be a valid URL.
+      // Return string value, but log a warning
       String url = imagesService.getServingUrl(options);
 
       System.out.println("WARNING: ImageService download URL may be invalid.");
       System.out.println("URL: " + url);
+
       return url;
     }
   }
