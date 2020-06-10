@@ -1,9 +1,10 @@
 package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Entity;
 import java.util.ArrayList;
 
 /**
@@ -143,15 +144,13 @@ public final class Comment {
     ArrayList<Comment> comments = new ArrayList<>();
 
     // Get results as an iterable
-    Iterable<Entity> results = resultsQuery.asIterable();
+    Iterable<Entity> results = max < 1 ? resultsQuery.asIterable() :
+        resultsQuery.asIterable(FetchOptions.Builder.withLimit(max));
 
     // Iterate through the entities
     // Create a Comment instance for each entity and add it to the ArrayList
     // until the maximum amount of elements are created (if a maximum exists)
     for (Entity entity: results) {
-      if(max != 0 && comments.size() >= max) {
-        break;
-      }
       Comment comment = new Comment(entity);
       comments.add(comment);
     }
@@ -160,3 +159,4 @@ public final class Comment {
     return comments;
   }
 }
+

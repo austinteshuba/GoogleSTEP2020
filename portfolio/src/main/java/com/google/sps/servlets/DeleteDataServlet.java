@@ -14,8 +14,12 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.*;
-
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +42,7 @@ public class DeleteDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     // Create a query to get all Comment entities
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").setKeysOnly();
 
     // Use the query to get results from the datastore
     PreparedQuery results = datastore.prepare(query);
@@ -50,3 +54,4 @@ public class DeleteDataServlet extends HttpServlet {
     }
   }
 }
+
