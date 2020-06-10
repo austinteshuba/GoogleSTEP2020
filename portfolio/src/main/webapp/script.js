@@ -150,7 +150,7 @@ function fetchBlobstoreUrl() {
 
   // Get the url
   fetch('/blobstore-upload-url')
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((urlObject) => {
         bizCardForm.action = urlObject['blobUrl'];
       });
@@ -162,8 +162,8 @@ function fetchBlobstoreUrl() {
  */
 function getImageUrls() {
   fetch('/biz-card')
-      .then(response => response.json())
-      .then(urls => {
+      .then((response) => response.json())
+      .then((urls) => {
         const container = document.getElementById('images-container');
         const imageUrls =
             urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
