@@ -1,42 +1,43 @@
 /*
-    This file is for the grid system on the page.
-    Use these for laying objects next to / on top of each other
-    Naming Convention: col-x-of-y means that this element takes 
-    x columns of y available. (e.g. col-2-of-3 means an element that
-    takes up 2 columns of three available). 
+  This file is for the grid system on the page.
+  Use these for laying objects next to / on top of each other
+  Naming Convention: col-x-of-y means that this element takes
+  x columns of y available. (e.g. col-2-of-3 means an element that
+  takes up 2 columns of three available).
 
-    Have a single amount of columns in a given row (e.g. do not mix and match
-    col 1-of-2 and col-1-of-3. Either have two columns in the row or three - not both.
+  Have a single amount of columns in a given row (e.g. do not mix and match
+  col 1-of-2 and col-1-of-3. Either have two columns in the row or three - not both.
 */
 
 .row {
-    height: 100%;
+  height: 100%;
 }
 
-.row:after {
-    clear: both;
-    content: '';
-    display: table;
+.row::after {
+  clear: both;
+  content: '';
+  display: table;
 }
 
 .row:not(:last-child) {
-    margin: 0 0 var(--gutter-vertical) 0;
+  margin: 0 0 var(--gutter-vertical) 0;
 }
 
 .col-1-of-3 {
-    float: left;
-    width: calc((100% - var(--gutter-horizontal)*2)/3);
+  float: left;
+  width: calc((100% - var(--gutter-horizontal) * 2) / 3);
 }
 
 .col-1-of-3:not(:last-child) {
-    margin: 0 var(--gutter-horizontal) 0 0;
+  margin: 0 var(--gutter-horizontal) 0 0;
 }
 
 .col-2-of-3 {
-    float: left;
-    width: calc((100% - var(--gutter-horizontal)*2)*2/3 + var(--gutter-horizontal));
+  float: left;
+  width: calc((100% - var(--gutter-horizontal) * 2) * 2 / 3 + var(--gutter-horizontal));
 }
 
 .col-2-of-3:not(:last-child) {
-    margin: 0 var(--gutter-horizontal) 0 0;
+  margin: 0 var(--gutter-horizontal) 0 0;
 }
+
