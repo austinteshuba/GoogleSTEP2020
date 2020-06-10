@@ -65,14 +65,6 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
       return;
     }
 
-    // UNCOMMENT FOR TESTING: Use for test server to check if Post and Blobstore is working
-    // blobstoreService.serve(bizCardBlobKey, response);
-
-    // UNCOMMENT FOR TESTING: Use this for testing GET method.
-    // Will set bizCardURL to a public Lorem Ipsum image hosted by Picsum
-    // String bizCardURL = "https://i.picsum.photos/id/1037/200/200.jpg";
-
-    // COMMENT WHILE TESTING - getImageUrl is only functional on live servers.
     // Get URL to download image
     String bizCardURL = getImageUrl(bizCardBlobKey);
 
