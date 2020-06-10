@@ -68,30 +68,31 @@
                  Blinking cursor has a blinking animation attached
                  to text contents (| in this case) -->
             <div class="heading-secondary">
-              <p class="text-xl">Do you need someone passionate about:
-              <p class="text-xl">
+              <p class="text-xlg">Do you need someone passionate about:
+              <p class="text-xlg">
                 <!-- These spans must be next to each-other to prevent an un-needed whitespace from appearing -->
                 <span id="passions"></span><span class="blinking-cursor">|</span>
             </div>
             <div class="heading-secondary">
-              <p class="text-l">Great!
-              <p class="text-l">You're in the right place.
+              <p class="text-lg">Great!
+              <p class="text-lg">You're in the right place.
             </div>
             <!-- Place text contents in the bottom right of the header div. -->
             <div class="u-div-bottom-r" id="header-bottom-r">
               <div class="heading-secondary">
-                <p class="text-l">Interested? Let's chat!
-                <p class="text-m">Don't worry, I won't bite.
+                <p class="text-lg">Interested? Let's chat!
+                <p class="text-md">Don't worry, I won't bite.
               </div>
               <div class="heading-secondary">
-                <p class="text-m">p: (519) 984-2619
-                <p class="text-m">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a>
+                <p class="text-md">p: (519) 984-2619</p>
+                <p class="text-md">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a>
               </div>
             </div>
           </div>
         </div>
       </header>
     </div>
+
     <!-- Placeholder for an About me section. Use same small padding 
          and text-shadows on text elements as above. -->
     <div class="section-about u-padding-sm u-text-shadow">
@@ -132,9 +133,9 @@
         <label for="lastName">Last Name:</label><br>
         <input type="text" id="lastName" name="lastName"><br>
         <label for="email">Email:</label><br>
-        <input type="text" id="email" name="email"><br>
-        <br>
+        <input type="text" id="email" name="email"><br><br>
 
+        <!-- Radio Button Input for Reason for Visiting -->
         <p>What's the purpose of your visit?</p>
 
         <input type="radio" id="recruiting" name="visitReason" value="recruiting">
@@ -147,8 +148,7 @@
         <label for="tutoring">Tutoring</label><br>
 
         <input type="radio" id="chat" name="visitReason" value="chat">
-        <label for="chat">Other / Just a chat</label><br>
-        <br>
+        <label for="chat">Other / Just a chat</label><br><br>
 
         <label for="comment">Comment:</label>
         <input type="text" id="comment" name="comment"><br>
@@ -168,3 +168,4 @@
       <!-- Container to hold the ImageURLs in the Blobstore -->
       <div id="images-container"></div>
     </div>
+

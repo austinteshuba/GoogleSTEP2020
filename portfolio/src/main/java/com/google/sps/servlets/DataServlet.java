@@ -37,7 +37,7 @@ public class DataServlet extends HttpServlet {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   /**
-   * Utility function that uses Gson to convert an ArrayList<String>
+   * Utility function that uses Gson to convert a List with any contents
    * to a JSON string.
    */
   private String listToJson(List objects) {
@@ -69,7 +69,7 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the display parameter and print it (for now)
+    // Get the display parameter
     String displayParam = request.getParameter("display");
 
     // Get the display value
