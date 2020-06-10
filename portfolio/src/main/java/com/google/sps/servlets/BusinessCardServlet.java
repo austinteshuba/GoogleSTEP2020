@@ -56,7 +56,8 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
 
     // If a blob key was not generated, an error occurred with the file.
     if(bizCardBlobKey == null) {
-      response.sendError(400, "No image uploaded or file was invalid.");
+      response
+          .sendError(400, "No image uploaded or file was invalid (corrupted, not image, etc.)");
       return;
     }
 
