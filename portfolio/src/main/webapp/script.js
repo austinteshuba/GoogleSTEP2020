@@ -193,8 +193,22 @@ function checkAuthentication() {
         const userEmail = authInfo['email'];
 
         // Begin changes to the DOM depending on the authentication status
-        initializeFormState(loggedIn, authLink, userEmail);
+        initializeFormState(loggedIn, authLink);
+        autofillForm(userEmail);
       });
+}
+
+/**
+ * Function to autofill the form with available information from the user's
+ *     authentication (currently just email)
+ * @param {string} userEmail contains the email address of the current user
+ */
+function autofillForm(userEmail) {
+  // Get the HTML elements
+  const emailFormInput = document.getElementById('email');
+
+  // Populate the value
+  emailFormInput.value = userEmail;
 }
 
 /**
@@ -203,16 +217,14 @@ function checkAuthentication() {
  * form if logged out, shows it if logged in.
  * @param {boolean} loggedIn true if user is logged in, false otherwise
  * @param {string} authLink link to either log in or log out, as needed.
- * @param {string} email contains the email address of current user
  */
-function initializeFormState(loggedIn, authLink, email) {
+function initializeFormState(loggedIn, authLink) {
   // Get the HTML elements
   const authPromptElement =
       document.getElementById('comment-form-authentication-prompt');
   const authLinkElement =
       document.getElementById('comment-form-authentication-link');
   const form = document.getElementById('comment-form');
-  const emailFormInput = document.getElementById('email');
 
   // If logged in, prompt user with link to log out and show form
   // If logged out, prompt user to log in and hide form
@@ -228,6 +240,5 @@ function initializeFormState(loggedIn, authLink, email) {
 
   // Update link and email values
   authLinkElement.href = authLink;
-  emailFormInput.value = email;
 }
 
