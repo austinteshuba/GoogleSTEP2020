@@ -84,7 +84,7 @@
               </div>
               <div class="heading-secondary">
                 <p class="text-md">p: (519) 984-2619
-                <p class="text-md">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a>
+                <p class="text-md">e: <a class="u-link-underline-white" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a>
               </div>
             </div>
           </div>
@@ -126,7 +126,12 @@
     <!-- TODO - style the forms (https://github.com/austinteshuba/GoogleSTEP2020/issues/24) -->
     <!-- Form to submit a comment/contact information. No required fields for now. -->
     <div>
-      <form action="/data" method="POST">
+      <!-- Will contain text to either prompt user to login, or offer a link to logout -->
+      <p id="comment-form-authentication-prompt"></p>
+      <a class="link-black u-link-underline-black" href="#" id="comment-form-authentication-link">Authentication Link</a><br>
+
+      <!-- Form to submit a comment/contact information. No required fields for now. -->
+      <form id="comment-form" action="/data" method="POST">
         <p>Introduce yourself!</p>
         <label for="firstName">First Name:</label><br>
         <input type="text" id="firstName" name="firstName"><br>

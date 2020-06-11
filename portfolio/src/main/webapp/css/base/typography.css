@@ -81,3 +81,6 @@ h5 {
   padding: 0 0 var(--heading-secondary-padding-btm) 0;
 }
 
+.link-black {
+  color: var(--text-black);
+}

@@ -60,10 +60,18 @@
 }
 
 /*
-  Add underline to text link. Use border-bottom to improve text readability
+  Add white underline to text link. Use border-bottom to improve text readability
   (border bottom will not cut off text. text-decoration will cut through some letters).
 */
-.u-link-underline {
+.u-link-underline-white {
   border-bottom: var(--underline-size) solid var(--text-white);
+}
+
+/*
+  Add white underline to text link. Use border-bottom to improve text readability
+  (border bottom will not cut off text. text-decoration will cut through some letters).
+*/
+.u-link-underline-black {
+  border-bottom: var(--underline-size) solid var(--text-black);
 }
 

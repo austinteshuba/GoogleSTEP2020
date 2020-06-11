@@ -20,11 +20,20 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
+<<<<<<< HEAD
+=======
+const logInPrompt =
+    'To simplify form entry, and to verify your identity, please log in.';
+const logOutPrompt = 'All done? Log out whenever you\'d like';
+
+// Start the typewriter effect when page loads
+>>>>>>> Hide form when logged out, show when logged in
 window.onload = function() {
   // Initialize the business card form
   // and retrieve all download URLs from the blobstore
   fetchBlobstoreUrl();
   getImageUrls();
+  checkAuthentication();
 
   // Start typewriter effect
   const passionSelector = document.getElementById('passions');
@@ -172,5 +181,69 @@ function getImageUrls() {
           container.innerText = imageUrls;
         }
       });
+}
+
+/**
+ * Gets the user's authentication status from the auth-status servlet
+ * and calls handleAuthenticationStatus function to change form visibility
+ * accordingly
+ */
+function checkAuthentication() {
+  fetch('/auth-status')
+      .then((response) => response.json())
+      .then((authInfo) => {
+        console.log(authInfo['logged-in']);
+        // Get the authentication status as boolean and auth link as string
+        const loggedIn = authInfo['logged-in'];
+        const authLink = authInfo['link'];
+
+        // Begin changes to the DOM depending on the authentication status
+        handleAuthenticationStatus(loggedIn, authLink);
+      });
+}
+
+/**
+ * Shows or hides the HTML form depending on the user's authentication status
+ * @param {boolean} visible
+ */
+function changeFormVisibility(visible) {
+  const form = document.getElementById('comment-form');
+
+  if (visible) {
+    form.style.display = 'block';
+  } else {
+    form.style.display = 'none';
+  }
+}
+
+/**
+ * Updates the HTML elements to prompt the user to log in or log out,
+ * with the correct link to do so below the text. Hides the comment
+ * form if logged out, shows it if logged in.
+ * @param {boolean} loggedIn true if user is logged in, false otherwise
+ * @param {string} authLink link to either log in or log out, as needed.
+ */
+function handleAuthenticationStatus(loggedIn, authLink) {
+  // Show the comments form if logged in, hide if logged out.
+  changeFormVisibility(loggedIn);
+
+  // Get the HTML elements
+  const authPromptElement =
+      document.getElementById('comment-form-authentication-prompt');
+
+  const authLinkElement =
+      document.getElementById('comment-form-authentication-link');
+
+  // If logged in, prompt user with link to log out.
+  // If logged out, prompt user to log in.
+  if (loggedIn) {
+    authPromptElement.innerText = logOutPrompt;
+    authLinkElement.innerHTML = 'Log Out of Google Account';
+  } else {
+    authPromptElement.innerText = logInPrompt;
+    authLinkElement.innerHTML = 'Log In with Google';
+  }
+
+  authLinkElement.href = authLink;
 }
 
