@@ -190,9 +190,10 @@ function checkAuthentication() {
         // Get the authentication status as boolean and auth link as string
         const loggedIn = authInfo['logged-in'];
         const authLink = authInfo['link'];
+        const userEmail = authInfo['email'];
 
         // Begin changes to the DOM depending on the authentication status
-        initializeFormState(loggedIn, authLink);
+        initializeFormState(loggedIn, authLink, userEmail);
       });
 }
 
@@ -202,16 +203,16 @@ function checkAuthentication() {
  * form if logged out, shows it if logged in.
  * @param {boolean} loggedIn true if user is logged in, false otherwise
  * @param {string} authLink link to either log in or log out, as needed.
+ * @param {string} email contains the email address of current user
  */
-function initializeFormState(loggedIn, authLink) {
+function initializeFormState(loggedIn, authLink, email) {
   // Get the HTML elements
   const authPromptElement =
       document.getElementById('comment-form-authentication-prompt');
-
   const authLinkElement =
       document.getElementById('comment-form-authentication-link');
-
   const form = document.getElementById('comment-form');
+  const emailFormInput = document.getElementById('email');
 
   // If logged in, prompt user with link to log out and show form
   // If logged out, prompt user to log in and hide form
@@ -225,6 +226,8 @@ function initializeFormState(loggedIn, authLink) {
     form.style.display = 'none';
   }
 
+  // Update link and email values
   authLinkElement.href = authLink;
+  emailFormInput.value = email;
 }
 

@@ -27,7 +27,8 @@ public class AuthStatusServlet extends HttpServlet {
    * @param request HTTP request received from the client. Should contain no params.
    * @param response HTTP Response to send back to the user. Should contain JSON object with
    *     two parameters: logged-in and link, where logged-in is true/false and link is either
-   *     a link to login if the user isn't logged in, or logout link if user is logged in.
+   *     a link to login if the user isn't logged in, or logout link if user is logged in. If
+   *     logged-in, response should also contain user's email.
    * @throws IOException if there is an issue with getWriter() while processing the request.
    */
   @Override
@@ -46,6 +47,10 @@ public class AuthStatusServlet extends HttpServlet {
       String loginUrl = userService.createLoginURL("/index.html");
       authInfo.addProperty("link", loginUrl);
     }
+
+    // Add the user's email (if logged in) to the JSON object.
+    String email = isLoggedIn ? userService.getCurrentUser().getEmail() : "";
+    authInfo.addProperty("email", email);
 
     // Send JSON to client
     response.setContentType("application/json");
