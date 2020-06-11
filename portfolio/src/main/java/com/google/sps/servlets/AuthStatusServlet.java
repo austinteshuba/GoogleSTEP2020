@@ -35,32 +35,40 @@ public class AuthStatusServlet extends HttpServlet {
   /**
    * Will return the authentication status of the current user.
    * @param request HTTP request received from the client. Should contain no params.
-   * @param response HTTP Response to send back to the user. Should contain JSON object with
-   *     two parameters: logged-in and link, where logged-in is true/false and link is either
-   *     a link to login if the user isn't logged in, or logout link if user is logged in. If
-   *     logged-in, response should also contain user's email.
+   * @param response HTTP Response to send back to the user. Should contain four parameters:
+   *     logged-in (boolean), isAdmin (boolean), link (to login/logout - string), and email
+   *     (current user's email - string).
    * @throws IOException if there is an issue with getWriter() while processing the request.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get Authentication status from UserService. Add it to JSON object.
-    boolean isLoggedIn = userService.isUserLoggedIn();
-
+    // Get Authentication status from UserService. Add it to a JSON object.
     JsonObject authInfo = new JsonObject();
+
+    boolean isLoggedIn = userService.isUserLoggedIn();
     authInfo.addProperty("logged-in", isLoggedIn);
 
-    // If the user is logged in, add a logout link to response (and vice versa)
     if (isLoggedIn) {
+      // Add link to logout of system
       String logoutUrl = userService.createLogoutURL("/index.html");
       authInfo.addProperty("link", logoutUrl);
+
+      // Add email param
+      String email = userService.getCurrentUser().getEmail();
+      authInfo.addProperty("email", email);
+
+      // Add admin param
+      boolean isAdmin = userService.isUserAdmin();
+      authInfo.addProperty("admin", isAdmin);
     } else {
+      // Add link to login to system
       String loginUrl = userService.createLoginURL("/index.html");
       authInfo.addProperty("link", loginUrl);
-    }
 
-    // Add the user's email (if logged in) to the JSON object.
-    String email = isLoggedIn ? userService.getCurrentUser().getEmail() : "";
-    authInfo.addProperty("email", email);
+      // Default values
+      authInfo.addProperty("email", "");
+      authInfo.addProperty("admin", false);
+    }
 
     // Send JSON to client
     response.setContentType("application/json");
