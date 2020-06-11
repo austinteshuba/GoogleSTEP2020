@@ -187,7 +187,6 @@ function checkAuthentication() {
   fetch('/auth-status')
       .then((response) => response.json())
       .then((authInfo) => {
-        console.log(authInfo['logged-in']);
         // Get the authentication status as boolean and auth link as string
         const loggedIn = authInfo['logged-in'];
         const authLink = authInfo['link'];
