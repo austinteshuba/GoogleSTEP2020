@@ -22,6 +22,9 @@ const typewriterLoadDelayMs = 1000;
 
 // Start the typewriter effect when page loads
 window.onload = function() {
+  fetchBlobstoreUrl();
+  getImageUrls();
+
   const passionSelector = document.getElementById('passions');
   window.setTimeout(() => {
     startTypewriter(
@@ -136,5 +139,37 @@ function deleteData() {
   // and then perform a GET request to update the comments view.
   fetch(request)
       .then(() => getData());
+}
+
+/**
+ * This function will fetch the blobstore URL for the business card form.
+ */
+function fetchBlobstoreUrl() {
+  // Get the form element
+  const bizCardForm = document.getElementById('bizCardForm');
+
+  // Get the url
+  fetch('/blobstore-upload-url')
+      .then((response) => response.json())
+      .then((urlObject) => {
+        bizCardForm.action = urlObject['blobUrl'];
+      });
+}
+
+/**
+ * This function will fetch the download URLs of all business cards in
+ * the blobstore.
+ */
+function getImageUrls() {
+  fetch('/biz-card')
+      .then((response) => response.json())
+      .then((urls) => {
+        const container = document.getElementById('images-container');
+        if (urls.length > 0) {
+          const imageUrls =
+              urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
+          container.innerText = imageUrls;
+        }
+      });
 }
 
