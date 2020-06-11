@@ -47,3 +47,12 @@
   display: none;
 }
 
+/*
+  By default, hide the comments.
+  Form should only be visible if user is an admin
+  (handled in script.js)
+*/
+#comments-container {
+  display: none;
+}
+

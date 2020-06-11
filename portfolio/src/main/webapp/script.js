@@ -192,10 +192,12 @@ function checkAuthentication() {
         const loggedIn = authInfo['logged-in'];
         const authLink = authInfo['link'];
         const userEmail = authInfo['email'];
+        const isAdmin = authInfo['admin'];
 
         // Begin changes to the DOM depending on the authentication status
         initializeFormState(loggedIn, authLink);
         autofillForm(userEmail);
+        toggleViewComments(isAdmin);
       });
 }
 
@@ -210,6 +212,29 @@ function autofillForm(userEmail) {
 
   // Populate the value
   emailFormInput.value = userEmail;
+}
+
+/**
+ * If the user is an administrator, they will be able to see current comments
+ * on home page. Otherwise, the containers for information in the
+ * database will be hidden.
+ * @param {boolean} isAdmin is true when current user is an administrator
+ */
+function toggleViewComments(isAdmin) {
+  // Get HTML Element
+  const commentsContainer =
+      document.getElementById('comments-container');
+
+  // If the user is an admin, show the comments container
+  // and populate the business card image URLS. Other values
+  // will be populated by user as desired via the view comments form.
+  // If the user is not an admin, hide the form and don't load data.
+  if (isAdmin) {
+    commentsContainer.style.display = 'block';
+    getImageUrls();
+  } else {
+    commentsContainer.style.display = 'none';
+  }
 }
 
 /**
