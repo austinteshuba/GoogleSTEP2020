@@ -36,9 +36,8 @@
             <!-- Include box shadow on circular image, text shadow on caption -->
             <div class="u-center u-text-center">
               <img class="img-circle u-box-shadow" src="/images/headshot.jpeg" alt="Profile Picture">
-              <p class="caption-lg u-text-shadow">
-                Welcome to My Portfolio
-              </p>
+              <p class="caption-lg u-text-shadow">Welcome to My Portfolio
+
               <!-- Create a container for three inline logos 
                    to go to LinkedIn, GitHub, and personal Devpost.
                    (images must be same small size, like 32x32, for proper formatting) -->
@@ -84,7 +83,7 @@
                 <p class="text-md">Don't worry, I won't bite.
               </div>
               <div class="heading-secondary">
-                <p class="text-md">p: (519) 984-2619</p>
+                <p class="text-md">p: (519) 984-2619
                 <p class="text-md">e: <a class="u-link-underline" href="mailto:austinteshuba@gmail.com" target="_blank">austinteshuba@gmail.com</a>
               </div>
             </div>
@@ -123,6 +122,7 @@
     </div>
     <br><br>
 
+    <!-- Div contains comment form(s). TODO - style the forms -->
     <!-- Form to submit a comment/contact information. No required fields for now. -->
     <div>
       <form action="/data" method="POST">
@@ -154,5 +154,17 @@
 
         <input type="submit" value="Submit">
       </form>
+      <br><br>
+
+      <form id="bizCardForm" method="POST" enctype="multipart/form-data">
+        <p>Or, drop your business card here!</p>
+        <input type="file" name="bizCard" id="bizCard" value="Select File"><br><br>
+
+        <input type="submit" value="Upload!" name="submit">
+      </form>
+      <br><br>
+
+      <!-- Container to hold the ImageURLs in the Blobstore -->
+      <div id="images-container"></div>
     </div>
 
