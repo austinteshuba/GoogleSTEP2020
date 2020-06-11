@@ -32,3 +32,4 @@ public class AuthStatusServlet extends HttpServlet {
     response.getWriter().println(isLoggedIn);
   }
 }
+
