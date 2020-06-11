@@ -192,22 +192,8 @@ function checkAuthentication() {
         const authLink = authInfo['link'];
 
         // Begin changes to the DOM depending on the authentication status
-        handleAuthenticationStatus(loggedIn, authLink);
+        initializeFormState(loggedIn, authLink);
       });
-}
-
-/**
- * Shows or hides the HTML form depending on the user's authentication status
- * @param {boolean} visible
- */
-function changeFormVisibility(visible) {
-  const form = document.getElementById('comment-form');
-
-  if (visible) {
-    form.style.display = 'block';
-  } else {
-    form.style.display = 'none';
-  }
 }
 
 /**
@@ -217,10 +203,7 @@ function changeFormVisibility(visible) {
  * @param {boolean} loggedIn true if user is logged in, false otherwise
  * @param {string} authLink link to either log in or log out, as needed.
  */
-function handleAuthenticationStatus(loggedIn, authLink) {
-  // Show the comments form if logged in, hide if logged out.
-  changeFormVisibility(loggedIn);
-
+function initializeFormState(loggedIn, authLink) {
   // Get the HTML elements
   const authPromptElement =
       document.getElementById('comment-form-authentication-prompt');
@@ -228,14 +211,18 @@ function handleAuthenticationStatus(loggedIn, authLink) {
   const authLinkElement =
       document.getElementById('comment-form-authentication-link');
 
-  // If logged in, prompt user with link to log out.
-  // If logged out, prompt user to log in.
+  const form = document.getElementById('comment-form');
+
+  // If logged in, prompt user with link to log out and show form
+  // If logged out, prompt user to log in and hide form
   if (loggedIn) {
     authPromptElement.innerText = logOutPrompt;
     authLinkElement.innerHTML = 'Log Out of Google Account';
+    form.style.display = 'block';
   } else {
     authPromptElement.innerText = logInPrompt;
     authLinkElement.innerHTML = 'Log In with Google';
+    form.style.display = 'none';
   }
 
   authLinkElement.href = authLink;
