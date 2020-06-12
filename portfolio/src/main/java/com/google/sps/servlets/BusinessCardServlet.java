@@ -5,13 +5,10 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ImagesServiceFailureException;
 import com.google.appengine.api.images.ServingUrlOptions;
 
 import javax.servlet.annotation.WebServlet;
@@ -28,8 +25,10 @@ import java.util.stream.Collectors;
  * This class will handle the storage/retrieval of information from the
  * Business Card Drop on the portfolio homepage.
  */
-@WebServlet("/biz-card")
+@WebServlet(BusinessCardServlet.BIZ_CARD_URL)
 public class BusinessCardServlet extends HttpServletWithUtilities {
+  // Endpoint to access BusinessCardServlet
+  public static final String BIZ_CARD_URL = "/biz-card";
 
   // Store the BlobstoreService instance for the application. Same instance as other files.
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
@@ -46,8 +45,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * DO NOT ACCESS DIRECTLY - should only be accessed by Blobstore.
    * Point Client to the blobstore upload URL, which can be retrieved from the BlobstoreUrlServlet
    *
-   * Image must have been uploaded inside a form element with the name "bizCard".
-   * If this changes, change the formElementName parameter in the getImageBlobKey function.
+   * Request parameter must be named "bizCard".
    *
    * @param request HTTP request sent from client for POST request
    * @param response HTTP response to be sent to client
@@ -56,22 +54,51 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the blobKey of the image so it can be located in the blobstore.
-    BlobKey bizCardBlobKey = getImageBlobKey(request, "bizCard");
+    BlobKey bizCardBlobKey = null;
 
-    // If a blob key was not generated, an error occurred with the file.
-    if(bizCardBlobKey == null) {
-      response
-          .sendError(400, "No image uploaded or file was invalid (corrupted, not image, etc.)");
+    // NullPointerException - No images uploaded
+    // IllegalArgumentException - File was not an image
+    try {
+      bizCardBlobKey = getImageBlobKey(request, "bizCard");
+    } catch (NullPointerException e) {
+      response.sendError(400, e.getClass().getSimpleName() +
+          " No images were uploaded. Please select an image to upload");
+      return;
+    } catch (IllegalArgumentException e) {
+      response.sendError(400, e.getClass().getSimpleName() +
+          " File not supported. Please upload a BMP, GIF, ICO, JPEG, PNG or TIFF file.");
       return;
     }
 
     // Get URL to download image
-    String bizCardURL = getImageUrl(bizCardBlobKey);
+    String bizCardURL = null;
+
+    // IllegalArgumentException - verify that BlobKey was parsed correctly
+    // ImagesServiceFailureException - check Google Cloud Platform for more info
+    try {
+      bizCardURL = getImageUrl(bizCardBlobKey);
+    } catch (Exception e) {
+      response.sendError(500, e.getClass().getSimpleName() +
+          " There was an issue processing your upload.");
+      blobstoreService.delete(bizCardBlobKey);
+      return;
+    }
 
     // Add Business Card URL to the datastore
     Entity businessCardEntity = new Entity("BizCard");
     businessCardEntity.setProperty("bizCard", bizCardURL);
-    datastore.put(businessCardEntity);
+
+    // IllegalArgumentException - verify that entity was created properly
+    // ConcurrentModificationException - should not happen. Verify entity is not being edited.
+    // DatastoreFailureException - check Google Cloud Platform for more info.
+    try {
+      datastore.put(businessCardEntity);
+    } catch (Exception e) {
+      response.sendError(500, e.getClass().getSimpleName() +
+          " There was an issue processing your upload.");
+      blobstoreService.delete(bizCardBlobKey);
+      return;
+    }
 
     // Refresh the client page
     response.sendRedirect("/index.html");
@@ -109,17 +136,22 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * (If more than one file is uploaded per form element, this function will return
    * unexpected results).
    * @param request The HTTP request sent by blobstore
-   * @param formElementName the name of the input element in the HTML form that uploaded the image.
-   * @return blobkey of image, or null if the upload was not an image or another error occurred
+   * @param paramName the name of the parameter in the request that stores the image
+   * @return blobkey of image
+   * @throws NullPointerException if no file was uploaded
+   * @throws IllegalArgumentException if the file was not an image
    */
-  private BlobKey getImageBlobKey(HttpServletRequest request, String formElementName) {
+  private BlobKey getImageBlobKey(HttpServletRequest request, String paramName)
+      throws NullPointerException, IllegalArgumentException {
     // Get the relevant blobkeys from the blobstore
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    List<BlobKey> blobKeys = blobs.get(formElementName);
+    List<BlobKey> blobKeys = blobs.get(paramName);
 
-    // Make sure at least one photo was uploaded
+    // Make sure at least one blob was uploaded
+    // In Dev, an empty file will be a null blob
+    // (thus this error will trigger in dev)
     if (blobKeys == null || blobKeys.size() == 0) {
-      return null;
+      throw new NullPointerException();
     }
 
     // Get first image in the blob keys list
@@ -130,13 +162,16 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // Make sure the file isn't empty and is of type image
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
 
+    // In prod, an empty file will be non-null but empty.
+    // (thus this error will trigger in prod)
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
-      return null;
+      throw new NullPointerException();
     }
 
     if (!blobInfo.getContentType().contains("image")) {
-      return null;
+      blobstoreService.delete(blobKey);
+      throw new IllegalArgumentException();
     }
 
     return blobKey;
@@ -149,8 +184,11 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * THIS WILL ONLY WORK ON A PRODUCTION/TEST SERVER (not Dev server)
    * @param blobKey The BlobKey of the image for which a URL is being generated.
    * @return a string containing a URL to retrieve the photo.
+   * @throws IllegalArgumentException if the blobKey is not valid
+   * @throws ImagesServiceFailureException if there is an error with the ImagesService
    */
-  private String getImageUrl(BlobKey blobKey) {
+  private String getImageUrl(BlobKey blobKey)
+      throws IllegalArgumentException, ImagesServiceFailureException {
     // Use the Image Service to get a download URL
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 

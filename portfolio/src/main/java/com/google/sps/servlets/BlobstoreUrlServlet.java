@@ -42,7 +42,7 @@ public class BlobstoreUrlServlet extends HttpServletWithUtilities {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the URL
-    String blobUrl = blobstoreService.createUploadUrl("/biz-card");
+    String blobUrl = blobstoreService.createUploadUrl(BusinessCardServlet.BIZ_CARD_URL);
 
     // Create JSON
     JsonObject urlJson = new JsonObject();
