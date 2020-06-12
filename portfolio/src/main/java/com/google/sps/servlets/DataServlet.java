@@ -37,8 +37,7 @@ public class DataServlet extends HttpServlet {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   /**
-   * Utility function that uses Gson to convert a List with any contents
-   * to a JSON string.
+   * Use Gson to convert a List with any contents to a JSON string.
    */
   private String listToJson(List objects) {
     Gson gson = new Gson();
