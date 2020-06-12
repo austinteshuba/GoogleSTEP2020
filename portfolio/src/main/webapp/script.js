@@ -20,11 +20,13 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-// Start the typewriter effect when page loads
 window.onload = function() {
+  // Initialize the business card form
+  // and retrieve all download URLs from the blobstore
   fetchBlobstoreUrl();
   getImageUrls();
 
+  // Start typewriter effect
   const passionSelector = document.getElementById('passions');
   window.setTimeout(() => {
     startTypewriter(
@@ -36,7 +38,7 @@ window.onload = function() {
 };
 
 /**
- * Function to start a typewriter effect on an HTML element
+ * Start a typewriter effect on an HTML element
  * where one letter of a word (in a list of words) appears at a time
  * @param {HTMLElement} textSelector - html selector of target element
  * @param {Array} words - list of words to cycle through in the effect.
@@ -90,7 +92,7 @@ function typewriter(textSelector, words, letterDelayMs,
 }
 
 /**
- * This function will execute GET request on the /data URL.
+ * Execute GET request on the /data URL.
  * Expected response is an array of comments previously inputted.
  * This function will display each comment on a new line in the
  * response-container div.
@@ -129,7 +131,7 @@ function getData() {
 }
 
 /**
- * This function will delete all comments currently in the datastore.
+ * Delete all comments currently in the datastore.
  */
 function deleteData() {
   // Create the request
@@ -142,7 +144,7 @@ function deleteData() {
 }
 
 /**
- * This function will fetch the blobstore URL for the business card form.
+ * Fetch the blobstore URL for the business card form.
  */
 function fetchBlobstoreUrl() {
   // Get the form element
@@ -157,8 +159,7 @@ function fetchBlobstoreUrl() {
 }
 
 /**
- * This function will fetch the download URLs of all business cards in
- * the blobstore.
+ * Fetch the download URLs of all business cards in the blobstore.
  */
 function getImageUrls() {
   fetch('/biz-card')
