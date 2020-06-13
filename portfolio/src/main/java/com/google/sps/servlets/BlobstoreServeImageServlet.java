@@ -13,43 +13,38 @@
 // limitations under the License.
 package com.google.sps.servlets;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.gson.JsonObject;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet responsible for generating an upload URL for HTML forms.
+ * Servlet to retrieve the authentication status of a user.
  */
-@WebServlet("/blobstore-upload-url")
-public class BlobstoreUrlServlet extends HttpServletWithUtilities {
+@WebServlet("/serve-image")
+public class BlobstoreServeImageServlet extends HttpServlet {
 
-  // Store the Blobstore service reference for the server
+  // UserService handles User Authentication and Authentication Status
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
   /**
-   * This POST request will create an upload URL for the blobstore.
-   * Will point to the BusinessCardServlet.
-   * @param request the request sent from client. Body should be empty
-   * @param response response to send back to the client. Should be empty.
-   * @throws IOException if there is an error retrieving the writer from the response.
+   * Will serve an image (Blobkey sent by client) from the blobstore on this URL
+   * @param request HTTP request received from the client. Should contain 'blobKey'
+   * @param response HTTP Response to send back to the user. Will redirect to image.
+   * @throws IOException if there is an issue with getWriter() while processing the request.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the URL
-    String blobUrl = blobstoreService.createUploadUrl(BusinessCardServlet.BIZ_CARD_URL);
+    String blobKeyString = request.getParameter("blobKey");
 
-    // Create JSON
-    JsonObject urlJson = new JsonObject();
-    urlJson.addProperty("blobUrl", blobUrl);
+    BlobKey blobKey = new BlobKey(blobKeyString);
 
-    // Add the JSON to the response
-    response.setContentType("application/json");
-    response.getWriter().println(urlJson);
+    blobstoreService.serve(blobKey, response);
   }
 }
 

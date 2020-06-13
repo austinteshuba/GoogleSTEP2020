@@ -21,10 +21,10 @@ const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
 window.onload = function() {
-  // Initialize the business card form
-  // and retrieve all download URLs from the blobstore
+  // Initialize the business card form and retrieve blobkey references for the
+  // business cards stores in blobstore
   fetchBlobstoreUrl();
-  getImageUrls();
+  getBlobKeys();
 
   // Start typewriter effect
   const passionSelector = document.getElementById('passions');
@@ -159,18 +159,44 @@ function fetchBlobstoreUrl() {
 }
 
 /**
- * Fetch the download URLs of all business cards in the blobstore.
+ * Fetch the blobKeys of all business cards in the blobstore.
  */
-function getImageUrls() {
+function getBlobKeys() {
   fetch('/biz-card')
       .then((response) => response.json())
-      .then((urls) => {
+      .then((blobKeys) => {
+        // Create empty list in div to store blobKey links
         const container = document.getElementById('images-container');
-        if (urls.length > 0) {
-          const imageUrls =
-              urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
-          container.innerText = imageUrls;
-        }
+        const blobKeyList = document.createElement('ol');
+        container.appendChild(blobKeyList);
+
+        // Iterate through blobkeys, make them buttons that trigger the getImage
+        // function, and add them to blobKey list
+        blobKeys.forEach((blobKey) => {
+          const blobKeyLink = document.createElement('li');
+
+          blobKeyLink.innerText = blobKey;
+          blobKeyLink.style.cursor = 'pointer';
+          blobKeyLink.onclick = getImage;
+
+          blobKeyList.appendChild(blobKeyLink);
+        });
       });
+}
+
+/**
+ * Event Listener for clicking on a blobkey. Will open a new window
+ * and display the image that the blobkey points to in the blobstore
+ * @param {Event} e is the event that triggered this function
+ */
+function getImage(e) {
+  // Get the blobkey
+  const blobKey = e.target.innerText;
+
+  // Create the URL for the GET request
+  const imageUrl = '/serve-image?blobKey=' + blobKey;
+
+  // Navigate to a new window to view image served by GET request
+  window.open(imageUrl, '_blank');
 }
 
