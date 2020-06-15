@@ -142,7 +142,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     }
 
     // Get first image in the blob keys list
-    // Change this if more than one URL is to be returned.
+    // Change this if more than one blobKey is to be returned.
     BlobKey blobKey = blobKeys.get(0);
 
     // Check the image file
