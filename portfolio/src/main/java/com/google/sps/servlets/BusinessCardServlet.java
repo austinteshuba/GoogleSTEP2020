@@ -25,6 +25,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.FetchOptions;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
  * Business Card Drop on the portfolio homepage.
  */
 @WebServlet(BusinessCardServlet.BIZ_CARD_URL)
-public class BusinessCardServlet extends HttpServletWithUtilities {
+public class BusinessCardServlet extends HttpServlet {
   // Endpoint to access BusinessCardServlet
   public static final String BIZ_CARD_URL = "/biz-card";
 
@@ -115,7 +116,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
         .collect(Collectors.toList());
 
     // Convert list to JSON
-    String blobKeyJson = listToJson(blobKeys);
+    String blobKeyJson = HttpServletUtilities.listToJson(blobKeys);
 
     // Attach the JSON to the response
     response.setContentType("application/json;");

@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet responsible for deleting all the comments in the datastore
  */
 @WebServlet("/delete-data")
-public class DeleteDataServlet extends HttpServletWithUtilities {
+public class DeleteDataServlet extends HttpServlet {
 
   // Get the datastore instance that contains all of the comments.
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

@@ -18,6 +18,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.gson.JsonObject;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.io.IOException;
  * Servlet responsible for generating an upload URL for HTML forms.
  */
 @WebServlet("/blobstore-upload-url")
-public class BlobstoreUrlServlet extends HttpServletWithUtilities {
+public class BlobstoreUrlServlet extends HttpServlet {
 
   // Store the Blobstore service reference for the server
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

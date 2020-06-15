@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet that stubs response from /data URL. Expected response is of type String.
  */
 @WebServlet("/data")
-public class DataServlet extends HttpServletWithUtilities {
+public class DataServlet extends HttpServlet {
 
   /**
    * Stores comments sent via POST request from client.
@@ -55,7 +56,7 @@ public class DataServlet extends HttpServletWithUtilities {
     ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore, display);
 
     // Convert the ArrayList to a JSON string
-    String json = listToJson(comments);
+    String json = HttpServletUtilities.listToJson(comments);
 
     // Add the comments to the response.
     response.setContentType("application/json;");
@@ -83,11 +84,11 @@ public class DataServlet extends HttpServletWithUtilities {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get values from request
     // comm is to hold the comment text left by the user
-    String comm = parameterToString(request, "comment");
-    String firstName = parameterToString(request, "firstName");
-    String lastName = parameterToString(request, "lastName");
-    String email = parameterToString(request, "email");
-    String visitReason = parameterToString(request, "visitReason");
+    String comm = HttpServletUtilities.parameterToString(request, "comment");
+    String firstName = HttpServletUtilities.parameterToString(request, "firstName");
+    String lastName = HttpServletUtilities.parameterToString(request, "lastName");
+    String email = HttpServletUtilities.parameterToString(request, "email");
+    String visitReason = HttpServletUtilities.parameterToString(request, "visitReason");
 
     // Declare a comment object
     Comment comment = null;

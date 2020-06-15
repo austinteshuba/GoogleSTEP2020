@@ -20,15 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Extension of the HttpServlet class to allow all servlets to access
- * utility functions.
+ * Some utility functions to help with common operations inside of HttpServlets
  */
-public class HttpServletWithUtilities extends HttpServlet {
+public class HttpServletUtilities {
   /**
    * Utility function that uses Gson to convert a List with any contents
    * to a JSON string.
    */
-  protected String listToJson(List objects) {
+  public static String listToJson(List objects) {
     Gson gson = new Gson();
     return gson.toJson(objects);
   }
@@ -41,7 +40,7 @@ public class HttpServletWithUtilities extends HttpServlet {
    * @param key     the parameter in the request you want to access
    * @return the value of the parameter in the request, or an empty string if this is null.
    */
-  protected String parameterToString(HttpServletRequest request, String key) {
+  public static String parameterToString(HttpServletRequest request, String key) {
     String requestVal = request.getParameter(key);
     return requestVal != null ? requestVal : "";
   }
