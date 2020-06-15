@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -35,6 +37,11 @@ public class DataServlet extends HttpServlet {
    * Stores comments sent via POST request from client.
    */
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+  /**
+   * Contains information about the user's authentication status
+   */
+  private final UserService userService = UserServiceFactory.getUserService();
 
   /**
    * Use Gson to convert a List with any contents to a JSON string.
@@ -68,6 +75,12 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Check the user's authentication status
+    // They must be an administrator to access this information
+    if (!(userService.isUserLoggedIn() && userService.isUserAdmin())) {
+      response.sendError(403, "You don't have access to this resource.");
+    }
+
     // Get the display parameter
     String displayParam = request.getParameter("display");
 
