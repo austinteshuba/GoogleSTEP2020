@@ -18,11 +18,16 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.FetchOptions;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +68,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     BlobKey bizCardBlobKey = null;
     try {
       bizCardBlobKey = getImageBlobKey(request, "bizCard");
-    } catch (NullPointerException e) {
+    } catch (FileNotFoundException e) {
       response.sendError(400, e.getClass().getSimpleName() +
           " No images were uploaded. Please select an image to upload");
       return;
@@ -129,7 +134,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
    * @throws IllegalArgumentException if the file was not an image
    */
   private BlobKey getImageBlobKey(HttpServletRequest request, String paramName)
-      throws NullPointerException, IllegalArgumentException {
+      throws FileNotFoundException, IllegalArgumentException {
     // Get the relevant blobkeys from the blobstore
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(paramName);
@@ -138,7 +143,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // In Dev, an empty file will be a null blob
     // (thus this error will trigger in dev)
     if (blobKeys == null || blobKeys.size() == 0) {
-      throw new NullPointerException();
+      throw new FileNotFoundException();
     }
 
     // Get first image in the blob keys list
@@ -153,7 +158,7 @@ public class BusinessCardServlet extends HttpServletWithUtilities {
     // (thus this error will trigger in prod)
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
-      throw new NullPointerException();
+      throw new FileNotFoundException();
     }
 
     if (!blobInfo.getContentType().contains("image")) {
