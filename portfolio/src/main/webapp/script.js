@@ -20,7 +20,6 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-// Start the typewriter effect when page loads
 window.onload = function() {
   // Initialize the business card form
   // and retrieve all download URLs from the blobstore
