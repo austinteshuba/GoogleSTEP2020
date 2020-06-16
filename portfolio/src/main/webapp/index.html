@@ -127,8 +127,14 @@
     <!-- Form to submit a comment/contact information. No required fields for now. -->
     <div>
       <!-- Will contain text to either prompt user to login, or offer a link to logout -->
-      <p id="comment-form-authentication-prompt"></p>
-      <a class="link-black u-link-underline-black" href="#" id="comment-form-authentication-link">Authentication Link</a>
+      <div hidden id="logIn">
+        <p id="logInPrompt">To simplify form entry, and to verify your identity, please log in.</p>
+        <a class="link-black u-link-underline-black" href="#" id="logInLink">Log In with Google</a>
+      </div>
+      <div hidden id="logOut">
+        <p id="logOutPrompt">All done? Log out whenever you'd like</p>
+        <a class="link-black u-link-underline-black" href="#" id="logOutLink">Log Out of Google Account</a>
+      </div>
 
       <!-- Form to submit a comment/contact information. No required fields for now. -->
       <form id="comment-form" action="/data" method="POST">

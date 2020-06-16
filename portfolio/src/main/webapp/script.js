@@ -20,14 +20,7 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-<<<<<<< HEAD
-=======
-const logInPrompt =
-    'To simplify form entry, and to verify your identity, please log in.';
-const logOutPrompt = 'All done? Log out whenever you\'d like';
-
 // Start the typewriter effect when page loads
->>>>>>> Hide form when logged out, show when logged in
 window.onload = function() {
   // Initialize the business card form
   // and retrieve all download URLs from the blobstore
@@ -193,8 +186,8 @@ function checkAuthentication() {
       .then((response) => response.json())
       .then((authInfo) => {
         // Get the authentication status as boolean and auth link as string
-        const loggedIn = authInfo['logged-in'];
-        const authLink = authInfo['link'];
+        const loggedIn = authInfo['loggedIn'];
+        const authLink = authInfo['changeAuthenticationUrl'];
 
         // Begin changes to the DOM depending on the authentication status
         initializeFormState(loggedIn, authLink);
@@ -209,27 +202,29 @@ function checkAuthentication() {
  * @param {string} authLink link to either log in or log out, as needed.
  */
 function initializeFormState(loggedIn, authLink) {
-  // Get the HTML elements
-  const authPromptElement =
-      document.getElementById('comment-form-authentication-prompt');
-
-  const authLinkElement =
-      document.getElementById('comment-form-authentication-link');
-
   const form = document.getElementById('comment-form');
+
+  const logInContainer = document.getElementById('logIn');
+  const logOutContainer = document.getElementById('logOut');
+  const logInLink = document.getElementById('logInLink');
+  const logOutLink = document.getElementById('logOutLink');
 
   // If logged in, prompt user with link to log out and show form
   // If logged out, prompt user to log in and hide form
   if (loggedIn) {
-    authPromptElement.innerText = logOutPrompt;
-    authLinkElement.innerHTML = 'Log Out of Google Account';
+    logOutLink.href = authLink;
+    logInLink.href = '#';
+    logOutContainer.removeAttribute('hidden');
+    logInContainer.setAttribute('hidden', '');
+
     form.style.display = 'block';
   } else {
-    authPromptElement.innerText = logInPrompt;
-    authLinkElement.innerHTML = 'Log In with Google';
+    logInLink.href = authLink;
+    logOutLink.href = '#';
+    logInContainer.removeAttribute('hidden');
+    logOutContainer.setAttribute('hidden', '');
+
     form.style.display = 'none';
   }
-
-  authLinkElement.href = authLink;
 }
 
