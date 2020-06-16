@@ -15,7 +15,6 @@ package com.google.sps.servlets;
 
 import com.google.appengine.repackaged.com.google.gson.Gson;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 

@@ -28,7 +28,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -64,18 +63,12 @@ public class BusinessCardServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the blobKey of the image so it can be located in the blobstore.
     // Possible Errors:
-    // NullPointerException - No images uploaded
-    // IllegalArgumentException - File was not an image
+    // InvalidBlobException - Uploaded data was invalid (empty or wrong type)
     BlobKey bizCardBlobKey = null;
     try {
       bizCardBlobKey = getImageBlobKey(request, "bizCard");
-    } catch (FileNotFoundException e) {
-      response.sendError(400, e.getClass().getSimpleName() +
-          " No images were uploaded. Please select an image to upload");
-      return;
-    } catch (IllegalArgumentException e) {
-      response.sendError(400, e.getClass().getSimpleName() +
-          " File not supported. Please upload a BMP, GIF, ICO, JPEG, PNG or TIFF file.");
+    } catch (InvalidBlobException e) {
+      response.sendError(400, e.getMessage());
       return;
     }
 
@@ -89,10 +82,8 @@ public class BusinessCardServlet extends HttpServlet {
     try {
       datastore.put(businessCardEntity);
     } catch (Exception e) {
-      response.sendError(500, e.getClass().getSimpleName() +
-          " There was an issue processing your upload.");
       blobstoreService.delete(bizCardBlobKey);
-      return;
+      throw e;
     }
 
     // Refresh the client page
@@ -135,7 +126,7 @@ public class BusinessCardServlet extends HttpServlet {
    * @throws IllegalArgumentException if the file was not an image
    */
   private BlobKey getImageBlobKey(HttpServletRequest request, String paramName)
-      throws FileNotFoundException, IllegalArgumentException {
+      throws InvalidBlobException {
     // Get the relevant blobkeys from the blobstore
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(paramName);
@@ -144,7 +135,7 @@ public class BusinessCardServlet extends HttpServlet {
     // In Dev, an empty file will be a null blob
     // (thus this error will trigger in dev)
     if (blobKeys == null || blobKeys.size() == 0) {
-      throw new FileNotFoundException();
+      throw new InvalidBlobException("No images were uploaded. Please select an image to upload");
     }
 
     // Get first image in the blob keys list
@@ -159,12 +150,15 @@ public class BusinessCardServlet extends HttpServlet {
     // (thus this error will trigger in prod)
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
-      throw new FileNotFoundException();
+      throw new InvalidBlobException("No images were uploaded. Please select an image to upload");
     }
 
-    if (!blobInfo.getContentType().contains("image")) {
+    String contentType = blobInfo.getContentType();
+
+    if (!contentType.contains("image")) {
       blobstoreService.delete(blobKey);
-      throw new IllegalArgumentException();
+      throw new InvalidBlobException("File not supported. Please upload a BMP, GIF, ICO, JPEG, " +
+          "PNG or TIFF file. Passed content type: " + contentType);
     }
 
     return blobKey;

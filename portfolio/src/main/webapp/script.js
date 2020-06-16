@@ -170,33 +170,20 @@ function getBlobKeys() {
         const blobKeyList = document.createElement('ol');
         container.appendChild(blobKeyList);
 
-        // Iterate through blobkeys, make them buttons that trigger the getImage
-        // function, and add them to blobKey list
+        // Iterate through blobKeys, make them links to serve the blob image
+        // Enclose each link in a list element for formatting purposes
         blobKeys.forEach((blobKey) => {
-          const blobKeyLink = document.createElement('li');
+          const listElement = document.createElement('li');
+          const blobKeyLink = document.createElement('a');
 
           blobKeyLink.innerText = blobKey;
-          blobKeyLink.style.cursor = 'pointer';
-          blobKeyLink.onclick = getImage;
+          blobKeyLink.href = '/serve-image?blobKey=' + blobKey;
+          blobKeyLink.target = '_blank';
+          blobKeyLink.className = 'blob-key-link';
 
-          blobKeyList.appendChild(blobKeyLink);
+          listElement.appendChild(blobKeyLink);
+          blobKeyList.appendChild(listElement);
         });
       });
-}
-
-/**
- * Event Listener for clicking on a blobkey. Will open a new window
- * and display the image that the blobkey points to in the blobstore
- * @param {Event} e is the event that triggered this function
- */
-function getImage(e) {
-  // Get the blobkey
-  const blobKey = e.target.innerText;
-
-  // Create the URL for the GET request
-  const imageUrl = '/serve-image?blobKey=' + blobKey;
-
-  // Navigate to a new window to view image served by GET request
-  window.open(imageUrl, '_blank');
 }
 
