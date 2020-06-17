@@ -161,17 +161,34 @@ public final class FindMeetingQuery {
         // event list is sorted
         TimeRange compare = eventTimes.get(currentEventIndex+1);
 
-        // Two Cases:
+        // Three Cases:
         // Case 1: If the next event contains the end time of the previous,
         // or starts when the previous one ends, the events are overlapping
         // and the merged event should grow to the endTime of the second event
         //
-        // Case 2: If the next event starts later than the previous one ends,
+        // Prev. Event(s) : |------|
+        // Next Event     :       |---|
+        // Merged Event   : |---------|
+        //
+        // Case 2: The next event is fully contained by the merged event
+        // Continue iterating and looking for more merges, but don't change current interval
+        // Prev. Event(s) : |-----------------|
+        // Next Event     :      |--|
+        // Merged Event   : |-----------------|
+        //
+        // Case 3: If the next event starts later than the previous one ends,
         // a gap of availability is identified. Merging can now stop
+        //
+        // Prev. Event(s) : |------|
+        // Next Event     :          |-----|
+        // No merge. Move on.
+        //
         if (compare.contains(endTime) || compare.start() == endTime) {
           endTime = eventTimes.get(currentEventIndex+1).end();
           currentEventIndex++;
-        } else if (compare.end() >= endTime) {
+        } else if (compare.end() < endTime) {
+          currentEventIndex++;
+        } else {
           break;
         }
       }
