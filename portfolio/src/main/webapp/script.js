@@ -180,7 +180,7 @@ function getBlobKeys() {
           blobKeyLink.innerText = blobKey;
           blobKeyLink.href = '/serve-image?blobKey=' + blobKey;
           blobKeyLink.target = '_blank';
-          blobKeyLink.className = 'blob-key-link';
+          blobKeyLink.className = 'link-black u-link-underline-black';
 
           listElement.appendChild(blobKeyLink);
           blobKeyList.appendChild(listElement);
