@@ -11,17 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-package com.google.sps;
+package com.google.sps.servlets;
 
 /**
- * Utility class for creating greeting messages.
+ * Simple exception class used for invalid blobs (no file present, file of wrong type, etc)
  */
-public class Greeter {
-  /**
-   * Returns a greeting for the given name.
-   */
-  public String greet(String name) {
-    return "Hello " + name.trim();
+public class InvalidBlobException extends Exception {
+
+  public InvalidBlobException(String message) {
+    super(message);
   }
 }

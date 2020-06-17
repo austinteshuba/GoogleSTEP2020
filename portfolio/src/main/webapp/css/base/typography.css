@@ -85,3 +85,9 @@ h5 {
   color: var(--text-black);
 }
 
+.blob-key-link {
+  cursor: pointer;
+  color: var(--text-black);
+  text-decoration: underline solid var(--text-black);
+}
+
