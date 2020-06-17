@@ -21,10 +21,10 @@ const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
 window.onload = function() {
-  // Initialize the business card form
-  // and retrieve all download URLs from the blobstore
+  // Initialize the business card form and retrieve blobkey references for the
+  // business cards stores in blobstore
   fetchBlobstoreUrl();
-  getImageUrls();
+  getBlobKeys();
 
   // Start typewriter effect
   const passionSelector = document.getElementById('passions');
@@ -159,18 +159,31 @@ function fetchBlobstoreUrl() {
 }
 
 /**
- * Fetch the download URLs of all business cards in the blobstore.
+ * Fetch the blobKeys of all business cards in the blobstore.
  */
-function getImageUrls() {
+function getBlobKeys() {
   fetch('/biz-card')
       .then((response) => response.json())
-      .then((urls) => {
+      .then((blobKeys) => {
+        // Create empty list in div to store blobKey links
         const container = document.getElementById('images-container');
-        if (urls.length > 0) {
-          const imageUrls =
-              urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
-          container.innerText = imageUrls;
-        }
+        const blobKeyList = document.createElement('ol');
+        container.appendChild(blobKeyList);
+
+        // Iterate through blobKeys, make them links to serve the blob image
+        // Enclose each link in a list element for formatting purposes
+        blobKeys.forEach((blobKey) => {
+          const listElement = document.createElement('li');
+          const blobKeyLink = document.createElement('a');
+
+          blobKeyLink.innerText = blobKey;
+          blobKeyLink.href = '/serve-image?blobKey=' + blobKey;
+          blobKeyLink.target = '_blank';
+          blobKeyLink.className = 'blob-key-link';
+
+          listElement.appendChild(blobKeyLink);
+          blobKeyList.appendChild(listElement);
+        });
       });
 }
 
