@@ -14,20 +14,23 @@
 
 package com.google.sps;
 
-
 import java.util.Collection;
 import java.util.List;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Class used to find optimal times for a meeting to be scheduled given a list of pre-existing events
+ */
 public final class FindMeetingQuery {
   /**
-   * Check what times, if any exist, a meeting can be scheduled so all attendees can come
-   * Will first find a time that accommodates optional attendees, then if none exist, find times
-   * that work when optional attendees are ignored.
-   * @param events a collection of events that attendees have already committed to.
-   *     Includes name, time range, and collection of attendees
+   * Check what times, if any exist, a meeting can be scheduled so all attendees can come Will first
+   * find a time that accommodates optional attendees, then if none exist, find times that work when
+   * optional attendees are ignored.
+   *
+   * @param events a collection of events that attendees have already committed to. Includes name,
+   *     time range, and collection of attendees
    * @param request a request for a new meeting that must not conflict with any existing events.
    *     Includes name, duration, and collection of attendees
    * @return A collection of time ranges when the new meeting can occur without conflict
@@ -47,16 +50,17 @@ public final class FindMeetingQuery {
 
   /**
    * Check what times, if any exist, a meeting can be scheduled so all attendees can come.
-   * @param events a collection of events that attendees have already committed to.
-   *     Includes name, time range, and collection of attendees
+   *
+   * @param events a collection of events that attendees have already committed to. Includes name,
+   *     time range, and collection of attendees
    * @param request a request for a new meeting that must not conflict with any existing events.
    *     Includes name, duration, and collection of attendees
-   * @param ignoreOptional false if optional attendees should be accommodated for scheduling.
-   *     True otherwise
+   * @param ignoreOptional false if optional attendees should be accommodated for scheduling. True
+   *     otherwise
    * @return A collection of time ranges when the new meeting can occur without conflict
    */
-  public List<TimeRange> queryToggleOptional
-      (Collection<Event> events, MeetingRequest request, boolean ignoreOptional) {
+  public List<TimeRange> queryToggleOptional(
+      Collection<Event> events, MeetingRequest request, boolean ignoreOptional) {
 
     // Get the current attendees, including/excluding the optional ones if specified
     // Use HashSet to prevent duplicates
@@ -80,32 +84,38 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Converts a list of events to a sorted list of time ranges for the events.
-   * Will remove events that are irrelevant (i.e. the event attendees don't match the requestedAttendees,
-   * or the event only contains optional attendees and ignoreOptional is true).
-   * Will sort by start time, from earliest in the day to latest
+   * Converts a list of events to a sorted list of time ranges for the events. Will remove events
+   * that are irrelevant (i.e. the event attendees don't match the requestedAttendees, or the event
+   * only contains optional attendees and ignoreOptional is true). Will sort by start time, from
+   * earliest in the day to latest
+   *
    * @param events list of Event objects that the meeting request must work around
-   * @param requestedAttendees list of attendees (optional and required) requested for the new meeting
+   * @param requestedAttendees list of attendees (optional and required) requested for the new
+   *     meeting
    * @return a list of time ranges of events that must be worked around
    */
-  private List<TimeRange> eventsToSortedTimes
-      (Collection<Event> events, Collection<String> requestedAttendees) {
-    return events.stream().filter(e -> {
-      HashSet<String> sharedAttendees = new HashSet<>(e.getAttendees());
-      sharedAttendees.retainAll(requestedAttendees);
-      return sharedAttendees.size() != 0;
-    }).map(Event::getWhen)
+  private List<TimeRange> eventsToSortedTimes(
+      Collection<Event> events, Collection<String> requestedAttendees) {
+    return events.stream()
+        .filter(
+            e -> {
+              HashSet<String> sharedAttendees = new HashSet<>(e.getAttendees());
+              sharedAttendees.retainAll(requestedAttendees);
+              return sharedAttendees.size() != 0;
+            })
+        .map(Event::getWhen)
         .sorted(TimeRange.ORDER_BY_START)
         .collect(Collectors.toList());
   }
 
   /**
-   * Takes in a list of busy periods, and outputs a list of available periods
-   * that are large enough to accommodate the requested event duration.
-   * @param busyTimes a sorted list (from earliest start time to latest start time)
-   *     of timeRanges that a new event cannot overlap with
-   * @param eventDuration a requested event duration. Available time ranges must be
-   *     at least this long. Value must be > 0 minutes.
+   * Takes in a list of busy periods, and outputs a list of available periods that are large enough
+   * to accommodate the requested event duration.
+   *
+   * @param busyTimes a sorted list (from earliest start time to latest start time) of timeRanges
+   *     that a new event cannot overlap with
+   * @param eventDuration a requested event duration. Available time ranges must be at least this
+   *     long. Value must be > 0 minutes.
    * @return a list of TimeRanges that represent possible meeting windows throughout the day
    */
   private List<TimeRange> invert(List<TimeRange> busyTimes, long eventDuration) {
@@ -120,7 +130,7 @@ public final class FindMeetingQuery {
     // start the next availability window when the next event ends.
     // If the availability window is long enough to fit the meeting request,
     // add it to the available times.
-    for (TimeRange busyTime: busyTimes) {
+    for (TimeRange busyTime : busyTimes) {
       endTime = busyTime.start();
       if (endTime - startTime >= eventDuration) {
         availableTimes.add(TimeRange.fromStartEnd(startTime, endTime, false));
@@ -139,11 +149,15 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Takes in a list of all events and merges them into non-overlapping time ranges of unavailability
-   * @param eventTimes a sorted list of event time ranges (from earliest start time to latest start time)
-   * @return a sorted list of non-overlapping time ranges (from earliest start time to latest start time)
+   * Takes in a list of all events and merges them into non-overlapping time ranges of
+   * unavailability
+   *
+   * @param eventTimes a sorted list of event time ranges (from earliest start time to latest start
+   *     time)
+   * @return a sorted list of non-overlapping time ranges (from earliest start time to latest start
+   *     time)
    */
-  private List<TimeRange> merge (List<TimeRange> eventTimes) {
+  private List<TimeRange> merge(List<TimeRange> eventTimes) {
     // Create empty list to store busy periods
     List<TimeRange> busyTimes = new ArrayList<>();
 
@@ -159,7 +173,7 @@ public final class FindMeetingQuery {
       while (currentEventIndex < eventTimes.size() - 1) {
         // This event is guaranteed to start later than the current startTime, since the
         // event list is sorted
-        TimeRange compare = eventTimes.get(currentEventIndex+1);
+        TimeRange compare = eventTimes.get(currentEventIndex + 1);
 
         // Three Cases:
         // Case 1: If the next event contains the end time of the previous,
@@ -184,7 +198,7 @@ public final class FindMeetingQuery {
         // No merge. Move on.
         //
         if (compare.contains(endTime) || compare.start() == endTime) {
-          endTime = eventTimes.get(currentEventIndex+1).end();
+          endTime = eventTimes.get(currentEventIndex + 1).end();
           currentEventIndex++;
         } else if (compare.end() < endTime) {
           currentEventIndex++;
@@ -203,5 +217,4 @@ public final class FindMeetingQuery {
     // Return list of merged events, which are now sorted and non-overlapping
     return busyTimes;
   }
-
 }
