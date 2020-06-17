@@ -32,7 +32,7 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     List<TimeRange> availableTimes = queryToggleOptional(events, request, false);
 
-    if (availableTimes.size() == 0) {
+    if (availableTimes.size() == 0 && request.getAttendees().size() > 0) {
       availableTimes = queryToggleOptional(events, request, true);
     }
 
