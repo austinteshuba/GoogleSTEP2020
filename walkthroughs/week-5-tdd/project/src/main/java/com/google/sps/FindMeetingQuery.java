@@ -16,10 +16,13 @@ package com.google.sps;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class FindMeetingQuery {
   /**
    * Check what times, if any exist, a meeting can be scheduled so all attendees can come
+   * Will first find a time that accommodates optional attendees, then if none exist, find times
+   * that work when optional attendees are ignored.
    * @param events a collection of events that attendees have already committed to.
    *     Includes name, time range, and collection of attendees
    * @param request a request for a new meeting that must not conflict with any existing events.
@@ -27,25 +30,46 @@ public final class FindMeetingQuery {
    * @return A collection of time ranges when the new meeting can occur without conflict
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    List<TimeRange> availableTimes = queryToggleOptional(events, request, false);
+
+    if (availableTimes.size() == 0) {
+      availableTimes = queryToggleOptional(events, request, true);
+    }
+
+    return availableTimes;
+  }
+
+  /**
+   * Check what times, if any exist, a meeting can be scheduled so all attendees can come.
+   * @param events a collection of events that attendees have already committed to.
+   *     Includes name, time range, and collection of attendees
+   * @param request a request for a new meeting that must not conflict with any existing events.
+   *     Includes name, duration, and collection of attendees
+   * @param ignoreOptional false if optional attendees should be accommodated for scheduling.
+   *     True otherwise
+   * @return A collection of time ranges when the new meeting can occur without conflict
+   */
+  public List<TimeRange> queryToggleOptional
+      (Collection<Event> events, MeetingRequest request, boolean ignoreOptional) {
     // TODO: Optional Attendees
 
     // Get the relevant event time ranges and remove all events that don't share
     // attendees with the meeting request
     // And Sort the times from earliest start to latest
     // Optional: Add a filter to the stream to account for optional attendees
-    List<TimeRange> eventTimes = eventsToSortedTimes(events, request.getAttendees(), false);
+    HashSet<String> attendees = new HashSet<>(request.getAttendees());
+    if (!ignoreOptional) {
+      attendees.addAll(request.getOptionalAttendees());
+    }
+
+    List<TimeRange> eventTimes = eventsToSortedTimes(events, attendees);
 
     List<TimeRange> busyTimes = merge(eventTimes);
-
 
     System.out.println("Inputted Events: " + Arrays.toString(eventTimes.toArray()));
     System.out.println("Merged Events: " + Arrays.toString(busyTimes.toArray()));
 
     List<TimeRange> availableTimes = invert(busyTimes, request.getDuration());
-
-    if (availableTimes.size() == 0) {
-      // TODO: Optional Attendees should now be ignored.
-    }
 
     return availableTimes;
   }
@@ -57,11 +81,10 @@ public final class FindMeetingQuery {
    * Will sort by start time, from earliest in the day to latest
    * @param events list of Event objects that the meeting request must work around
    * @param requestedAttendees list of attendees (optional and required) requested for the new meeting
-   * @param ignoreOptional true if optional attendees must be accommodated, false otherwise
    * @return a list of time ranges of events that must be worked around
    */
   private List<TimeRange> eventsToSortedTimes
-      (Collection<Event> events, Collection<String> requestedAttendees, boolean ignoreOptional) {
+      (Collection<Event> events, Collection<String> requestedAttendees) {
     return events.stream().filter(e -> {
       HashSet<String> sharedAttendees = new HashSet<>(e.getAttendees());
       sharedAttendees.retainAll(requestedAttendees);
