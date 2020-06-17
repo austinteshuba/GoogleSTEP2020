@@ -25,7 +25,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/** */
+/**
+ * Class to Test the FindMeetingQuery class and, in particular, the query function.
+ */
 @RunWith(JUnit4.class)
 public final class FindMeetingQueryTest {
   private static final Collection<Event> NO_EVENTS = Collections.emptySet();
@@ -50,7 +52,6 @@ public final class FindMeetingQueryTest {
   private static final int DURATION_60_MINUTES = 60;
   private static final int DURATION_90_MINUTES = 90;
   private static final int DURATION_1_HOUR = 60;
-  private static final int DURATION_2_HOUR = 120;
 
   private FindMeetingQuery query;
 
@@ -396,6 +397,7 @@ public final class FindMeetingQueryTest {
     // Events B :           |---B---|
     // Day      :   |---------------|
     // Options  :
+
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_1000AM, false),
             Arrays.asList(PERSON_A)),
@@ -413,7 +415,6 @@ public final class FindMeetingQueryTest {
         Collections.emptyList();
 
     Assert.assertEquals(expected, actual);
-
   }
 }
 
