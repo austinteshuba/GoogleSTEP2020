@@ -14,9 +14,12 @@
 
 package com.google.sps;
 
-import java.util.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class FindMeetingQuery {
   /**
@@ -30,8 +33,11 @@ public final class FindMeetingQuery {
    * @return A collection of time ranges when the new meeting can occur without conflict
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    // Get the available times, first trying to accommodate the optional attendees
     List<TimeRange> availableTimes = queryToggleOptional(events, request, false);
 
+    // If there were no times that worked, try to find times without accommodating the optional
+    // attendees (assuming there are required attendees at all)
     if (availableTimes.size() == 0 && request.getAttendees().size() > 0) {
       availableTimes = queryToggleOptional(events, request, true);
     }
@@ -51,24 +57,23 @@ public final class FindMeetingQuery {
    */
   public List<TimeRange> queryToggleOptional
       (Collection<Event> events, MeetingRequest request, boolean ignoreOptional) {
-    // TODO: Optional Attendees
 
-    // Get the relevant event time ranges and remove all events that don't share
-    // attendees with the meeting request
-    // And Sort the times from earliest start to latest
-    // Optional: Add a filter to the stream to account for optional attendees
+    // Get the current attendees, including/excluding the optional ones if specified
+    // Use HashSet to prevent duplicates
     HashSet<String> attendees = new HashSet<>(request.getAttendees());
     if (!ignoreOptional) {
       attendees.addAll(request.getOptionalAttendees());
     }
 
+    // Filter the data to remove events with no shared attendees with the meeting request
+    // Sort the events from earliest start time to latest
     List<TimeRange> eventTimes = eventsToSortedTimes(events, attendees);
 
+    // Merge the event times into a sorted list of non-overlapping events
     List<TimeRange> busyTimes = merge(eventTimes);
 
-    System.out.println("Inputted Events: " + Arrays.toString(eventTimes.toArray()));
-    System.out.println("Merged Events: " + Arrays.toString(busyTimes.toArray()));
-
+    // Invert the busy periods list to create an availability window.
+    // Only include availability windows that are large enough to fit the meeting request
     List<TimeRange> availableTimes = invert(busyTimes, request.getDuration());
 
     return availableTimes;
@@ -104,13 +109,17 @@ public final class FindMeetingQuery {
    * @return a list of TimeRanges that represent possible meeting windows throughout the day
    */
   private List<TimeRange> invert(List<TimeRange> busyTimes, long eventDuration) {
-    // Now that we have the non-overlapping version of busy periods
-    // Get the non-busy periods
     List<TimeRange> availableTimes = new ArrayList<>();
 
+    // Variable to define the start and end of available windows
     int startTime = TimeRange.START_OF_DAY;
     int endTime;
 
+    // Iterate through all busy windows.
+    // End the current availability window when the next event starts, and
+    // start the next availability window when the next event ends.
+    // If the availability window is long enough to fit the meeting request,
+    // add it to the available times.
     for (TimeRange busyTime: busyTimes) {
       endTime = busyTime.start();
       if (endTime - startTime >= eventDuration) {
@@ -120,6 +129,8 @@ public final class FindMeetingQuery {
       startTime = busyTime.end();
     }
 
+    // Create the last availability window (if it fits the requested duration)
+    // from the end of the last event to the end of the day
     if (TimeRange.END_OF_DAY - startTime >= eventDuration) {
       availableTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
     }
@@ -137,36 +148,42 @@ public final class FindMeetingQuery {
     List<TimeRange> busyTimes = new ArrayList<>();
 
     // Iterate through all of the events
-    // merge overlapping events to its simplest form
+    // and merge overlapping events into one larger event
     int currentEventIndex = 0;
     while (currentEventIndex < eventTimes.size()) {
-      // The shortest the current unavailable window can be is the length of the current window.
+      // The shortest the merged unavailable window can be is the length of the current window.
       int startTime = eventTimes.get(currentEventIndex).start();
       int endTime = eventTimes.get(currentEventIndex).end();
 
+      // Then, continue iterating through the list (if possible)
       while (currentEventIndex < eventTimes.size() - 1) {
-        currentEventIndex++;
+        // This event is guaranteed to start later than the current startTime, since the
+        // event list is sorted
+        TimeRange compare = eventTimes.get(currentEventIndex+1);
 
-        TimeRange compare = eventTimes.get(currentEventIndex);
+        // Two Cases:
+        // Case 1: If the next event contains the end time of the previous,
+        // or starts when the previous one ends, the events are overlapping
+        // and the merged event should grow to the endTime of the second event
+        //
+        // Case 2: If the next event starts later than the previous one ends,
+        // a gap of availability is identified. Merging can now stop
         if (compare.contains(endTime) || compare.start() == endTime) {
-          // Extend the end time due to overlap
-          endTime = eventTimes.get(currentEventIndex).end();
-
+          endTime = eventTimes.get(currentEventIndex+1).end();
+          currentEventIndex++;
         } else if (compare.end() >= endTime) {
-          // The next time range does not contain the current time range's end
-          // and it is not overlapping.
-          // Thus, there are no other events to merge together.
-          currentEventIndex--;
           break;
         }
       }
 
+      // Create the TimeRange for the new merged events and add it to the list.
+      // Continue iterating through all events to find all merging opportunities
       TimeRange busyPeriod = TimeRange.fromStartEnd(startTime, endTime, false);
-
       busyTimes.add(busyPeriod);
       currentEventIndex++;
     }
 
+    // Return list of merged events, which are now sorted and non-overlapping
     return busyTimes;
   }
 
