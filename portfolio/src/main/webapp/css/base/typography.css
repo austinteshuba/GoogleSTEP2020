@@ -81,3 +81,9 @@ h5 {
   padding: 0 0 var(--heading-secondary-padding-btm) 0;
 }
 
+.blob-key-link {
+  cursor: pointer;
+  color: var(--text-black);
+  text-decoration: underline solid var(--text-black);
+}
+
