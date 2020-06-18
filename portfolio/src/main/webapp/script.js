@@ -200,10 +200,25 @@ function checkAuthentication() {
         // Get the authentication status as boolean and auth link as string
         const loggedIn = authInfo['loggedIn'];
         const authLink = authInfo['changeAuthenticationUrl'];
+        const userEmail = authInfo['email'];
 
         // Begin changes to the DOM depending on the authentication status
         initializeFormState(loggedIn, authLink);
+        autofillForm(userEmail);
       });
+}
+
+/**
+ * Autofill the form with available information from the user's
+ *     authentication (currently just email)
+ * @param {string} userEmail contains the email address of the current user
+ */
+function autofillForm(userEmail) {
+  // Get the HTML elements
+  const emailFormInput = document.getElementById('email');
+
+  // Populate the value
+  emailFormInput.value = userEmail;
 }
 
 /**
@@ -214,6 +229,7 @@ function checkAuthentication() {
  * @param {string} authLink link to either log in or log out, as needed.
  */
 function initializeFormState(loggedIn, authLink) {
+  // Get the HTML elements
   const form = document.getElementById('comment-form');
 
   const logInContainer = document.getElementById('logIn');
