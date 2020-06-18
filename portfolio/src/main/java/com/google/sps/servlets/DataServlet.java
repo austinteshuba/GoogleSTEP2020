@@ -14,14 +14,14 @@
 
 package com.google.sps.servlets;
 
+
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,27 +42,6 @@ public class DataServlet extends HttpServlet {
    * Contains information about the user's authentication status
    */
   private final UserService userService = UserServiceFactory.getUserService();
-
-  /**
-   * Use Gson to convert a List with any contents to a JSON string.
-   */
-  private String listToJson(List objects) {
-    Gson gson = new Gson();
-    return gson.toJson(objects);
-  }
-
-  /**
-   * Takes in a request and parameter for the request
-   * and returns the result as a string.
-   *
-   * @param request the request sent to the GET or POST methods
-   * @param key     the parameter in the request you want to access
-   * @return the value of the parameter in the request, or an empty string if this is null.
-   */
-  private String parameterToString(HttpServletRequest request, String key) {
-    String requestVal = request.getParameter(key);
-    return requestVal != null ? requestVal : "";
-  }
 
   /**
    * Response to a GET request with a JSON string representing the
@@ -92,7 +71,7 @@ public class DataServlet extends HttpServlet {
     ArrayList<Comment> comments = Comment.datastoreToArrayList(datastore, display);
 
     // Convert the ArrayList to a JSON string
-    String json = listToJson(comments);
+    String json = HttpServletUtilities.listToJson(comments);
 
     // Add the comments to the response.
     response.setContentType("application/json;");
@@ -120,11 +99,11 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get values from request
     // comm is to hold the comment text left by the user
-    String comm = parameterToString(request, "comment");
-    String firstName = parameterToString(request, "firstName");
-    String lastName = parameterToString(request, "lastName");
-    String email = parameterToString(request, "email");
-    String visitReason = parameterToString(request, "visitReason");
+    String comm = HttpServletUtilities.parameterToString(request, "comment");
+    String firstName = HttpServletUtilities.parameterToString(request, "firstName");
+    String lastName = HttpServletUtilities.parameterToString(request, "lastName");
+    String email = HttpServletUtilities.parameterToString(request, "email");
+    String visitReason = HttpServletUtilities.parameterToString(request, "visitReason");
 
     // Declare a comment object
     Comment comment = null;

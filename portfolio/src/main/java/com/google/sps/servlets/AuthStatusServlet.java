@@ -35,9 +35,11 @@ public class AuthStatusServlet extends HttpServlet {
   /**
    * Will return the authentication status of the current user.
    * @param request HTTP request received from the client. Should contain no params.
-   * @param response HTTP Response to send back to the user. Should contain four parameters:
-   *     logged-in (boolean), isAdmin (boolean), link (to login/logout - string), and email
-   *     (current user's email - string).
+   * @param response HTTP Response to send back to the user. Should contain JSON object with
+   *     four parameters: loggedIn, changeAuthenticationUrl, isAdmin, and email, where loggedIn is true/false
+   *     and changeAuthenticationUrl is either a link to login if the user isn't logged in,
+   *     or logout link if user is logged in. isAdmin is true/false based on if the user is an admin
+   *     (false if not logged in) and Email is the user's email, but is "" if user is not authenticated
    * @throws IOException if there is an issue with getWriter() while processing the request.
    */
   @Override
@@ -46,12 +48,12 @@ public class AuthStatusServlet extends HttpServlet {
     JsonObject authInfo = new JsonObject();
 
     boolean isLoggedIn = userService.isUserLoggedIn();
-    authInfo.addProperty("logged-in", isLoggedIn);
+    authInfo.addProperty("loggedIn", isLoggedIn);
 
     if (isLoggedIn) {
       // Add link to logout of system
       String logoutUrl = userService.createLogoutURL("/index.html");
-      authInfo.addProperty("link", logoutUrl);
+      authInfo.addProperty("changeAuthenticationUrl", logoutUrl);
 
       // Add email param
       String email = userService.getCurrentUser().getEmail();
@@ -63,7 +65,7 @@ public class AuthStatusServlet extends HttpServlet {
     } else {
       // Add link to login to system
       String loginUrl = userService.createLoginURL("/index.html");
-      authInfo.addProperty("link", loginUrl);
+      authInfo.addProperty("changeAuthenticationUrl", loginUrl);
 
       // Default values
       authInfo.addProperty("email", "");

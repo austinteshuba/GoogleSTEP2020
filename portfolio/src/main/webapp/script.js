@@ -20,16 +20,12 @@ const typewriterLetterDelayMs = 100;
 const typewriterWordDelayMs = 1000;
 const typewriterLoadDelayMs = 1000;
 
-const logInPrompt =
-    'To simplify form entry, and to verify your identity, please log in.';
-const logOutPrompt = 'All done? Log out whenever you\'d like';
-
 window.onload = function() {
-  // Initialize the business card form
-  // and retrieve all download URLs from the blobstore
+  // Initialize the business card form and retrieve blobkey references for the
+  // business cards stores in blobstore
   fetchBlobstoreUrl();
-  getImageUrls();
   checkAuthentication();
+  getBlobKeys();
 
   // Start typewriter effect
   const passionSelector = document.getElementById('passions');
@@ -164,18 +160,31 @@ function fetchBlobstoreUrl() {
 }
 
 /**
- * Fetch the download URLs of all business cards in the blobstore.
+ * Fetch the blobKeys of all business cards in the blobstore.
  */
-function getImageUrls() {
+function getBlobKeys() {
   fetch('/biz-card')
       .then((response) => response.json())
-      .then((urls) => {
+      .then((blobKeys) => {
+        // Create empty list in div to store blobKey links
         const container = document.getElementById('images-container');
-        if (urls.length > 0) {
-          const imageUrls =
-              urls.reduce((urls, currentUrl) => urls + '\n' + currentUrl);
-          container.innerText = imageUrls;
-        }
+        const blobKeyList = document.createElement('ol');
+        container.appendChild(blobKeyList);
+
+        // Iterate through blobKeys, make them links to serve the blob image
+        // Enclose each link in a list element for formatting purposes
+        blobKeys.forEach((blobKey) => {
+          const listElement = document.createElement('li');
+          const blobKeyLink = document.createElement('a');
+
+          blobKeyLink.innerText = blobKey;
+          blobKeyLink.href = '/serve-image?blobKey=' + blobKey;
+          blobKeyLink.target = '_blank';
+          blobKeyLink.className = 'link-black u-link-underline-black';
+
+          listElement.appendChild(blobKeyLink);
+          blobKeyList.appendChild(listElement);
+        });
       });
 }
 
@@ -189,8 +198,8 @@ function checkAuthentication() {
       .then((response) => response.json())
       .then((authInfo) => {
         // Get the authentication status as boolean and auth link as string
-        const loggedIn = authInfo['logged-in'];
-        const authLink = authInfo['link'];
+        const loggedIn = authInfo['loggedIn'];
+        const authLink = authInfo['changeAuthenticationUrl'];
         const userEmail = authInfo['email'];
         const isAdmin = authInfo['admin'];
 
@@ -246,25 +255,29 @@ function toggleViewComments(isAdmin) {
  */
 function initializeFormState(loggedIn, authLink) {
   // Get the HTML elements
-  const authPromptElement =
-      document.getElementById('comment-form-authentication-prompt');
-  const authLinkElement =
-      document.getElementById('comment-form-authentication-link');
   const form = document.getElementById('comment-form');
+
+  const logInContainer = document.getElementById('logIn');
+  const logOutContainer = document.getElementById('logOut');
+  const logInLink = document.getElementById('logInLink');
+  const logOutLink = document.getElementById('logOutLink');
 
   // If logged in, prompt user with link to log out and show form
   // If logged out, prompt user to log in and hide form
   if (loggedIn) {
-    authPromptElement.innerText = logOutPrompt;
-    authLinkElement.innerHTML = 'Log Out of Google Account';
+    logOutLink.href = authLink;
+    logInLink.href = '#';
+    logOutContainer.removeAttribute('hidden');
+    logInContainer.setAttribute('hidden', '');
+
     form.style.display = 'block';
   } else {
-    authPromptElement.innerText = logInPrompt;
-    authLinkElement.innerHTML = 'Log In with Google';
+    logInLink.href = authLink;
+    logOutLink.href = '#';
+    logInContainer.removeAttribute('hidden');
+    logOutContainer.setAttribute('hidden', '');
+
     form.style.display = 'none';
   }
-
-  // Update link and email values
-  authLinkElement.href = authLink;
 }
 
