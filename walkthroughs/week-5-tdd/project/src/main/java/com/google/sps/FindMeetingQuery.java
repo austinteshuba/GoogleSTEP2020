@@ -160,10 +160,10 @@ public final class FindMeetingQuery {
         // Next Event     :          |-----|
         // No merge. Move on.
         //
-        if (compare.contains(endTime) || compare.start() == endTime) {
+        if (compare.start() < endTime && compare.end() > endTime) {
           endTime = eventTimes.get(currentEventIndex + 1).end();
           currentEventIndex++;
-        } else if (compare.end() < endTime) {
+        } else if (compare.end() <= endTime) {
           currentEventIndex++;
         } else {
           break;
