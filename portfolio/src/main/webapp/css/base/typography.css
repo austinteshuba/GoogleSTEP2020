@@ -83,5 +83,6 @@ h5 {
 
 .link-black {
   color: var(--text-black);
+  cursor: pointer;
 }
 

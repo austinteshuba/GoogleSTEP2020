@@ -36,9 +36,10 @@ public class AuthStatusServlet extends HttpServlet {
    * Will return the authentication status of the current user.
    * @param request HTTP request received from the client. Should contain no params.
    * @param response HTTP Response to send back to the user. Should contain JSON object with
-   *     two parameters: logged-in and link, where logged-in is true/false and link is either
-   *     a link to login if the user isn't logged in, or logout link if user is logged in. If
-   *     logged-in, response should also contain user's email.
+   *     three parameters: loggedIn, changeAuthenticationUrl, and email, where loggedIn is true/false
+   *     and changeAuthenticationUrl is either a link to login if the user isn't logged in,
+   *     or logout link if user is logged in. Email is the user's email, but is "" if user is not
+   *     authenticated
    * @throws IOException if there is an issue with getWriter() while processing the request.
    */
   @Override
@@ -47,15 +48,15 @@ public class AuthStatusServlet extends HttpServlet {
     boolean isLoggedIn = userService.isUserLoggedIn();
 
     JsonObject authInfo = new JsonObject();
-    authInfo.addProperty("logged-in", isLoggedIn);
+    authInfo.addProperty("loggedIn", isLoggedIn);
 
     // If the user is logged in, add a logout link to response (and vice versa)
     if (isLoggedIn) {
       String logoutUrl = userService.createLogoutURL("/index.html");
-      authInfo.addProperty("link", logoutUrl);
+      authInfo.addProperty("changeAuthenticationUrl", logoutUrl);
     } else {
       String loginUrl = userService.createLoginURL("/index.html");
-      authInfo.addProperty("link", loginUrl);
+      authInfo.addProperty("changeAuthenticationUrl", loginUrl);
     }
 
     // Add the user's email (if logged in) to the JSON object.
