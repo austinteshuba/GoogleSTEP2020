@@ -14,10 +14,10 @@
 
 package com.google.sps;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -74,11 +74,7 @@ public final class FindMeetingQuery {
     List<TimeRange> eventTimes = eventsToSortedTimes(events, attendees);
 
     // Merge the event times into a sorted list of non-overlapping events
-    List<TimeRange> busyTimes = merge(eventTimes);
-
-    // Invert the busy periods list to create an availability window.
-    // Only include availability windows that are large enough to fit the meeting request
-    List<TimeRange> availableTimes = invert(busyTimes, request.getDuration());
+    List<TimeRange> availableTimes = generateSuggestedTimes(eventTimes, request.getDuration());
 
     return availableTimes;
   }
@@ -109,60 +105,27 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Takes in a list of busy periods, and outputs a list of available periods that are large enough
-   * to accommodate the requested event duration.
-   *
-   * @param busyTimes a sorted list (from earliest start time to latest start time) of timeRanges
-   *     that a new event cannot overlap with
-   * @param eventDuration a requested event duration. Available time ranges must be at least this
-   *     long. Value must be > 0 minutes.
-   * @return a list of TimeRanges that represent possible meeting windows throughout the day
-   */
-  private List<TimeRange> invert(List<TimeRange> busyTimes, long eventDuration) {
-    List<TimeRange> availableTimes = new ArrayList<>();
-
-    // Variable to define the start and end of available windows
-    int startTime = TimeRange.START_OF_DAY;
-    int endTime;
-
-    // Iterate through all busy windows.
-    // End the current availability window when the next event starts, and
-    // start the next availability window when the next event ends.
-    // If the availability window is long enough to fit the meeting request,
-    // add it to the available times.
-    for (TimeRange busyTime : busyTimes) {
-      endTime = busyTime.start();
-      if (endTime - startTime >= eventDuration) {
-        availableTimes.add(TimeRange.fromStartEnd(startTime, endTime, false));
-      }
-
-      startTime = busyTime.end();
-    }
-
-    // Create the last availability window (if it fits the requested duration)
-    // from the end of the last event to the end of the day
-    if (TimeRange.END_OF_DAY - startTime >= eventDuration) {
-      availableTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
-    }
-
-    return availableTimes;
-  }
-
-  /**
-   * Takes in a list of all events and merges them into non-overlapping time ranges of
-   * unavailability
+   * Takes in a list of all events and outputs a list of available time ranges that can accommodate
+   * the requested meeting duration
    *
    * @param eventTimes a sorted list of event time ranges (from earliest start time to latest start
    *     time)
+   * @param requestedDurationMinutes a length of time given in minutes for the requested meeting.
+   *     Must be > 0.
    * @return a sorted list of non-overlapping time ranges (from earliest start time to latest start
    *     time)
    */
-  private List<TimeRange> merge(List<TimeRange> eventTimes) {
+  private List<TimeRange> generateSuggestedTimes(List<TimeRange> eventTimes, long requestedDurationMinutes) {
     // Create empty list to store busy periods
-    List<TimeRange> busyTimes = new ArrayList<>();
+    List<TimeRange> availableTimes = new ArrayList<>();
+
+    // Store the startTime of the next availability window.
+    // First window of time will start at the beginning of the day
+    int availableStartTime = TimeRange.START_OF_DAY;
 
     // Iterate through all of the events
-    // and merge overlapping events into one larger event
+    // merge overlapping events into one larger event
+    // And then create available time windows that work around the merged events
     int currentEventIndex = 0;
     while (currentEventIndex < eventTimes.size()) {
       // The shortest the merged unavailable window can be is the length of the current window.
@@ -207,14 +170,39 @@ public final class FindMeetingQuery {
         }
       }
 
-      // Create the TimeRange for the new merged events and add it to the list.
-      // Continue iterating through all events to find all merging opportunities
-      TimeRange busyPeriod = TimeRange.fromStartEnd(startTime, endTime, false);
-      busyTimes.add(busyPeriod);
+      // Using the start time of the next window that has been saved and
+      // the start time of this merged event, check if a window of availability
+      // that can fit the requested meeting duration is available. Then, update
+      // the start time of the next window, and continue the loop.
+      //
+      // Previous Start Time  :     |
+      // Current Merged Event :           |--------|
+      // Day                  : |----------------------|
+      // New Window           :     |-----|
+      // Next start time      :                    |
+      if (startTime - availableStartTime >= requestedDurationMinutes) {
+        TimeRange availablePeriod =
+            TimeRange.fromStartEnd(availableStartTime, startTime, false);
+        availableTimes.add(availablePeriod);
+      }
+
       currentEventIndex++;
+      availableStartTime = endTime;
     }
 
-    // Return list of merged events, which are now sorted and non-overlapping
-    return busyTimes;
+    // This handles the last availability window, which will span to the end of the day
+    // Add if it can fit the requested meeting length
+    //
+    // Previous Start Time :             |
+    // Day                 : |------------------|
+    // Last Window         :             |------|
+    if (TimeRange.END_OF_DAY - availableStartTime >= requestedDurationMinutes) {
+      TimeRange availablePeriod =
+          TimeRange.fromStartEnd(availableStartTime, TimeRange.END_OF_DAY, true);
+      availableTimes.add(availablePeriod);
+    }
+
+    // Return list of available windows
+    return availableTimes;
   }
 }
