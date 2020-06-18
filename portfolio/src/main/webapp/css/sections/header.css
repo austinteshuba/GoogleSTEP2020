@@ -38,3 +38,12 @@
   text-decoration: underline;
 }
 
+/*
+  By default, hide the form.
+  Form should only be visible if user is logged in
+  (handled in script.js)
+*/
+#comment-form {
+  display: none;
+}
+

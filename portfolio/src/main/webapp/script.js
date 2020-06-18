@@ -24,6 +24,7 @@ window.onload = function() {
   // Initialize the business card form and retrieve blobkey references for the
   // business cards stores in blobstore
   fetchBlobstoreUrl();
+  checkAuthentication();
   getBlobKeys();
 
   // Start typewriter effect
@@ -179,11 +180,63 @@ function getBlobKeys() {
           blobKeyLink.innerText = blobKey;
           blobKeyLink.href = '/serve-image?blobKey=' + blobKey;
           blobKeyLink.target = '_blank';
-          blobKeyLink.className = 'blob-key-link';
+          blobKeyLink.className = 'link-black u-link-underline-black';
 
           listElement.appendChild(blobKeyLink);
           blobKeyList.appendChild(listElement);
         });
       });
+}
+
+/**
+ * Gets the user's authentication status from the auth-status servlet
+ * and calls handleAuthenticationStatus function to change form visibility
+ * accordingly
+ */
+function checkAuthentication() {
+  fetch('/auth-status')
+      .then((response) => response.json())
+      .then((authInfo) => {
+        // Get the authentication status as boolean and auth link as string
+        const loggedIn = authInfo['loggedIn'];
+        const authLink = authInfo['changeAuthenticationUrl'];
+
+        // Begin changes to the DOM depending on the authentication status
+        initializeFormState(loggedIn, authLink);
+      });
+}
+
+/**
+ * Updates the HTML elements to prompt the user to log in or log out,
+ * with the correct link to do so below the text. Hides the comment
+ * form if logged out, shows it if logged in.
+ * @param {boolean} loggedIn true if user is logged in, false otherwise
+ * @param {string} authLink link to either log in or log out, as needed.
+ */
+function initializeFormState(loggedIn, authLink) {
+  const form = document.getElementById('comment-form');
+
+  const logInContainer = document.getElementById('logIn');
+  const logOutContainer = document.getElementById('logOut');
+  const logInLink = document.getElementById('logInLink');
+  const logOutLink = document.getElementById('logOutLink');
+
+  // If logged in, prompt user with link to log out and show form
+  // If logged out, prompt user to log in and hide form
+  if (loggedIn) {
+    logOutLink.href = authLink;
+    logInLink.href = '#';
+    logOutContainer.removeAttribute('hidden');
+    logInContainer.setAttribute('hidden', '');
+
+    form.style.display = 'block';
+  } else {
+    logInLink.href = authLink;
+    logOutLink.href = '#';
+    logInContainer.removeAttribute('hidden');
+    logOutContainer.setAttribute('hidden', '');
+
+    form.style.display = 'none';
+  }
 }
 
