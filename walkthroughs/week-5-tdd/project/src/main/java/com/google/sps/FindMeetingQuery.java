@@ -116,7 +116,6 @@ public final class FindMeetingQuery {
    *     time)
    */
   private List<TimeRange> generateSuggestedTimes(List<TimeRange> eventTimes, long requestedDurationMinutes) {
-    // Create empty list to store busy periods
     List<TimeRange> availableTimes = new ArrayList<>();
 
     // Store the startTime of the next availability window.
