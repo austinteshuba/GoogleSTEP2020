@@ -14,11 +14,10 @@
 
 package com.google.sps.servlets;
 
-
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,8 +43,7 @@ public class DataServlet extends HttpServlet {
   private final UserService userService = UserServiceFactory.getUserService();
 
   /**
-   * Response to a GET request with a JSON string representing the
-   * hardcoded comments.
+   * Return all stored user comments
    *
    * @param request  the request sent to the GET method from client. display parameter indicates
    *     maximum amount of comments to return (empty value if all comments can be returned)
@@ -58,6 +56,7 @@ public class DataServlet extends HttpServlet {
     // They must be an administrator to access this information
     if (!(userService.isUserLoggedIn() && userService.isUserAdmin())) {
       response.sendError(403, "You don't have access to this resource.");
+      return;
     }
 
     // Get the display parameter

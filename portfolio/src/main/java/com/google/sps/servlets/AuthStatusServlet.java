@@ -44,26 +44,23 @@ public class AuthStatusServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get Authentication status from UserService. Add it to a JSON object.
+    // Get Authentication status from UserService. Add it to a JSON object to be returned.
     JsonObject authInfo = new JsonObject();
 
     boolean isLoggedIn = userService.isUserLoggedIn();
     authInfo.addProperty("loggedIn", isLoggedIn);
 
+    // If the user is logged in, add a logout link to response (and vice versa)
     if (isLoggedIn) {
-      // Add link to logout of system
       String logoutUrl = userService.createLogoutURL("/index.html");
       authInfo.addProperty("changeAuthenticationUrl", logoutUrl);
 
-      // Add email param
       String email = userService.getCurrentUser().getEmail();
       authInfo.addProperty("email", email);
 
-      // Add admin param
       boolean isAdmin = userService.isUserAdmin();
       authInfo.addProperty("admin", isAdmin);
     } else {
-      // Add link to login to system
       String loginUrl = userService.createLoginURL("/index.html");
       authInfo.addProperty("changeAuthenticationUrl", loginUrl);
 
@@ -72,7 +69,6 @@ public class AuthStatusServlet extends HttpServlet {
       authInfo.addProperty("admin", false);
     }
 
-    // Send JSON to client
     response.setContentType("application/json");
     response.getWriter().println(authInfo);
   }

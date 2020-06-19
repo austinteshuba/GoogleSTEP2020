@@ -229,18 +229,24 @@ function autofillForm(userEmail) {
  * @param {boolean} isAdmin is true when current user is an administrator
  */
 function toggleViewComments(isAdmin) {
-  // Get HTML Element
+  // Holds the imagesContainer and responseContainer
   const commentsContainer =
       document.getElementById('comments-container');
 
+  // Holds the blobKeys of business cards and comment objects, respectively
+  const imagesContainer = document.getElementById('images-container');
+  const responseContainer = document.getElementById('response-container');
+
   // If the user is an admin, show the comments container
   // which contains the URL data
-  // If the user is not an admin, hide the form and don't load data.
+  // If the user is not an admin, hide the form and clear the data
   if (isAdmin) {
     getBlobKeys();
-    commentsContainer.style.display = 'block';
+    commentsContainer.removeAttribute('hidden');
   } else {
-    commentsContainer.style.display = 'none';
+    commentsContainer.setAttribute('hidden', '');
+    imagesContainer.innerHTML = '';
+    responseContainer.innerHTML = '';
   }
 }
 
