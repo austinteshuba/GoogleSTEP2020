@@ -23,6 +23,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,6 +49,8 @@ public class BusinessCardServlet extends HttpServlet {
 
   // Store the Datastore Service instance. Will hold all BizCard entities.
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+  private final UserService userService = UserServiceFactory.getUserService();
 
   /**
    * Add a business card to the Datastore.
@@ -92,12 +96,20 @@ public class BusinessCardServlet extends HttpServlet {
 
   /**
    * Return a list of blobKeys for all business cards in datastore.
+   * Send 403 error if user is not an admin
    * @param request the HTTP request sent from client for GET
    * @param response HTTP response that will be sent back to the client
    * @throws IOException if an IO error occurs while the request is being processed by the servlet.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Check the user's authentication status
+    // They must be an administrator to access this information
+    if (!(userService.isUserLoggedIn() && userService.isUserAdmin())) {
+      response.sendError(403, "You don't have access to this resource.");
+      return;
+    }
+
     // Create Query to get the blobKeys
     Query query = new Query("BizCard");
 

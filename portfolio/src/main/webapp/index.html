@@ -101,7 +101,7 @@
     </div>
 
     <!-- Container to display comments from server. Should be removed for prod version. -->
-    <div>
+    <div id="comments-container">
       <!-- Form controls how many comments are displayed -->
       <!-- Return false is needed so form doesn't submit its own HTTP request. -->
       <form onsubmit="getData(); return false;">
@@ -119,6 +119,10 @@
       <form onsubmit="deleteData(); return false;">
         <input type="submit" value="Delete All Comments">
       </form>
+      <br><br>
+
+      <!-- Container to hold the ImageURLs in the Blobstore -->
+      <div id="images-container"></div>
     </div>
     <br><br>
 
@@ -174,9 +178,5 @@
 
         <input type="submit" value="Upload!" name="submit">
       </form>
-      <br><br>
-
-      <!-- Container to hold the BlobKey links for business cards -->
-      <div id="images-container"></div>
     </div>
 

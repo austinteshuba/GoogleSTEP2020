@@ -25,7 +25,6 @@ window.onload = function() {
   // business cards stores in blobstore
   fetchBlobstoreUrl();
   checkAuthentication();
-  getBlobKeys();
 
   // Start typewriter effect
   const passionSelector = document.getElementById('passions');
@@ -201,10 +200,12 @@ function checkAuthentication() {
         const loggedIn = authInfo['loggedIn'];
         const authLink = authInfo['changeAuthenticationUrl'];
         const userEmail = authInfo['email'];
+        const isAdmin = authInfo['admin'];
 
         // Begin changes to the DOM depending on the authentication status
         initializeFormState(loggedIn, authLink);
         autofillForm(userEmail);
+        toggleViewComments(isAdmin);
       });
 }
 
@@ -219,6 +220,34 @@ function autofillForm(userEmail) {
 
   // Populate the value
   emailFormInput.value = userEmail;
+}
+
+/**
+ * If the user is an administrator, they will be able to see current comments
+ * on home page. Otherwise, the containers for information in the
+ * database will be hidden.
+ * @param {boolean} isAdmin is true when current user is an administrator
+ */
+function toggleViewComments(isAdmin) {
+  // Holds the imagesContainer and responseContainer
+  const commentsContainer =
+      document.getElementById('comments-container');
+
+  // Holds the blobKeys of business cards and comment objects, respectively
+  const imagesContainer = document.getElementById('images-container');
+  const responseContainer = document.getElementById('response-container');
+
+  // If the user is an admin, show the comments container
+  // which contains the URL data
+  // If the user is not an admin, hide the form and clear the data
+  if (isAdmin) {
+    getBlobKeys();
+    commentsContainer.removeAttribute('hidden');
+  } else {
+    commentsContainer.setAttribute('hidden', '');
+    imagesContainer.innerHTML = '';
+    responseContainer.innerHTML = '';
+  }
 }
 
 /**
