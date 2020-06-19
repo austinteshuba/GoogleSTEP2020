@@ -25,7 +25,6 @@ window.onload = function() {
   // business cards stores in blobstore
   fetchBlobstoreUrl();
   checkAuthentication();
-  getBlobKeys();
 
   // Start typewriter effect
   const passionSelector = document.getElementById('passions');
@@ -235,12 +234,11 @@ function toggleViewComments(isAdmin) {
       document.getElementById('comments-container');
 
   // If the user is an admin, show the comments container
-  // and populate the business card image URLS. Other values
-  // will be populated by user as desired via the view comments form.
+  // which contains the URL data
   // If the user is not an admin, hide the form and don't load data.
   if (isAdmin) {
+    getBlobKeys();
     commentsContainer.style.display = 'block';
-    getImageUrls();
   } else {
     commentsContainer.style.display = 'none';
   }
