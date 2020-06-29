@@ -134,8 +134,8 @@ public class BusinessCardServlet extends HttpServlet {
    * @param request The HTTP request sent by blobstore
    * @param paramName the name of the parameter in the request that stores the image
    * @return blobkey of image
-   * @throws NullPointerException if no file was uploaded
-   * @throws IllegalArgumentException if the file was not an image
+   * @throws InvalidBlobException if no images were uploaded, or the file uploaded was not an image
+   *    If this error is thrown, the associated blob will be deleted (if available to begin with)
    */
   private BlobKey getImageBlobKey(HttpServletRequest request, String paramName)
       throws InvalidBlobException {
