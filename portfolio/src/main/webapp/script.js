@@ -274,7 +274,6 @@ function initializeFormState(loggedIn, authLink) {
     logOutContainer.removeAttribute('hidden');
     logInContainer.setAttribute('hidden', '');
 
-    // form.style.display = 'block';
     form.removeAttribute('hidden');
   } else {
     logInLink.href = authLink;
@@ -282,7 +281,6 @@ function initializeFormState(loggedIn, authLink) {
     logInContainer.removeAttribute('hidden');
     logOutContainer.setAttribute('hidden', '');
 
-    // form.style.display = 'none';
     form.setAttribute('hidden', '');
   }
 }
