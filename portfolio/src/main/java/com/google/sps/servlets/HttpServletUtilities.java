@@ -13,8 +13,7 @@
 // limitations under the License.
 package com.google.sps.servlets;
 
-import com.google.appengine.repackaged.com.google.gson.Gson;
-
+import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class HttpServletUtilities {
    *
    * @param request the request sent to the GET or POST methods
    * @param key     the parameter in the request you want to access
-   * @return the value of the parameter in the request, or an empty string if this is null.
+   * @return the value of the parameter in the request, or an emptqy string if this is null.
    */
   public static String parameterToString(HttpServletRequest request, String key) {
     String requestVal = request.getParameter(key);
