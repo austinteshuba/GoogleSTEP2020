@@ -101,7 +101,7 @@
     </div>
 
     <!-- Container to display comments from server. Should be removed for prod version. -->
-    <div id="comments-container">
+    <div hidden id="comments-container">
       <!-- Form controls how many comments are displayed -->
       <!-- Return false is needed so form doesn't submit its own HTTP request. -->
       <form onsubmit="getData(); return false;">
@@ -141,7 +141,7 @@
       </div>
 
       <!-- Form to submit a comment/contact information. No required fields for now. -->
-      <form id="comment-form" action="/data" method="POST">
+      <form hidden id="comment-form" action="/data" method="POST">
         <p>Introduce yourself!</p>
         <label for="firstName">First Name:</label><br>
         <input type="text" id="firstName" name="firstName"><br>
