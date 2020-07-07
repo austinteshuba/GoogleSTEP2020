@@ -36,7 +36,7 @@ public class HttpServletUtilities {
    *
    * @param request the request sent to the GET or POST methods
    * @param key     the parameter in the request you want to access
-   * @return the value of the parameter in the request, or an emptqy string if this is null.
+   * @return the value of the parameter in the request, or an empty string if this is null.
    */
   public static String parameterToString(HttpServletRequest request, String key) {
     String requestVal = request.getParameter(key);
